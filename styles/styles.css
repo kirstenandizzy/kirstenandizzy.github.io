@@ -615,6 +615,10 @@ ul, ol {
         padding: 1.5rem .75rem;
     }
 
+    .section__welcome {
+        height: 40rem;
+    }
+
     .sprite-house {
         z-index: 1;
     }
