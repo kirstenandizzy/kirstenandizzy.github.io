@@ -425,6 +425,18 @@ ul, ol {
     --sl-input-background-color: #B0B887; 
 }
 
+.questions button {
+    background-color: #DC252B;
+    border: 0;
+    border-radius: 4px;
+    padding: 1rem;
+    min-width: 60px;
+    padding: 0.75rem;
+    min-width: 120px;
+    float: right;
+    margin: 1rem 1.25rem;
+}
+
 .questions__questions {
     padding: 1.5rem 0;
 }
@@ -601,6 +613,10 @@ ul, ol {
  @media (max-width: 700px) {
     .padding--body {
         padding: 1.5rem .75rem;
+    }
+
+    .sprite-house {
+        z-index: 1;
     }
 
     .divider {
