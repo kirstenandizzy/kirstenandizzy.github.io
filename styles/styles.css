@@ -1,0 +1,248 @@
+/*
+ * Color guide:
+ * Black  - #000000
+ * Cream  - #E9E1CC
+ * Gray   - #C9D3CE
+ * Red    - #DC252B
+ * Pink   - #E45960
+ * Orange - #EB8F65
+ * Brown  - #BB493C
+ * Green  - #B0B887
+ * Teal   - #279C7B
+ * Blue   - #46A8AB
+ */
+
+ /*
+  * TYPOGRAPHY
+  *
+  */
+.lorimer {
+    font-family: 'lorimer-no-2', sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.lorimer-italic {
+    font-family: 'lorimer-no-2', sans-serif;
+    font-weight: 500;
+    font-style: italic;
+}
+
+.lorimer--light {
+    font-family: 'lorimer-no-2', sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.lorimer--light-italic {
+    font-family: 'lorimer-no-2', sans-serif;
+    font-weight: 300;
+    font-style: italic;
+}
+
+.lorimer--medium {
+    font-family: 'lorimer-no-2', sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.lorimer--medium-italic {
+    font-family: 'lorimer-no-2', sans-serif;
+    font-weight: 600;
+    font-style: italic;
+}
+
+.lorimer--bold {
+    font-family: 'lorimer-no-2', sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.lorimer--bold-italic {
+    font-family: 'lorimer-no-2', sans-serif;
+    font-weight: 700;
+    font-style: italic;
+}
+
+.seravek {
+    font-family: 'seravek-web', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.seravek-italic {
+    font-family: 'seravek-web', sans-serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.seravek--light {
+    font-family: 'seravek-web', sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.seravek--light-italic {
+    font-family: 'seravek-web', sans-serif;
+    font-weight: 300;
+    font-style: italic;
+}
+
+.seravek--medium {
+    font-family: 'seravek-web', sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.seravek--medium-italic {
+    font-family: 'seravek-web', sans-serif;
+    font-weight: 600;
+    font-style: italic;
+}
+
+
+.seravek--bold {
+    font-family: 'seravek-web', sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.seravek--bold-italic {
+    font-family: 'seravek-web', sans-serif;
+    font-weight: 700;
+    font-style: italic;
+}
+
+.euphoria-regular {
+    font-family: 'Euphoria Script', cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+.typography__heading--1 {
+    font-size: 48px;
+    letter-spacing: -1.9px;
+    line-height: 40px;
+}
+
+.typography__heading--2 {
+    font-size: 120px;
+    letter-spacing: -4.8px;
+    line-height: 100px;
+}
+
+.typography__subheading--1 {
+    font-size: 32px;
+    letter-spacing: 3.75px;
+}
+
+.typography__subheading--2 {
+    font-size: 64px;
+    line-height: 48px;
+}
+
+.typography--inverse {
+    color: #E9E1CC;
+}
+
+.typography--uppercase {
+    text-transform: uppercase;
+}
+
+ /*
+  * PAGE HEADER
+  *
+  */
+.page-header {
+    position: absolute;
+}
+
+.page-header__heading {
+    display: flex;
+    flex-direction: column;
+}
+
+ /*
+  * PAGE STYLES
+  *
+  */
+body {
+    height: 100%;
+    position: relative;
+}
+
+h1, h2, h3, h4, h5, h6, p, span {
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+    width: fit-content;
+}
+
+.padding--body {
+    padding: 2rem 2.5rem;
+}
+
+.section__welcome {
+    height: 40rem;
+    background-color: #DC252B;
+}
+
+.section__welcome-heading {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    top: 50%;
+    margin-top: -74px;
+    left: 50%;
+    margin-left: -366.5;
+}
+
+.sprite {
+    padding: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: 40px;
+    cursor: pointer;
+}
+
+.sprite--1 {
+    width: 235px;    
+    margin-left: -375px;
+    margin-top: -145px;
+}
+
+.sprite--2 {
+    width: 150px;
+    margin-left: 250px;
+    margin-top: -170px;
+    rotate: 15deg;
+}
+
+.floaty {
+    animation: 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s 1 floaty;
+    animation-iteration-count: infinite;
+    animation-play-state: paused;
+}
+
+.floaty:hover {
+    animation-play-state: running;
+}
+
+@keyframes floaty {
+    0% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    50% {
+        -webkit-transform: translateY(-25px);
+        transform: translateY(-25px);
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
