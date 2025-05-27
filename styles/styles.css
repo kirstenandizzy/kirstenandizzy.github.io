@@ -119,6 +119,12 @@
     font-style: normal;
 }
 
+.lxgw-wenkai-regular {
+    font-family: 'LXGW WenKai Mono TC', monospace;
+    font-weight: 400;
+    font-style: normal;
+  }
+
 .nav__list {
     position: relative;
     z-index: 100;
@@ -130,7 +136,17 @@
     font-size: 32px;
     color: black;
     text-decoration: none;
-    padding: 12px; 
+    padding: 2rem; 
+}
+
+.typography__text--1 {
+    font-size: 24px;
+    letter-spacing: -1.0px
+}
+
+.typography__text--2 {
+    font-size: 20px;
+    letter-spacing: -1.0px
 }
 
 .typography__heading--1 {
@@ -197,6 +213,7 @@ body {
     background-color: #E9E1CC;
     height: 4rem;
     z-index: 99;
+    margin: 0;
 }
 
 .divider-link {
@@ -214,11 +231,15 @@ body {
 }
 
 .divider-icon {
-    transition: top 200ms;
+    position: relative;
+    transition: 200ms ease-in-out;
+    top: 0;
+    padding: 1rem;
 }
 
 .divider-icon:hover {
-    top: -1rem;
+    top: -0.5rem;
+    opacity: 0.75;
 }
 
 .divider-container {
@@ -242,15 +263,23 @@ h1, h2, h3, h4, h5, h6, p, span {
 
 .section__welcome {
     position: relative;
-    height: 40rem;
+    height: 44rem;
 }
 
 .section__blurb {
     position: relative;
-    height: 40rem;
+    height: 44rem;
 }
 
-.section__welcome-heading {
+.section__faq {
+    position: relative;
+    min-height: 44rem;
+    height: 100%;
+    background: #E45960;
+    overflow: auto;
+}
+
+.welcome__heading {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -262,10 +291,73 @@ h1, h2, h3, h4, h5, h6, p, span {
     margin-left: -366.5;
 }
 
-.section__welcome-heading-container {
+.welcome {
     position: relative;
     height: 100%;
     background-color: #DC252B;
+}
+
+.blurb {
+    position: relative;
+    height: 100%;
+    background-color: #EB8F65;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blurb__heading {
+    position: absolute;
+    top: 9.25rem;
+    z-index: 2;
+}
+
+.blurb__blurb {
+    background-color: #BB493C;
+    max-width: 40rem;
+    padding: 4rem;
+    border-radius: 4px;
+}
+
+.faq {
+    height: 100%;
+    background-color: #E45960;
+}
+
+.faq__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.faq__heading {
+    position: relative;
+    top: 3rem;
+}
+
+.faq__details {
+    width: 100%;
+    background-color: #DC252B;
+}
+
+.faq__details p {
+    padding: 1rem 0;
+}
+
+.faq__faq {
+    padding: 4rem 2rem;
+    width: 100%;
+    max-width: 40rem;
+    background-color: #DC252B;
+    max-height: 30rem;
+    overflow: scroll;
+}
+
+:root {
+    /* Changes the primary theme color to purple using primitives */
+    --sl-color-neutral-0: #DC252B;
+    --sl-color-neutral-200: #DC252B
 }
 
 .sprite {
@@ -289,6 +381,22 @@ h1, h2, h3, h4, h5, h6, p, span {
     margin-top: -170px;
     rotate: 15deg;
 }
+
+.sprite--3 {
+    width: 150px;
+    margin-left: 300px;
+    margin-top: -130px;
+    z-index: 2;
+}
+
+.sprite--4 {
+    width: 150px;
+    margin-left: -525px;
+    margin-top: -250px;
+    rotate: 30deg;
+    z-index: 3;
+}
+
 
 .sprite-house {
     width: 100%;

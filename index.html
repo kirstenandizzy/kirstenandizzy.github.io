@@ -4,12 +4,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="https://use.typekit.net/fxq2sgs.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Euphoria+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Euphoria+Script&family=LXGW+WenKai+Mono+TC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/light.css" />
     <link rel="stylesheet" href="styles/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/shoelace-autoloader.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/components/details/details.js"></script>
+
   </head>
   <body>
     <header class="page-header padding--body">
@@ -28,8 +33,8 @@
     <main class="main">
       <section class="section__welcome">
         <canvas id="sprite-house" class="sprite-house"></canvas>
-        <div class="section__welcome-heading-container padding--body">
-          <h2 class="section__welcome-heading">
+        <div class="welcome padding--body">
+          <h2 class="welcome__heading">
             <img  class="sprite sprite--1 floaty" src="assets/soot_sprites/body/13.png" alt="Ghibli soot sprite"/>
             <img  class="sprite sprite--2 floaty" src="assets/soot_sprites/body/9.png" alt="Ghibli soot sprite"/>
             <span class="seravek--bold typography__heading--2 typography--uppercase typography--inverse">Bridal Party</span>
@@ -44,20 +49,113 @@
           <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
           <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
           <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
+        </a>
+      </div>
+      <section class="section__blurb" id="blurb">
+        <div class="blurb">
+          <img  class="sprite sprite--3 floaty" src="assets/soot_sprites/body/11.png" alt="Ghibli soot sprite"/>
+          <img  class="sprite sprite--4 floaty" src="assets/soot_sprites/body/7.png" alt="Ghibli soot sprite"/>
+          <h3 class="blurb__heading">
+            <span class="seravek--bold typography__heading--2 typography--uppercase typography--inverse">BLurb</span>
+          </h3>
+          <p class="blurb__blurb lxgw-wenkai-regular typography--inverse typography__text--1" id="blurb">
+            HEYO<span></span>!! I want this to be a fun experience that is stress & worry free.
+            I love you and would love to have you with me during my wedding — it would mean the world to me.
+            I just wanted to provide an FAQ and a questionnaire to clarify what sort of things to expect — on both sides. 😌
+          </p>
+        </div>
+      </section>
+      <div class="divider-container">
+        <hr class="divider"/>
+        <a href="#faq" class="divider-link" aria-label="Scroll to blurb section">
+          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
+          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
           <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
           <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
         </a>
       </div>
-      
-
-      <section id="blurb" class="section__blurb">
-
+      <section class="section__faq" id="faq">
+        <div class="faq">
+          <div class="faq__container">
+          <h3 class="faq__heading">
+            <span class="seravek--bold typography__heading--2 typography--uppercase typography--inverse">FAQ</span>
+          </h3>
+          <div class="faq__faq">
+            <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="WHAT ARE THE COSTS INVOLVED?">
+              <p class="typography__text--2">
+                As a member of the bridal party, I don't want you to pay more than a regular guest would pay to be able to attend the wedding.
+              </p>
+              <p class="typography__text--2">
+                As such, we plan on covering dresses, accessories, hair, nails, and make-up at a minimum! Let me know what other costs you might anticipate that worries you — I'd be happy to see what I can do.
+                If you're flying in early for the wedding for some pre-wedding things like nails, rehearsal dinner, etc then I'm happy to help with some of those lodging costs!
+                We were not planning on covering airfare or lodging for the wedding itself, but we are happy to help if would make it possible to attend. 
+              </p>
+              <p class="typography__text--2">
+                There will be pre-wedding events that will of course be optional. Everything is optional here. Here are some possible pre-wedding events:
+                <ul class="typography__text--2">
+                  <li>Engagement Party — We are thinking the end-of-September (2025) in Chicago</li> 
+                  <li>Bachelorette party — We are thinking some sort of a camping situation in California or the Pacific Northwest — very open to suggestions.</li>
+                  <li>Bridal shower — There might be a casual bridal shower somewhere at some point.</li>
+                  <li>Rehearsal dinner — The day before the wedding at my childhood home.</li>
+                </ul>
+              </p>
+            </sl-details>
+            <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="WHAT WILL I WEAR?">
+              <p class="typography__text--2">
+                I'd like to give you lots of flexibility when it comes to dresses. I want you to find something that you feel beautiful in.
+                My only strong request is that the dress is similar in color to our wedding's color palette (more to come, but an example below).
+                Some soft requests are: midi or long dresses, and a material with a satin vibe. Feel free to ignore though and do your thing — truly.
+              </p>
+              <p class="typography__text--2">
+                Here are some examples of preferred dress shops, but will very much support you choosing a dress that you found anywhere yourself — I can subsidize the cost of your dress up to $350 in that case.
+                <ul class="typography__text--2">
+                  <li>Jenny Yoo</li> 
+                  <li>Birdy Grey</li>
+                  <li>Meshki</li>
+                  <li>Shona Joy (dresses under $350-ish please!)</li>
+                  <li>Bella Bridesmaids (carries several designers, including Jenny Yoo)</li>
+                </ul>
+              </p>
+            </sl-details>
+            <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="TIME COMMITMENT?">
+              <p class="typography__text--2">
+                As much or as little as you like — I don't want this to feel like a burden.
+                Ideally a day or two before the wedding, the day of the wedding, and the morning after — the venue gives us the space for 4 consecutive days. The morning afterwards, we can snack on bagels, enjoy the views of the Atlantic ocean and the NYC skyline, and play bocce ball or something.
+                And of course, the events like the bridal shower, bachelorette party, engagement party, and/or the rehearsal dinner if you so choose!
+              </p>
+            </sl-details>
+            <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="RESPONSIBILITIES?">
+              <p class="typography__text--2">
+                Attending and participating in whatever you reasonably can, humoring me sometimes when I send too many wedding-related texts, and being present for the events if you can!
+                Bridesmaids are not expected to participate in set up or breakdown or any type of labor like that.
+              </p>
+            </sl-details>
+            <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="WHAT IF I CAN’T MAKE IT TO STUFF?">
+              <p class="typography__text--2">
+                That is okay! I miss you already 💞
+              </p>
+            </sl-details>
+            <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="HOW MUCH SHOULD I SPEND ON A GIFT?">
+              <p class="typography__text--2">
+                As far as I am concerned, you being there with me on the big day is enough of a gift so I am not expecting any gifts from the bridal party.
+              </p>
+            </sl-details>
+            <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="DO I HAVE TO SAY YES THO?">
+              <p class="typography__text--2">
+                Absolutely not! Attending a wedding is a commitment on its own, as is being a bridesmaid.
+                I have no expectations if you choose to be a bridesmaid or not!
+                I will love you regardless, and would not think less of you or our friendship if this role is not something that you want right now. 
+                That being said, of course I would be overjoyed if you were down!
+              </p>
+            </sl-details>
+          </div>
+        </div>
+      </div>
       </section>
-      <section class="section__faq">
+      <section class="section__questions" id="questions">
+        <div class="">
 
-      </section>
-      <section class="section__questions">
-
+        </div>
       </section>
     </main>
     <script src="scripts/matter.min.js"></script>

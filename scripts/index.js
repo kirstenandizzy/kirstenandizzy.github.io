@@ -34,7 +34,7 @@ let engine = Engine.create();
 
 const SPRIZE_SIZE = 70;
 const BOUNDARY_SIZE = 20;
-const HEIGHT = 640 + BOUNDARY_SIZE;
+const HEIGHT = 695 + BOUNDARY_SIZE;
 
 
 // create a renderer
@@ -64,7 +64,7 @@ const createObject = () => {
     },
     frictionAir : 0.025,
     friction : 2,
-    restitution: 1.2,
+    restitution: 1.05,
     inertia: 50000,
     mass: 1.25
   });
@@ -79,7 +79,7 @@ const createObject = () => {
       Matter.Body.applyForce(sprite, sprite.position, forceVector);
     }
     
-  }, 500);
+  }, 250);
   return sprite;
 };
 
