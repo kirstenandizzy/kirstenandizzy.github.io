@@ -8,8 +8,16 @@ const sprites = [
     "./assets/soot_sprites/face/7.png",
     "./assets/soot_sprites/face/8.png",
     "./assets/soot_sprites/face/9.png",
-    "./assets/soot_sprites/face/10.png"
-]
+    "./assets/soot_sprites/face/10.png",
+    "./assets/soot_sprites/face/11.png",
+    "./assets/soot_sprites/face/12.png",
+    "./assets/soot_sprites/face/13.png",
+    "./assets/soot_sprites/face/14.png",
+    "./assets/soot_sprites/face/15.png",
+    "./assets/soot_sprites/face/16.png",
+    "./assets/soot_sprites/face/17.png",
+    "./assets/soot_sprites/face/18.png",
+    "./assets/soot_sprites/face/19.png"]
 const canvas = document.querySelector("#sprite-house");
 
 // module aliases
@@ -42,25 +50,46 @@ let render = Render.create({
   }
 });
 
+const SPAWN_POS_MAX = window.innerWidth - SPRIZE_SIZE;
+const SPAWN_POS_MIN = SPRIZE_SIZE;
+
 const createObject = () => {
-  let box = Bodies.circle(Math.random() * (SPRIZE_SIZE - window.innerWidth) + window.innerWidth, -SPRIZE_SIZE, SPRIZE_SIZE, {
+  let sprite = Bodies.circle(Math.random() * (SPAWN_POS_MIN - SPAWN_POS_MAX) + SPAWN_POS_MAX, -SPRIZE_SIZE, SPRIZE_SIZE, {
     render: {
       sprite: {
         texture: sprites[Math.floor(Math.random() * sprites.length)],
         xScale: 0.035,
         yScale: 0.035
       }
-    }
+    },
+    frictionAir : 0.025,
+    friction : 2,
+    restitution: 1.2,
+    inertia: 50000,
+    mass: 1.25
   });
-  Composite.add(engine.world, box);
+  Composite.add(engine.world, sprite);
+  setInterval(function() {
+    const shouldMakeTrouble = Math.random() < 0.025;
+    if (shouldMakeTrouble) {
+      var force = 0.1;
+      var deltaVector = Matter.Vector.sub(mouse.position, sprite.position);
+      var normalizedDelta = Matter.Vector.normalise(deltaVector);
+      var forceVector = Matter.Vector.mult(normalizedDelta, force);
+      Matter.Body.applyForce(sprite, sprite.position, forceVector);
+    }
+    
+  }, 500);
+  return sprite;
 };
 
-const GENERATE_INTERVAL = 500;
+const GENERATE_INTERVAL = 100;
 const intervalId = setInterval(createObject, GENERATE_INTERVAL);
+const SRITE_COUNT = window.innerWidth*.0075;
 
 setTimeout(() => {
   clearInterval(intervalId);
-}, GENERATE_INTERVAL*13);
+}, GENERATE_INTERVAL*SRITE_COUNT);
 
 
 // create ground
@@ -75,15 +104,33 @@ const ground = Bodies.rectangle(
    }
 );
 
+const ceiling = Bodies.rectangle(
+  window.innerWidth / 2,
+  -SPRIZE_SIZE,
+  window.innerWidth,
+  BOUNDARY_SIZE,
+  {
+    isStatic: true,
+    label: "Ceiling"
+   }
+);
+
 const wallLeft = Bodies.rectangle(-BOUNDARY_SIZE, HEIGHT / 2, BOUNDARY_SIZE, HEIGHT, {
   isStatic: true, label: "Wall Left"
 });
+
 const wallRight = Bodies.rectangle(window.innerWidth + BOUNDARY_SIZE, HEIGHT / 2, BOUNDARY_SIZE, HEIGHT, {
   isStatic: true, label: "Wall Right"
 });
 
+window.addEventListener("resize", function () {
+  Matter.Body.setPosition(ground, {x: window.innerWidth / 2, y: HEIGHT})
+  Matter.Body.setPosition(wallRight, {x: window.innerWidth + BOUNDARY_SIZE, y: HEIGHT / 2})
+  Matter.Body.setPosition(wallLeft, {x: -BOUNDARY_SIZE, y: HEIGHT / 2})
+});
+
 // add all of the bodies to the world
-Composite.add(engine.world, [ground, wallLeft, wallRight]);
+Composite.add(engine.world, [ground, ceiling, wallLeft, wallRight]);
 
 // run the renderer
 Render.run(render);
@@ -107,8 +154,7 @@ let mouseConstraint = MouseConstraint.create(engine, {
 
 Composite.add(engine.world, mouseConstraint);
 
-window.addEventListener("resize", function () {
-  Matter.Body.setPosition(ground, {x: window.innerWidth / 2, y: HEIGHT + BOUNDARY_SIZE})
-  Matter.Body.setPosition(wallRight, {x: window.innerWidth + BOUNDARY_SIZE, y: HEIGHT / 2})
-});
+// Needed for Matter.js bug where window stops scrolling around canvas
+mouse.element.removeEventListener('wheel', mouse.mousewheel);
+mouse.element.removeEventListener('DOMMouseScroll', mouse.mousewheel);
 
