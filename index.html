@@ -1,5 +1,8 @@
 <html>
   <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <link rel="stylesheet" href="https://use.typekit.net/fxq2sgs.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,17 +17,21 @@
         <span class="lorimer--medium typography__subheading--1">(kirsten & izzy)</span>
       </h1>
     </header>
-    <main>
-      <section class="section__welcome padding--body">
-        <h2 class="section__welcome-heading">
-          <img  class="sprite sprite--1 floaty" src="assets/soot_sprites/body/13.png" alt="Ghibli soot sprite"/>
-          <img  class="sprite sprite--2 floaty" src="assets/soot_sprites/body/9.png" alt="Ghibli soot sprite"/>
-          <span class="seravek--bold typography__heading--2 typography--uppercase typography--inverse">Bridal Party</span>
-          <span class="euphoria-regular typography__subheading--2 typography--inverse">things</span>
-        </h2>
+    <main class="main">
+      <section class="section__welcome">
+        <canvas id="sprite-house" class="sprite-house"></canvas>
+        <div class="section__welcome-heading-container padding--body">
+          <h2 class="section__welcome-heading">
+            <img  class="sprite sprite--1 floaty" src="assets/soot_sprites/body/13.png" alt="Ghibli soot sprite"/>
+            <img  class="sprite sprite--2 floaty" src="assets/soot_sprites/body/9.png" alt="Ghibli soot sprite"/>
+            <span class="seravek--bold typography__heading--2 typography--uppercase typography--inverse">Bridal Party</span>
+            <span class="euphoria-regular typography__subheading--2 typography--inverse">things</span>
+          </h2>
+        </div>
       </section>
+      <hr class="divider"/>
       <section class="section__blurb">
-
+        <button id="add-button">Test</button>
       </section>
       <section class="section__faq">
 
@@ -33,6 +40,8 @@
 
       </section>
     </main>
+    <script src="scripts/matter.min.js"></script>
+    <script type="module" src="scripts/index.js"></script>
     <footer>
 
     </footer>
