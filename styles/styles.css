@@ -123,20 +123,31 @@
     font-family: 'LXGW WenKai Mono TC', monospace;
     font-weight: 400;
     font-style: normal;
-  }
+}
+
+.nav__hamburger {
+    display: none;;
+}
+
+
+.nav__hamburger {
+
+}
 
 .nav__list {
     position: relative;
     z-index: 100;
     display: flex;
     list-style: none;
+    align-items: center;
+    gap: 2rem;
 }
 
 .typography__nav-link {
     font-size: 32px;
     color: black;
     text-decoration: none;
-    padding: 2rem; 
+    padding: 2rem 0; 
 }
 
 .typography__text--1 {
@@ -156,6 +167,12 @@
 }
 
 .typography__heading--2 {
+    font-size: 120px;
+    letter-spacing: -4.8px;
+    line-height: 100px;
+}
+
+.typography__heading--3 {
     font-size: 120px;
     letter-spacing: -4.8px;
     line-height: 100px;
@@ -187,7 +204,8 @@
     position: absolute;
     display: flex;
     justify-content: space-between;
-    width: calc(100% - 5rem);
+    align-items: center;
+    width: 100%;
 }
 
 .page-header__heading {
@@ -202,6 +220,36 @@
 body {
     height: 100%;
     position: relative;
+}
+
+:root {
+    /* Changes the primary theme color to purple using primitives */
+    /* --sl-color-neutral-0: transparent;
+    --sl-color-neutral-200: transparent */
+}
+
+fieldset {
+    border: none;
+}
+
+hr {
+    border: 0;
+}
+
+h1, h2, h3, h4, h5, h6, p, span {
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+    width: fit-content;
+}
+
+div, form, main, header, footer, hr {
+    box-sizing: border-box;
+}
+ 
+ul, ol {
+    margin: 0 1rem;
+    padding: 0;
 }
 
 .main {
@@ -250,13 +298,6 @@ body {
     color: #46A8AB;
 }
 
-h1, h2, h3, h4, h5, h6, p, span {
-    margin: 0;
-    padding: 0;
-    z-index: 1;
-    width: fit-content;
-}
-
 .padding--body {
     padding: 2rem 2.5rem;
 }
@@ -264,19 +305,32 @@ h1, h2, h3, h4, h5, h6, p, span {
 .section__welcome {
     position: relative;
     height: 44rem;
+    overflow: hidden;
 }
 
 .section__blurb {
     position: relative;
     height: 44rem;
+    overflow: hidden;
 }
 
 .section__faq {
     position: relative;
     min-height: 44rem;
     height: 100%;
+    overflow: hidden;
     background: #E45960;
     overflow: auto;
+
+    --sl-color-neutral-0: #DC252B;
+    --sl-color-neutral-200: #DC252B;
+}
+
+.section__questions {
+    position: relative;
+    min-height: 44rem;
+    overflow: hidden;
+    background: #B0B887;
 }
 
 .welcome__heading {
@@ -286,15 +340,17 @@ h1, h2, h3, h4, h5, h6, p, span {
     text-align: center;
     align-items: center;
     top: 50%;
-    margin-top: -160px;
+    margin-top: -100px;
     left: 50%;
-    margin-left: -366.5;
+    margin-left: -400;
 }
 
 .welcome {
     position: relative;
     height: 100%;
     background-color: #DC252B;
+    width: 100%;
+    overflow: hidden;
 }
 
 .blurb {
@@ -308,7 +364,7 @@ h1, h2, h3, h4, h5, h6, p, span {
 
 .blurb__heading {
     position: absolute;
-    top: 6.25rem;
+    top: 5.75rem;
     z-index: 2;
 }
 
@@ -329,6 +385,8 @@ h1, h2, h3, h4, h5, h6, p, span {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
 }
 
 .faq__heading {
@@ -354,7 +412,6 @@ h1, h2, h3, h4, h5, h6, p, span {
 }
 
 .faq__faq {
-    padding: 4rem 2rem;
     width: 100%;
     max-width: 40rem;
     background-color: #DC252B;
@@ -362,12 +419,50 @@ h1, h2, h3, h4, h5, h6, p, span {
     overflow: scroll;
 }
 
-:root {
-    /* Changes the primary theme color to purple using primitives */
-    --sl-color-neutral-0: #DC252B;
-    --sl-color-neutral-200: #DC252B
+.questions {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: 1.5rem;
 }
 
+.questions__questions {
+    padding: 1.5rem 0;
+}
+
+.questions__container {
+    width: 100%;
+    max-width: 40rem;
+    background-color: #279C7B;
+}
+
+.questions__heading {
+    position: relative;
+    top: 3rem;
+}
+
+.questions__form-grouping {
+    padding: 1rem;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+
+    --sl-color-neutral-0: white;
+    --sl-color-neutral-200: white;
+}
+
+.questions__switch {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+/*
+ * Sprites
+ *
+ */
 .sprite {
     padding: 40px;
     position: absolute;
@@ -413,6 +508,10 @@ h1, h2, h3, h4, h5, h6, p, span {
     z-index: 98;
 }
 
+/*
+ * Animations
+ *
+ */
 .floaty {
     animation: 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s 1 floaty;
     animation-iteration-count: infinite;
@@ -435,5 +534,96 @@ h1, h2, h3, h4, h5, h6, p, span {
     100% {
         -webkit-transform: translateY(0);
         transform: translateY(0);
+    }
+}
+
+/*
+ * Mobile
+ *
+ */
+ @media (max-width: 900px) {
+    .nav__list {
+        display: none;
+        visibility: hidden;
+      }
+  
+      .nav__hamburger {
+          display: block;
+          position: relative;
+          z-index: 1;
+          background: transparent;
+          border: 0;
+      }
+  
+      .nav__hamburger img {
+          width: 90%;
+      }
+
+      .page-header {
+        flex-direction: row-reverse;
+        width: 100%;
+        justify-content: start;
+    }
+ }
+
+ @media (max-width: 700px) {
+    .padding--body {
+        padding: 1.5rem .75rem;
+    }
+
+    .divider {
+        height: 2.5rem;
+    }
+    
+    .welcome__heading {
+        width: fit-content;
+        margin: 0;
+        text-align: left;
+        left: 2rem;
+        margin-top: -150px;
+        align-items: start;
+    }
+
+    .blurb__blurb {
+        padding: 6rem 2rem;
+        min-height: 230px;
+        align-items: center;
+        display: flex;
+    }
+
+    .faq__faq {
+        padding: 3rem 0;
+    }
+
+    .sprite--2, .sprite--3 {
+        display: none;
+    }
+
+    .typography__text--1 {
+        font-size: 20px;
+    }
+    
+    .typography__text--2 {
+    }
+    
+    .typography__heading--1 {
+        font-size: 54px;
+    }
+    
+    .typography__heading--2 {
+        font-size: 96px;
+    }
+
+    .typography__heading--3 {
+        font-size: 75px;
+    }
+    
+    .typography__subheading--1 {
+        font-size: 24px;
+        letter-spacing: 8.25px;
+    }
+    
+    .typography__subheading--2 {
+        font-size: 64px;
     }
 }

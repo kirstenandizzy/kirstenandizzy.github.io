@@ -36,7 +36,6 @@ const SPRIZE_SIZE = 70;
 const BOUNDARY_SIZE = 20;
 const HEIGHT = 695 + BOUNDARY_SIZE;
 
-
 // create a renderer
 let render = Render.create({
   canvas: canvas,
@@ -44,13 +43,13 @@ let render = Render.create({
   options: {
     background: "transparent",
     wireframes: false,
-    width: window.innerWidth,
+    width: window.outerWidth,
     height: HEIGHT,
-    pixelRatio: 'auto'
+    pixelRatio: 2
   }
 });
 
-const SPAWN_POS_MAX = window.innerWidth - SPRIZE_SIZE;
+const SPAWN_POS_MAX = window.outerWidth - SPRIZE_SIZE;
 const SPAWN_POS_MIN = SPRIZE_SIZE;
 
 const createObject = () => {
@@ -85,7 +84,7 @@ const createObject = () => {
 
 const GENERATE_INTERVAL = 100;
 const intervalId = setInterval(createObject, GENERATE_INTERVAL);
-const SRITE_COUNT = window.innerWidth*.0075;
+const SRITE_COUNT = window.outerWidth*.0075;
 
 setTimeout(() => {
   clearInterval(intervalId);
@@ -94,9 +93,9 @@ setTimeout(() => {
 
 // create ground
 const ground = Bodies.rectangle(
-  window.innerWidth / 2,
+  window.outerWidth / 2,
   HEIGHT,
-  window.innerWidth,
+  window.outerWidth,
   BOUNDARY_SIZE,
   {
     isStatic: true,
@@ -105,9 +104,9 @@ const ground = Bodies.rectangle(
 );
 
 const ceiling = Bodies.rectangle(
-  window.innerWidth / 2,
+  window.outerWidth / 2,
   -SPRIZE_SIZE,
-  window.innerWidth,
+  window.outerWidth,
   BOUNDARY_SIZE,
   {
     isStatic: true,
@@ -119,13 +118,13 @@ const wallLeft = Bodies.rectangle(-BOUNDARY_SIZE, HEIGHT / 2, BOUNDARY_SIZE, HEI
   isStatic: true, label: "Wall Left"
 });
 
-const wallRight = Bodies.rectangle(window.innerWidth + BOUNDARY_SIZE, HEIGHT / 2, BOUNDARY_SIZE, HEIGHT, {
+const wallRight = Bodies.rectangle(window.outerWidth + BOUNDARY_SIZE, HEIGHT / 2, BOUNDARY_SIZE, HEIGHT, {
   isStatic: true, label: "Wall Right"
 });
 
 window.addEventListener("resize", function () {
-  Matter.Body.setPosition(ground, {x: window.innerWidth / 2, y: HEIGHT})
-  Matter.Body.setPosition(wallRight, {x: window.innerWidth + BOUNDARY_SIZE, y: HEIGHT / 2})
+  Matter.Body.setPosition(ground, {x: window.outerWidth / 2, y: HEIGHT})
+  Matter.Body.setPosition(wallRight, {x: window.outerWidth + BOUNDARY_SIZE, y: HEIGHT / 2})
   Matter.Body.setPosition(wallLeft, {x: -BOUNDARY_SIZE, y: HEIGHT / 2})
 });
 

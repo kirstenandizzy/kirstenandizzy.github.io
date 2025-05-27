@@ -2,7 +2,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="https://use.typekit.net/fxq2sgs.css">
@@ -22,7 +22,8 @@
         <span class="seravek--bold typography__heading--1 typography--uppercase">K.K. & Kiko</span>
         <span class="lorimer--medium typography__subheading--1">(kirsten & izzy)</span>
       </h1>
-      <nav>
+      <nav class="nav">
+        <button class="nav__hamburger"><img src="assets/hamburger.png" alt="Open navigation menu"></button>
         <ul class="nav__list seravek--bold">
           <li><a class="typography__nav-link" href="#blurb">BLURB</a></li>
           <li><a class="typography__nav-link" href="#faq">FAQ</a></li>
@@ -48,7 +49,6 @@
           <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
           <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
           <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
-          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
         </a>
       </div>
       <section class="section__blurb" id="blurb">
@@ -56,99 +56,105 @@
           <img  class="sprite sprite--3 floaty" src="assets/soot_sprites/body/11.png" alt="Ghibli soot sprite"/>
           <img  class="sprite sprite--4 floaty" src="assets/soot_sprites/body/7.png" alt="Ghibli soot sprite"/>
           <h3 class="blurb__heading">
-            <span class="seravek--bold typography__heading--2 typography--uppercase typography--inverse">BLurb</span>
+            <span class="seravek--bold typography__heading--3 typography--uppercase typography--inverse">BLurb</span>
           </h3>
           <p class="blurb__blurb lxgw-wenkai-regular typography--inverse typography__text--1" id="blurb">
-            HEYO<span></span>!! I want this to be a fun experience that is stress & worry free.
-            I love you and would love to have you with me during my wedding — it would mean the world to me.
-            I just wanted to provide an FAQ and a questionnaire to clarify what sort of things to expect — on both sides. 😌
+            HEYO!! I love you and would love to have you with me during my wedding — it would mean the world to me.
+            I want this to be a stress & worry free experience so I wanted to front-load an FAQ and a questionnaire so that things are more clear on both sides. 😌
           </p>
         </div>
       </section>
       <div class="divider-container">
         <hr class="divider"/>
         <a href="#faq" class="divider-link" aria-label="Scroll to blurb section">
-          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
-          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
+          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon mobile"></i>
           <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
           <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
         </a>
       </div>
       <section class="section__faq" id="faq">
         <div class="faq">
-          <div class="faq__container">
-          <h3 class="faq__heading">
-            <span class="seravek--bold typography__heading--2 typography--uppercase typography--inverse">FAQ</span>
-          </h3>
-          <div class="faq__faq">
-            <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="WHAT ARE THE COSTS INVOLVED?">
-              <p class="typography__text--2">
-                As a member of the bridal party, I don't want you to pay more than a regular guest would pay to be able to attend the wedding.
-              </p>
-              <p class="typography__text--2">
-                As such, we plan on covering dresses, accessories, hair, nails, and make-up at a minimum! Let me know what other costs you might anticipate that worries you — I'd be happy to see what I can do.
-                If you're flying in early for the wedding for some pre-wedding things like nails, rehearsal dinner, etc then I'm happy to help with some of those lodging costs!
-                We were not planning on covering airfare or lodging for the wedding itself, but we are happy to help if would make it possible to attend. 
-              </p>
-              <p class="typography__text--2">
-                There will be pre-wedding events that will of course be optional. Everything is optional here. Here are some possible pre-wedding events:
-                <ul class="typography__text--2">
-                  <li>Engagement party — We are thinking the end-of-September (2025) in Chicago</li> 
-                  <li>Bachelorette party — We are thinking some sort of a camping situation in California or the Pacific Northwest — very open to suggestions.</li>
-                  <li>Bridal shower — There might be a casual bridal shower somewhere at some point.</li>
-                  <li>Rehearsal dinner — The day before the wedding at my childhood home.</li>
-                </ul>
-              </p>
-            </sl-details>
-            <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="WHAT WILL I WEAR?">
-              <p class="typography__text--2">
-                I'd like to give you lots of flexibility when it comes to dresses. I want you to find something that you feel beautiful in.
-                My only strong request is that the dress is similar in color to our wedding's color palette (more to come, but an example below).
-                Some soft requests are: midi or long dresses, and a material with a satin vibe. Feel free to disregard these requests and do your thing — I trust ya.
-              </p>
-              <p class="typography__text--2">
-                Here are some examples of preferred dress shops, but will very much support you choosing a dress that you found anywhere yourself. I can subsidize the cost of your dress up to $300 in that case.
-                <ul class="typography__text--2">
-                  <li><a href="https://www.jennyyoo.com/collections/jenny-yoo-bridesmaids">Jenny Yoo</a></li> 
-                  <li><a href="https://www.birdygrey.com/collections/bridesmaid-dresses">Birdy Grey</a></li>
-                  <li><a href="https://www.meshki.us/collections/bridesmaids">Meshki</a></li>
-                  <li><a href="https://shonajoy.com/collections/bridesmaids#/filter:ss_price:10:350">Shona Joy</a></li>
-                  <li><a href="https://bellabridesmaids.com/collections/all-bridesmaids-dresses">Bella Bridesmaids</a>(carries several designers)</li>
-                </ul>
-              </p>
-              <img class="faq__details-image" src="assets/color_palette.png" />
-            </sl-details>
-            <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="TIME COMMITMENT?">
-              <p class="typography__text--2">
-                As much or as little as you like — I don't want this to feel like a burden.
-                Ideally a day or two before the wedding, the day of the wedding, and the morning after — the venue gives us the space for 4 consecutive days. The morning afterwards, we can snack on bagels, enjoy the views of the Atlantic ocean and the NYC skyline, and play bocce ball or something.
-                And of course, the events like the bridal shower, bachelorette party, engagement party, and/or the rehearsal dinner if you so choose!
-              </p>
-            </sl-details>
-            <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="RESPONSIBILITIES?">
-              <p class="typography__text--2">
-                Attending and participating in whatever you reasonably can, humoring me sometimes when I send too many wedding-related texts, and being present for the events if you can!
-                Bridesmaids are not expected to participate in set up or breakdown or any type of labor like that. I maaay need some small help in folding origami cranes... !
-              </p>
-            </sl-details>
-            <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="WHAT IF I CAN’T MAKE IT TO STUFF?">
-              <p class="typography__text--2">
-                That is okay! I miss you already 💞
-              </p>
-            </sl-details>
-            <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="HOW MUCH SHOULD I SPEND ON A GIFT?">
-              <p class="typography__text--2">
-                As far as I am concerned, you being there with me on the big day is enough of a gift so I am not expecting any gifts from the bridal party.
-              </p>
-            </sl-details>
-            <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="DO I HAVE TO SAY YES THO?">
-              <p class="typography__text--2">
-                Absolutely not! Attending a wedding is a commitment on its own, as is being a bridesmaid.
-                I have no expectations if you choose to be a bridesmaid or not —
-                I will love you regardless, and would not think less of you or our friendship if this role is not something that you want right now. 
-                That being said, of course I would be overjoyed if you were down!
-              </p>
-            </sl-details>
+          <div class="faq__container padding--body">
+            <h3 class="faq__heading">
+              <span class="seravek--bold typography__heading--3 typography--uppercase typography--inverse">FAQ</span>
+            </h3>
+            <div class="faq__faq padding--body">
+              <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="WHEN AND WHERE?">
+                <p class="typography__text--2">
+                  We are targeting September 19, 2026 for the wedding in Highlands, NJ at the Waterwitch Club.
+                </p>
+              </sl-details>
+              <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="WHAT ARE THE COSTS INVOLVED?">
+                <p class="typography__text--2">
+                  As a member of the bridal party, I don't want you to pay more than a regular guest would pay to be able to attend the wedding.
+                </p>
+                <p class="typography__text--2">
+                  We plan on covering the following costs at a minimum:
+                  <ul class="typography__text--2">
+                    <li>Dress</li> 
+                    <li>Hair</li>
+                    <li>Nails</li>
+                    <li>Make-up</li>
+                  </ul>
+                </p>
+                <p class="typography__text--2">
+                  Here is a guestimate at what some of the pre-wedding events are looking like:
+                  <ul class="typography__text--2">
+                    <li>Engagement party — We are thinking the end-of-September (2025) in Chicago (can house anyone looking to save $$$)</li> 
+                    <li>Bachelorette party — We are thinking some sort of low-maintenance camping situation in California or the Pacific Northwest or Banff, so it should really just be the cost of flights and food.</li>
+                    <li>Bridal shower — There might be a casual bridal shower in New Jersey or Chicago at some point (can house anyone looking to save $$$).</li>
+                    <li>Rehearsal dinner — The day before the wedding at my childhood home in Jersey.</li>
+                  </ul>
+                </p>
+              </sl-details>
+              <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="WHAT WILL I WEAR?">
+                <p class="typography__text--2">
+                  I want you to find something that you feel beautiful in, so I am totally flexible. I have a WIP color palette as a guide — but its more there for vibe and less for exactness.
+                  One soft request is potentially favoring dresses with a satin-like sheen/vibe. But again — I don't really care. Do yo thing. Be freeeee.
+                </p>
+                <p class="typography__text--2">
+                  Here are some examples of dress shops that could be nice, but will very much support you choosing a dress that you found <strong>anywhere</strong> yourself. I can subsidize the cost of your dress up to $350 in that case.
+                  <ul class="typography__text--2">
+                    <li><a href="https://www.jennyyoo.com/collections/jenny-yoo-bridesmaids">Jenny Yoo</a></li> 
+                    <li><a href="https://www.birdygrey.com/collections/bridesmaid-dresses">Birdy Grey</a></li>
+                    <li><a href="https://www.meshki.us/collections/bridesmaids">Meshki</a></li>
+                    <li><a href="https://shonajoy.com/collections/bridesmaids#/filter:ss_price:10:350">Shona Joy (< $350 tho pls)</a></li>
+                    <li><a href="https://bellabridesmaids.com/collections/all-bridesmaids-dresses">Bella Bridesmaids</a>(carries several designers)</li>
+                  </ul>
+                </p>
+                <img class="faq__details-image" src="assets/color_palette.png" />
+              </sl-details>
+              <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="TIME COMMITMENT?">
+                <p class="typography__text--2">
+                  As much or as little as you like — I don't want this to feel like a burden. Being there for the rehearsal (day before) and the wedding itself would be my requests. Of course coming to the bachelorette would be awesome, but completely get it if you can't make it work.
+                  There are other events like the bridal shower and engagement party but no sweat if it ain't in the cards.
+                </p>
+              </sl-details>
+              <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="RESPONSIBILITIES?">
+                <p class="typography__text--2">
+                  Just attending and participating in whatever you reasonably can!
+                  I don't know what I'm doing, so any guidance or suggestions or telling me something is a bad idea would be fckn amazing.
+                  I maaay need some small help in folding origami cranes if anyone is into ez origami...?!
+                </p>
+              </sl-details>
+              <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="WHAT IF I CAN’T MAKE IT TO STUFF?">
+                <p class="typography__text--2">
+                  That is okay! I miss you already.
+                </p>
+              </sl-details>
+              <!-- <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="HOW MUCH SHOULD I SPEND ON A GIFT?">
+                <p class="typography__text--2">
+                  As far as I am concerned, you being there with me on the big day is enough of a gift so I am not expecting any gifts from the bridal party.
+                </p>
+              </sl-details> -->
+              <!-- <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="DO I HAVE TO SAY YES THO?">
+                <p class="typography__text--2">
+                  Absolutely not! Attending a wedding is a commitment on its own, as is being a bridesmaid.
+                  I have no expectations if you choose to be a bridesmaid or not —
+                  I will love you regardless, and would not think less of you or our friendship if this role is not something that you want right now. 
+                  That being said, of course I would be overjoyed if you were down!
+                </p>
+              </sl-details> -->
           </div>
         </div>
       </div>
@@ -159,12 +165,44 @@
           <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
           <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
           <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
-          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
         </a>
       </div>
       <section class="section__questions" id="questions">
-        <div class="">
-
+        <div class="questions">
+          <h3 class="questions__heading">
+            <span class="seravek--bold typography__heading--3 typography--uppercase typography--inverse">QUESTIONS</span>
+          </h3>
+          <form class="questions__container padding--body">
+            <div class="questions__questions">
+              <fieldset class="questions__form-grouping">
+                <label class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">FAVORITE SONGS?</label>
+                
+              </fieldset>
+              <fieldset class="questions__form-grouping">
+                <label class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">FAVORITE COLOR?</label>
+                <sl-color-picker size="small" value="#46A8AB" label="Select a color"></sl-color-picker>
+  
+              </fieldset>
+              <fieldset class="questions__form-grouping">
+                <label class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">COFFEE OR TEA ORDER?</label>
+              </fieldset>
+              <fieldset class="questions__form-grouping">
+                <label class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">GO-TO DESSERT OR SNACKS?</label>
+                
+              </fieldset>
+              <fieldset class="questions__form-grouping">
+                <label class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">DRINK OF CHOICE?</label>
+                
+              </fieldset>
+              <fieldset class="questions__form-grouping">
+                <label class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">SILVER OR GOLD JEWELRY?</label>
+                <div class="questions__switch">
+                  <span class="lxgw-wenkai-regular typography--inverse typography__text--1">Gold</span><sl-switch size="small"></sl-switch>
+                </div>
+              </fieldset>
+            </div>
+            
+          </form>
         </div>
       </section>
     </main>
