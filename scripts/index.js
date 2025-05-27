@@ -64,13 +64,13 @@ const createObject = () => {
     },
     frictionAir : 0.025,
     friction : 2,
-    restitution: 1.05,
+    restitution: 1,
     inertia: 50000,
     mass: 1.25
   });
   Composite.add(engine.world, sprite);
   setInterval(function() {
-    const shouldMakeTrouble = Math.random() < 0.025;
+    const shouldMakeTrouble = Math.random() < 0.05;
     if (shouldMakeTrouble) {
       var force = 0.1;
       var deltaVector = Matter.Vector.sub(mouse.position, sprite.position);

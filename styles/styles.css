@@ -308,14 +308,14 @@ h1, h2, h3, h4, h5, h6, p, span {
 
 .blurb__heading {
     position: absolute;
-    top: 9.25rem;
+    top: 6.25rem;
     z-index: 2;
 }
 
 .blurb__blurb {
     background-color: #BB493C;
     max-width: 40rem;
-    padding: 4rem;
+    padding: 8rem 4rem;
     border-radius: 4px;
 }
 
@@ -341,8 +341,16 @@ h1, h2, h3, h4, h5, h6, p, span {
     background-color: #DC252B;
 }
 
+.faq__details img {
+    width: 100%;
+}
+
 .faq__details p {
     padding: 1rem 0;
+}
+
+.faq__details a {
+    color: #E9E1CC;
 }
 
 .faq__faq {
@@ -391,9 +399,9 @@ h1, h2, h3, h4, h5, h6, p, span {
 
 .sprite--4 {
     width: 150px;
-    margin-left: -525px;
-    margin-top: -250px;
-    rotate: 30deg;
+    margin-left: -515px;
+    margin-top: -300px;
+    rotate: 40deg;
     z-index: 3;
 }
 
