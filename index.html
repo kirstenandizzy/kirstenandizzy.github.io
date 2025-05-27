@@ -133,8 +133,8 @@
               <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="RESPONSIBILITIES?">
                 <p class="typography__text--2">
                   Just attending and participating in whatever you reasonably can!
-                  I don't know what I'm doing, so any guidance or suggestions or telling me something is a bad idea would be fckn amazing.
-                  I maaay need some small help in folding origami cranes if anyone is into ez origami...?!
+                  I don't know what I'm doing, so any guidance or suggestions or telling me something is a bad idea (like this website, probably) would be fckn amazing.
+                  I could use some help in folding origami cranes at some point if anyone's into easy origami!
                 </p>
               </sl-details>
               <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="WHAT IF I CAN’T MAKE IT TO STUFF?">
@@ -172,48 +172,57 @@
           <h3 class="questions__heading">
             <span class="seravek--bold typography__heading--3 typography--uppercase typography--inverse">QUESTIONS</span>
           </h3>
-          <form class="questions__container padding--body">
+          <form class="questions__container padding--body" action="https://fabform.io/f/I_eZ57y" method="post">
             <div class="questions__questions">
               <fieldset class="questions__form-grouping questions__form-grouping--text-area">
-                <label class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">FAVORITE SONGS?</label>
+                <label id="music" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">FAVORITE SONGS?</label>
                 <textarea
+                  id="music"
+                  name="music"
                   class="lxgw-wenkai-regular typography--inverse"
-                  placeholder="How can we mend a broken heart? — Kahil El'Zabar"></textarea>
+                  placeholder="'How can we mend a broken heart?' by Kahil El'Zabar"></textarea>
               </fieldset>
               <fieldset class="questions__form-grouping">
-                <label class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">FAVORITE COLOR?</label>
-                <sl-color-picker size="small" value="#46A8AB" label="Select a color"></sl-color-picker>
+                <label for="color" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">FAVORITE COLOR?</label>
+                <sl-color-picker id="color" name="color" size="small" value="#46A8AB" label="Select a color"></sl-color-picker>
               </fieldset>
               <fieldset class="questions__form-grouping">
-                <label class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">COFFEE OR TEA ORDER?</label>
+                <label for="coffeetea" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">COFFEE OR TEA ORDER?</label>
                 <input
+                  id="coffeetea"
+                  name="coffeetea"
                   class="lxgw-wenkai-regular typography--inverse"
                   placeholder="Fruity boba tea"
                   filled
                 ></input>
               </fieldset>
               <fieldset class="questions__form-grouping">
-                <label class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">GO-TO DESSERT OR SNACKS?</label>
+                <label for="snacks" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">GO-TO DESSERT OR SNACKS?</label>
                 <input
+                  id="snacks"
+                  name="snacks"
                   class="lxgw-wenkai-regular typography--inverse"
                   placeholder="Canolis"
                   filled
                 ></input>
               </fieldset>
               <fieldset class="questions__form-grouping">
-                <label class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">DRINK OF CHOICE?</label>
+                <label for="drinks" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">DRINK OF CHOICE?</label>
                 <input
+                  id="drinks"
+                  name="drinks"
                   class="lxgw-wenkai-regular typography--inverse"
                   placeholder="Lemonade"
                   filled
                 ></input>
               </fieldset>
               <fieldset class="questions__form-grouping">
-                <label class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">SILVER OR GOLD JEWELRY?</label>
+                <label for="jewlery"  class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">JEWELRY?</label>
                 <div class="questions__switch">
-                  <span class="lxgw-wenkai-regular typography--inverse typography__text--1">Gold</span><sl-switch size="small"></sl-switch>
+                  <span class="lxgw-wenkai-regular typography--inverse typography__text--1">Silver</span><sl-switch id="jewlery" name="jewlery" size="small"></sl-switch>
                 </div>
               </fieldset>
+              <button class="lorimer--medium typography--inverse typography__text--1" type="submit">Submit</button>
             </div>
           </form>
         </div>
