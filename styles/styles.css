@@ -161,7 +161,7 @@
 }
 
 .typography__heading--1 {
-    font-size: 48px;
+    font-size: 40px;
     letter-spacing: -1.9px;
     line-height: 40px;
 }
@@ -639,7 +639,7 @@ ul, ol {
     }
     
     .typography__heading--1 {
-        font-size: 54px;
+        font-size: 48px;
     }
     
     .typography__heading--2 {
@@ -652,7 +652,7 @@ ul, ol {
     
     .typography__subheading--1 {
         font-size: 24px;
-        letter-spacing: 8.25px;
+        letter-spacing: 6.75px;
     }
     
     .typography__subheading--2 {
