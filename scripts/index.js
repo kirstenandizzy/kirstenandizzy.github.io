@@ -160,3 +160,18 @@ Matter.mouseConstraint.mouse.element.removeEventListener('touchmove', Matter.mou
 Matter.mouseConstraint.mouse.element.removeEventListener('touchstart', Matter.mouseConstraint.mouse.mousedown);
 Matter.mouseConstraint.mouse.element.removeEventListener('touchend', Matter.mouseConstraint.mouse.mouseup);
 
+mouseConstraint.mouse.element.removeEventListener('touchstart', mouseConstraint.mouse.mousedown);
+mouseConstraint.mouse.element.removeEventListener('touchmove', mouseConstraint.mouse.mousemove);
+mouseConstraint.mouse.element.removeEventListener('touchend', mouseConstraint.mouse.mouseup);
+
+mouseConstraint.mouse.element.addEventListener('touchstart', mouseConstraint.mouse.mousedown, { passive: true });
+mouseConstraint.mouse.element.addEventListener('touchmove', (e) => {
+  if (mouseConstraint.body) {
+    mouseConstraint.mouse.mousemove(e);
+  }
+});
+mouseConstraint.mouse.element.addEventListener('touchend', (e) => {
+  if (mouseConstraint.body) {
+    mouseConstraint.mouse.mouseup(e);
+  }
+});
