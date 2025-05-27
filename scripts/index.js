@@ -156,4 +156,7 @@ Composite.add(engine.world, mouseConstraint);
 // Needed for Matter.js bug where window stops scrolling around canvas
 mouse.element.removeEventListener('wheel', mouse.mousewheel);
 mouse.element.removeEventListener('DOMMouseScroll', mouse.mousewheel);
+Matter.mouseConstraint.mouse.element.removeEventListener('touchmove', Matter.mouseConstraint.mouse.mousemove);
+Matter.mouseConstraint.mouse.element.removeEventListener('touchstart', Matter.mouseConstraint.mouse.mousedown);
+Matter.mouseConstraint.mouse.element.removeEventListener('touchend', Matter.mouseConstraint.mouse.mouseup);
 
