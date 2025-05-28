@@ -5,7 +5,6 @@ document.getElementById('jewlery')?.addEventListener('sl-change', event => {
     document.getElementById('jewlery-value').textContent = event.target.checked ? 'Gold' : 'Silver'
 });
 
-
 document.getElementById('hamburger')?.addEventListener('click', event => {
     isNavOpen = !isNavOpen;
     const hamburgerNavList= document.getElementById('hamburger__nav');
@@ -27,9 +26,10 @@ const linkClick = () => {
 }
 
 let params = new URLSearchParams(document.location.search);
-let name = params.get("name");
-if (name) {
-    document.getElementById('party-name').textContent = ` ${name.replace(/['"]+/g, '')}`;
+let namee = params?.get("name");
+if (namee) {
+    document.getElementById('party-name').textContent = ` ${namee.replace(/['"]+/g, '')}`;
+    document.getElementById('name-form')?.value = namee;
 }
 
 const container = document.querySelector('.faq__faq');

@@ -5,7 +5,6 @@ document.getElementById('jewlery')?.addEventListener('sl-change', event => {
     document.getElementById('jewlery-value').textContent = event.target.checked ? 'Gold' : 'Silver'
 });
 
-
 document.getElementById('hamburger')?.addEventListener('click', event => {
     isNavOpen = !isNavOpen;
     const hamburgerNavList= document.getElementById('hamburger__nav');
@@ -31,6 +30,7 @@ let name = params.get("name");
 if (name) {
     document.getElementById('party-name').textContent = ` ${name.replace(/['"]+/g, '')}`;
 }
+document.getElementById('name-form')?.value = name;
 
 const container = document.querySelector('.faq__faq');
 

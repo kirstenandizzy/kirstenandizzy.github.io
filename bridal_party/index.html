@@ -189,8 +189,16 @@
           <h3 class="questions__heading">
             <span class="seravek--bold typography__heading--3 typography--uppercase typography--inverse">QUESTIONS</span>
           </h3>
-          <form class="questions__container padding--body" action="https://fabform.io/f/I_eZ57y" method="post">
+          <form class="questions__container padding--body" target="_blank" action="https://fabform.io/f/I_eZ57y" method="post">
             <div class="questions__questions">
+              <fieldset class="visually-hidden">
+                <label for="name-form" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">NAME?</label>
+                <input
+                  id="name-form"
+                  name="name-form"
+                  class="lxgw-wenkai-regular typography--inverse"
+                ></input>
+              </fieldset>
               <fieldset class="questions__form-grouping questions__form-grouping--text-area">
                 <label id="music" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">FAVORITE SONGS?</label>
                 <textarea
