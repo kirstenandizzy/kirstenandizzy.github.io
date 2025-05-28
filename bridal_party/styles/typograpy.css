@@ -127,6 +127,11 @@
     letter-spacing: -1.0px
 }
 
+.typography__text--3 {
+    font-size: 16px;
+    letter-spacing: -1.0px
+}
+
 .typography__heading--1 {
     font-size: 40px;
     letter-spacing: -1.9px;
