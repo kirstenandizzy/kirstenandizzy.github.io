@@ -52,7 +52,7 @@
         width: fit-content;
         margin: 0;
         text-align: left;
-        left: 2rem;
+        left: 0.5rem;
         margin-top: -150px;
         align-items: start;
     }
@@ -84,7 +84,7 @@
     }
     
     .typography__heading--2 {
-        font-size: 96px;
+        font-size: 84px;
     }
 
     .typography__heading--3 {

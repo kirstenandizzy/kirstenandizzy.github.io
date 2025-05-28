@@ -84,7 +84,7 @@ body {
 
 .section__faq {
     position: relative;
-    min-height: 44rem;
+    min-height: 55rem;
     height: 100%;
     overflow: hidden;
     background: #E45960;
@@ -182,7 +182,6 @@ body {
     width: 100%;
     max-width: 40rem;
     background-color: #DC252B;
-    max-height: 30rem;
     overflow: scroll;
 }
 
