@@ -25,3 +25,9 @@ const linkClick = () => {
     document.getElementById('main')?.classList.remove('visually-hidden');
     return true;
 }
+
+let params = new URLSearchParams(document.location.search);
+let name = params.get("name");
+if (name) {
+    document.getElementById('party-name').textContent = ` ${name.replace(/['"]+/g, '')}`;
+}

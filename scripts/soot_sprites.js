@@ -34,7 +34,7 @@ let engine = Engine.create();
 
 const SPRIZE_SIZE = 70;
 const BOUNDARY_SIZE = 20;
-const HEIGHT = 695 + BOUNDARY_SIZE;
+const HEIGHT = window.outerWidth < 700 ? window.outerWidth < 500 ? 640 + BOUNDARY_SIZE : 660 + BOUNDARY_SIZE : 695 + BOUNDARY_SIZE;
 
 // create a renderer
 let render = Render.create({
@@ -84,7 +84,7 @@ const createObject = () => {
 
 const GENERATE_INTERVAL = 100;
 const intervalId = setInterval(createObject, GENERATE_INTERVAL);
-const SRITE_COUNT = window.outerWidth*.0075;
+const SRITE_COUNT = window.outerWidth*.009;
 
 setTimeout(() => {
   clearInterval(intervalId);

@@ -147,7 +147,8 @@
 
 .typography__subheading--1 {
     font-size: 32px;
-    letter-spacing: 3.75px;
+    letter-spacing: 2px;
+    font-weight: 400;
 }
 
 .typography__subheading--2 {
