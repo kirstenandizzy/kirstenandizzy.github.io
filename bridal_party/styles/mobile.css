@@ -1,0 +1,102 @@
+/*
+ * Mobile
+ *
+ */
+ @media (max-width: 900px) {
+    .nav__list {
+        position: absolute;
+        left: -1000px;
+        flex-direction: column;
+        top: 0;
+        height: 100vh;
+        width: 100%;
+        background: #E9E1CC;
+        margin: 0;
+        min-height: 500px;
+        padding: 2rem 0;
+    }
+
+    .nav__hamburger {
+        display: block;
+        position: relative;
+        z-index: 1;
+        background: transparent;
+        border: 0;
+    }
+  
+    .nav__hamburger img {
+        width: 90%;
+    }
+
+    .page-header {
+        flex-direction: row-reverse;
+        width: 100%;
+        justify-content: start;
+    }
+ }
+
+ @media (max-width: 700px) {
+    .padding--body {
+        padding: 1.5rem .75rem;
+    }
+
+    .section__welcome {
+        height: 40rem;
+    }
+
+    .divider {
+        height: 2.5rem;
+    }
+    
+    .welcome__heading {
+        width: fit-content;
+        margin: 0;
+        text-align: left;
+        left: 2rem;
+        margin-top: -150px;
+        align-items: start;
+    }
+
+    .blurb__blurb {
+        padding: 6rem 2rem;
+        min-height: 230px;
+        align-items: center;
+        display: flex;
+    }
+
+    .faq__faq {
+        padding: 3rem 0;
+    }
+
+    .sprite--2, .sprite--3, .sprite--1, .sprite--4 {
+        display: none;
+    }
+
+    .typography__text--1 {
+        font-size: 20px;
+    }
+    
+    .typography__text--2 {
+    }
+    
+    .typography__heading--1 {
+        font-size: 48px;
+    }
+    
+    .typography__heading--2 {
+        font-size: 96px;
+    }
+
+    .typography__heading--3 {
+        font-size: 75px;
+    }
+    
+    .typography__subheading--1 {
+        font-size: 24px;
+        letter-spacing: 6.75px;
+    }
+    
+    .typography__subheading--2 {
+        font-size: 64px;
+    }
+}

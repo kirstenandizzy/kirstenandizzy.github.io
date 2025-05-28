@@ -1,0 +1,357 @@
+/*
+ * Color guide:
+ * Black  - #000000
+ * Cream  - #E9E1CC
+ * Gray   - #C9D3CE
+ * Red    - #DC252B
+ * Pink   - #E45960
+ * Orange - #EB8F65
+ * Brown  - #BB493C
+ * Green  - #B0B887
+ * Teal   - #279C7B
+ * Blue   - #46A8AB
+ */
+body {
+    background-color: #DC252B;
+}
+
+.page-header {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    z-index: 10000;
+}
+
+.page-header__heading {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav__hamburger {
+    display: none;
+}
+
+.nav__list {
+    position: relative;
+    z-index: 100;
+    display: flex;
+    list-style: none;
+    align-items: center;
+    gap: 2rem;
+    transition: left 500ms ease-in;
+}
+
+.nav__close-button {
+    display: none;;
+}
+
+.nav__list--open .nav__close-button {
+    display: unset;
+    background: transparent;
+    border: transparent;
+    position: absolute;
+    top: 0;
+    right: 1rem;
+}
+
+.nav__close-button i {
+    color: #DC252B;
+}
+
+.page-header .nav__list--open {
+    left: 0;
+}
+
+.main {
+    position: relative;
+}
+
+.section__welcome {
+    position: relative;
+    height: 44rem;
+    overflow: hidden;
+    background-color: #DC252B;
+
+}
+
+.section__blurb {
+    position: relative;
+    height: 44rem;
+    overflow: hidden;
+}
+
+.section__faq {
+    position: relative;
+    min-height: 44rem;
+    height: 100%;
+    overflow: hidden;
+    background: #E45960;
+    overflow: auto;
+
+    --sl-color-neutral-0: #DC252B;
+    --sl-color-neutral-200: #DC252B;
+}
+
+.section__questions {
+    position: relative;
+    min-height: 44rem;
+    overflow: hidden;
+    background: #B0B887;
+}
+
+.welcome__heading {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    top: 50%;
+    margin-top: -100px;
+    left: 50%;
+    margin-left: -400;
+}
+
+.welcome {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.blurb {
+    position: relative;
+    height: 100%;
+    background-color: #EB8F65;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blurb__heading {
+    position: absolute;
+    top: 5.75rem;
+    z-index: 2;
+}
+
+.blurb__blurb {
+    background-color: #BB493C;
+    max-width: 40rem;
+    padding: 8rem 4rem;
+    border-radius: 4px;
+}
+
+.faq {
+    height: 100%;
+    background-color: #E45960;
+}
+
+.faq__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+.faq__heading {
+    position: relative;
+    top: 3rem;
+}
+
+.faq__details {
+    width: 100%;
+    background-color: #DC252B;
+}
+
+.faq__details img {
+    width: 100%;
+}
+
+.faq__details p {
+    padding: 1rem 0;
+}
+
+.faq__details a {
+    color: #E9E1CC;
+}
+
+.faq__faq {
+    width: 100%;
+    max-width: 40rem;
+    background-color: #DC252B;
+    max-height: 30rem;
+    overflow: scroll;
+}
+
+.questions {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: 1.5rem;
+    --sl-input-color: white;
+    --sl-input-filled-background-color: #B0B887;
+    --sl-input-background-color: #B0B887; 
+}
+
+.questions button {
+    background-color: #DC252B;
+    border: 0;
+    border-radius: 4px;
+    padding: 1rem;
+    min-width: 60px;
+    padding: 0.75rem;
+    min-width: 120px;
+    float: right;
+    margin: 1rem 1.25rem;
+}
+
+.questions__questions {
+    padding: 1.5rem 0;
+}
+
+.questions__container {
+    width: 100%;
+    max-width: 40rem;
+    background-color: #279C7B;
+}
+
+.questions__heading {
+    position: relative;
+    top: 3rem;
+}
+
+.questions__form-grouping {
+    padding: 1rem;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+
+    --sl-color-neutral-0: white;
+    --sl-color-neutral-200: white;
+}
+
+
+.questions__form-grouping--text-area {
+   flex-direction: column;
+   align-items: start;
+   gap: 1rem;
+}
+
+.questions textarea {
+    width: 100%;
+    height: 5rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #B0B887;
+    color: white;
+    padding: .75rem;
+}
+
+.questions input {
+    padding: .75rem;
+    min-width: 200px;
+    border: none;
+    border-radius: 4px;
+    background-color: #B0B887;
+    color: white;
+}
+
+.questions input::placeholder, .questions textarea::placeholder {
+    color: #dbd4bf;
+}
+
+.questions textarea:focus, .questions input:focus {
+    outline: var(--sl-focus-ring);
+    outline-offset: var(--sl-focus-ring-offset);
+}
+
+.questions__switch {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    --sl-color-primary-600: #FFD700;
+    --sl-color-neutral-400: #E0E0E0;
+}
+
+/*
+ * Sprites
+ *
+ */
+.sprite {
+    padding: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: 40px;
+    cursor: pointer;
+}
+
+.sprite--1 {
+    width: 235px;    
+    margin-left: -375px;
+    margin-top: -145px;
+}
+
+.sprite--2 {
+    width: 150px;
+    margin-left: 250px;
+    margin-top: -170px;
+    rotate: 15deg;
+}
+
+.sprite--3 {
+    width: 150px;
+    margin-left: 300px;
+    margin-top: -130px;
+    z-index: 2;
+}
+
+.sprite--4 {
+    width: 150px;
+    margin-left: -515px;
+    margin-top: -300px;
+    rotate: 40deg;
+    z-index: 3;
+}
+
+
+.sprite-house {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 98;
+}
+
+/*
+ * Animations
+ *
+ */
+.floaty {
+    animation: 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s 1 floaty;
+    animation-iteration-count: infinite;
+    animation-play-state: paused;
+}
+
+.floaty:hover {
+    animation-play-state: running;
+}
+
+@keyframes floaty {
+    0% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    50% {
+        -webkit-transform: translateY(-25px);
+        transform: translateY(-25px);
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,71 @@
+.divider {
+    position: relative;
+    background-color: #E9E1CC;
+    height: 4rem;
+    z-index: 99;
+    margin: 0;
+}
+
+.divider-link {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    top: 0;
+    left: 0;
+    width: calc(100% - 5rem);
+    height: 100%;
+    z-index: 100;
+    text-decoration: none;
+    padding: 0 2.5rem;
+}
+
+.divider-icon {
+    position: relative;
+    transition: 200ms ease-in-out;
+    top: 0;
+    padding: 1rem;
+}
+
+.divider-icon:hover {
+    top: -0.5rem;
+    opacity: 0.75;
+}
+
+.divider-container {
+    position: relative;
+}
+
+.fa-solid {
+    color: #46A8AB;
+}
+
+.padding--body {
+    padding: 2rem 2.5rem;
+}
+
+.padding--top {
+    padding-top: 1.5rem;
+    width: 100%;
+}
+
+.center {
+    text-align: center;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
