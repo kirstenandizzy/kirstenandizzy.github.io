@@ -296,10 +296,27 @@ ul, ol {
     padding: 2rem 2.5rem;
 }
 
+.padding--top {
+    padding-top: 1.5rem;
+    width: 100%;
+}
+
+.center {
+    text-align: center;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
 .section__welcome {
     position: relative;
     height: 44rem;
     overflow: hidden;
+    background-color: #DC252B;
+
 }
 
 .section__blurb {
@@ -342,7 +359,6 @@ ul, ol {
 .welcome {
     position: relative;
     height: 100%;
-    background-color: #DC252B;
     width: 100%;
     overflow: hidden;
 }
@@ -501,6 +517,8 @@ ul, ol {
     display: flex;
     align-items: center;
     gap: .5rem;
+    --sl-color-primary-600: #FFD700;
+    --sl-color-neutral-400: #E0E0E0;
 }
 
 /*
@@ -620,7 +638,7 @@ ul, ol {
     }
 
     .sprite-house {
-        z-index: 1;
+        z-index: 0;
     }
 
     .divider {

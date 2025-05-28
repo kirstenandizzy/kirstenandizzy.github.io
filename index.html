@@ -184,7 +184,10 @@
               </fieldset>
               <fieldset class="questions__form-grouping">
                 <label for="color" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">FAVORITE COLOR?</label>
-                <sl-color-picker id="color" name="color" size="small" value="#46A8AB" label="Select a color"></sl-color-picker>
+                <div class="flex">
+                  <span class="lxgw-wenkai-regular typography--inverse typography__text--2">(Tap me!)</span>
+                  <sl-color-picker id="color" name="color" size="small" value="#46A8AB" label="Select a color"></sl-color-picker>
+                </div>
               </fieldset>
               <fieldset class="questions__form-grouping">
                 <label for="coffeetea" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">COFFEE OR TEA ORDER?</label>
@@ -219,12 +222,21 @@
               <fieldset class="questions__form-grouping">
                 <label for="jewlery"  class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">JEWELRY?</label>
                 <div class="questions__switch">
-                  <span class="lxgw-wenkai-regular typography--inverse typography__text--1">Silver</span><sl-switch id="jewlery" name="jewlery" size="small"></sl-switch>
+                  <span id="jewlery-value" class="lxgw-wenkai-regular typography--inverse typography__text--1">Gold</span><sl-switch id="jewlery" name="jewlery" size="small" checked></sl-switch>
                 </div>
               </fieldset>
+              <p class=" center lxgw-wenkai-regular typography--inverse typography__text--2 padding--top">(You'll have to do a quick captcha after hitting Submit!)</p>
               <button class="lorimer--medium typography--inverse typography__text--1" type="submit">Submit</button>
             </div>
           </form>
+          <script>
+            const checkbox = document.getElementById('jewlery');
+            checkbox.addEventListener('sl-change', event => {
+              debugger;
+              console.log(event.target.checked ? 'checked' : 'not checked');
+              document.getElementById('jewlery-value').textContent = event.target.checked ? 'Gold' : 'Silver'
+            });
+          </script>
         </div>
       </section>
     </main>
