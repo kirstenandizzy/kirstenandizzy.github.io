@@ -5,7 +5,7 @@
  @media (max-width: 900px) {
     .nav__list {
         position: absolute;
-        left: -700px;
+        left: -900px;
         flex-direction: column;
         top: 0;
         height: 1000px;
