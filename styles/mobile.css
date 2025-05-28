@@ -5,10 +5,10 @@
  @media (max-width: 900px) {
     .nav__list {
         position: absolute;
-        left: -1000px;
+        left: -700px;
         flex-direction: column;
         top: 0;
-        height: 100vh;
+        height: 1000px;
         width: 100%;
         background: #E9E1CC;
         margin: 0;
