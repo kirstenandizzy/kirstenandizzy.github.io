@@ -26,11 +26,11 @@ const linkClick = () => {
 }
 
 let params = new URLSearchParams(document.location.search);
-let namee = params?.get("name");
+let namee = params.get("name");
 if (namee) {
     document.getElementById('party-name').textContent = ` ${namee.replace(/['"]+/g, '')}`;
-    document.getElementById('name-form')?.value = namee;
 }
+document.getElementById('name-form').value = namee;
 
 const container = document.querySelector('.faq__faq');
 
