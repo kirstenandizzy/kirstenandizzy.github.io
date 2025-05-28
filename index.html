@@ -10,7 +10,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Euphoria+Script&family=LXGW+WenKai+Mono+TC&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/light.css" />
+    <link rel="stylesheet" href="styles/custom_normalize.css">
+    <link rel="stylesheet" href="styles/generic.css">
+    <link rel="stylesheet" href="styles/typograpy.css">
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/mobile.css">
 
     <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/shoelace-autoloader.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/components/details/details.js"></script>
@@ -23,15 +27,20 @@
         <span class="lorimer--medium typography__subheading--1">(kirsten & izzy)</span>
       </h1>
       <nav class="nav">
-        <button class="nav__hamburger"><img src="assets/hamburger.png" alt="Open navigation menu"></button>
-        <ul class="nav__list seravek--bold">
-          <li><a class="typography__nav-link" href="#blurb">BLURB</a></li>
-          <li><a class="typography__nav-link" href="#faq">FAQ</a></li>
-          <li><a class="typography__nav-link" href="#questionairre">QUESTIONAIRRE</a></li>
+        <button id="hamburger" class="nav__hamburger"><img src="assets/hamburger.png" alt="Open navigation menu"></button>
+        <ul id="hamburger__nav" class="nav__list seravek--bold">
+          <li>
+            <button onclick='return linkClick()' class="typography__nav-link nav__close-button" aria-label="close">
+              <i class="fa-solid fa-circle-xmark fa-lg"></i>
+            </button>
+          </li>
+          <li><a id="blurb__link" onclick='return linkClick()' class="typography__nav-link" href="#blurb">BLURB</a></li>
+          <li><a id="faq__link" onclick='return linkClick()' class="typography__nav-link" href="#faq">FAQ</a></li>
+          <li><a id="questionnaire__link" onclick='return linkClick()' class="typography__nav-link" href="#questionairre">QUESTIONAIRRE</a></li>
         </ul>
       </nav>
     </header>
-    <main class="main">
+    <main class="main" id="main">
       <section class="section__welcome">
         <canvas id="sprite-house" class="sprite-house"></canvas>
         <div class="welcome padding--body">
@@ -229,21 +238,11 @@
               <button class="lorimer--medium typography--inverse typography__text--1" type="submit">Submit</button>
             </div>
           </form>
-          <script>
-            const checkbox = document.getElementById('jewlery');
-            checkbox.addEventListener('sl-change', event => {
-              debugger;
-              console.log(event.target.checked ? 'checked' : 'not checked');
-              document.getElementById('jewlery-value').textContent = event.target.checked ? 'Gold' : 'Silver'
-            });
-          </script>
         </div>
       </section>
     </main>
+    <script src="scripts/index.js"></script>
     <script src="scripts/matter.min.js"></script>
-    <script  src="scripts/index.js"></script>
-    <footer>
-
-    </footer>
+    <script  src="scripts/soot_sprites.js"></script>
   </body>
 </html>
