@@ -96,7 +96,7 @@ body {
 
 .section__questions {
     position: relative;
-    min-height: 44rem;
+    min-height: 50rem;
     overflow: hidden;
     background: #B0B887;
 }
