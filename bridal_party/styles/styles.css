@@ -11,7 +11,7 @@
  * Teal   - #279C7B
  * Blue   - #46A8AB
  */
-body {
+ body {
     background-color: #DC252B;
 }
 
@@ -84,7 +84,7 @@ body {
 
 .section__faq {
     position: relative;
-    min-height: 55rem;
+    min-height: 44rem;
     height: 100%;
     overflow: hidden;
     background: #E45960;
