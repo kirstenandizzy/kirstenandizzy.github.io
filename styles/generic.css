@@ -69,3 +69,8 @@
   clip: rect(0,0,0,0);
   border: 0;
 }
+
+.max-height {
+    max-height: 20rem;
+    overflow: scroll;
+}

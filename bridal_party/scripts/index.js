@@ -31,3 +31,12 @@ let name = params.get("name");
 if (name) {
     document.getElementById('party-name').textContent = ` ${name.replace(/['"]+/g, '')}`;
 }
+
+const container = document.querySelector('.faq__faq');
+
+// Close all other details when one is shown
+container.addEventListener('sl-show', event => {
+    if (event.target.localName === 'sl-details') {
+        [...container?.querySelectorAll('sl-details')].map(details => (details.open = event.target === details));
+    }
+});
