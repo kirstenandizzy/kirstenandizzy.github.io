@@ -96,7 +96,7 @@
 
 .section__questions {
     position: relative;
-    min-height: 50rem;
+    min-height: 41rem;
     overflow: hidden;
     background: #B0B887;
 }
@@ -216,7 +216,6 @@
     width: 100%;
     max-width: 40rem;
     background-color: #279C7B;
-    margin-bottom: 10rem;
 }
 
 .questions__heading {

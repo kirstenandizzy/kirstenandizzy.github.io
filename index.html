@@ -77,6 +77,87 @@
       </section>
       <div class="divider-container">
         <hr class="divider"/>
+        <a href="#questions" class="divider-link" aria-label="Scroll to blurb section">
+          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
+          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
+          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
+        </a>
+      </div>
+      <section class="section__questions" id="questions">
+        <div class="questions">
+          <h3 class="questions__heading">
+            <span class="seravek--bold typography__heading--3 typography--uppercase typography--inverse">QUESTIONS</span>
+          </h3>
+          <form class="questions__container padding--body">
+          <!-- <form class="questions__container padding--body" target="_blank" action="https://fabform.io/f/I_eZ57y" method="post"> -->
+            <div class="questions__questions">
+              <fieldset class="visually-hidden">
+                <label for="name-form" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">NAME?</label>
+                <input
+                  id="name-form"
+                  name="name-form"
+                  class="lxgw-wenkai-regular typography--inverse"
+                ></input>
+              </fieldset>
+              <!-- <fieldset class="questions__form-grouping questions__form-grouping--text-area">
+                <label id="music" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">FAVORITE SONGS?</label>
+                <textarea
+                  id="music"
+                  name="music"
+                  class="lxgw-wenkai-regular typography--inverse"
+                  placeholder="'How can we mend a broken heart?' by Kahil El'Zabar"></textarea>
+              </fieldset> -->
+              <fieldset class="questions__form-grouping">
+                <label for="color" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">FAVORITE COLOR?</label>
+                <div class="flex">
+                  <span class="lxgw-wenkai-regular typography--inverse typography__text--2">(Tap me!)</span>
+                  <sl-color-picker id="color" name="color" size="small" value="#46A8AB" label="Select a color"></sl-color-picker>
+                </div>
+              </fieldset>
+              <!-- <fieldset class="questions__form-grouping">
+                <label for="coffeetea" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">COFFEE OR TEA ORDER?</label>
+                <input
+                  id="coffeetea"
+                  name="coffeetea"
+                  class="lxgw-wenkai-regular typography--inverse"
+                  placeholder="Fruity boba tea"
+                  filled
+                ></input>
+              </fieldset> -->
+              <fieldset class="questions__form-grouping">
+                <label for="snacks" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">GO-TO DESSERT OR SNACKS?</label>
+                <input
+                  id="snacks"
+                  name="snacks"
+                  class="lxgw-wenkai-regular typography--inverse"
+                  placeholder="Sweet treat"
+                  filled
+                ></input>
+              </fieldset>
+              <!-- <fieldset class="questions__form-grouping">
+                <label for="drinks" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">DRINK OF CHOICE?</label>
+                <input
+                  id="drinks"
+                  name="drinks"
+                  class="lxgw-wenkai-regular typography--inverse"
+                  placeholder="Lemonade"
+                  filled
+                ></input>
+              </fieldset> -->
+              <fieldset class="questions__form-grouping">
+                <label for="jewlery"  class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">JEWELRY?</label>
+                <div class="questions__switch">
+                  <span id="jewlery-value" class="lxgw-wenkai-regular typography--inverse typography__text--1">Gold</span><sl-switch id="jewlery" name="jewlery" size="small" checked></sl-switch>
+                </div>
+              </fieldset>
+              <p class="right lxgw-wenkai-regular typography--inverse typography__text--2 padding--top">(Quick captcha after hitting Submit!)</p>
+              <button class="lorimer--medium typography--inverse typography__text--1" type="submit">Submit</button>
+            </div>
+          </form>
+        </div>
+      </section>
+      <div class="divider-container">
+        <hr class="divider"/>
         <a href="#faq" class="divider-link" aria-label="Scroll to blurb section">
           <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon mobile"></i>
           <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
@@ -115,8 +196,8 @@
                     Here is a guestimate at what some of the pre-wedding events are looking like:
                     <ul class="typography__text--3">
                       <li>Engagement party — End-of-September (2025) in Chicago</li> 
-                      <li>Bachelorette party — Camping (probs West Coast)</li>
-                      <li>Bridal shower — TBD (2026) New Jersey or Chicago</li>
+                      <li>Bachelorette party — Camping?! (prob West Coast)</li>
+                      <li>Bridal shower — My mom New Jersey or Chicago</li>
                       <li>Rehearsal dinner — September 18, 2026 in Jersey.</li>
                     </ul>
                   </p>
@@ -126,7 +207,6 @@
                 <div class="max-height">
                   <p class="typography__text--3">
                     I want you to find something that you feel beautiful in, so I am very very flexible. I have a WIP color palette — but its more there for vibe and less for exactness.
-                    One soft request is favoring dresses w/ a satin-like sheen — but isn't important. Do yo thing & be freeee.
                   </p>
                   <p class="typography__text--3">
                     Here are some examples of dress shops that could be nice, but absolutely support you choosing a dress that you found anywhere yourself.
@@ -143,9 +223,8 @@
               </sl-details>
               <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="TIME COMMITMENT?">
                 <p class="typography__text--3">
-                  As much or as little as you like — I don't want this to feel like a burden. Being there for the rehearsal (day before) and the wedding itself would be my requests.
-                  Joining for the bachelorette would be awesome, but completely get it if you can't make it work.
-                  There are other events like the bridal shower and engagement party but no sweat if it ain't in the cards.
+                  As much or as little as you like — I don't want this to feel like a burden. Being there for the rehearsal (day before) and the wedding itself would be my only request!
+                  Joining for the pre-wedding activities would be lovely but is completely optional.
                 </p>
               </sl-details>
               <sl-details class="faq__details lxgw-wenkai-regular typography--inverse typography__text--1" summary="RESPONSIBILITIES?">
@@ -176,87 +255,6 @@
           </div>
         </div>
       </div>
-      </section>
-      <div class="divider-container">
-        <hr class="divider"/>
-        <a href="#questions" class="divider-link" aria-label="Scroll to blurb section">
-          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
-          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
-          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
-        </a>
-      </div>
-      <section class="section__questions" id="questions">
-        <div class="questions">
-          <h3 class="questions__heading">
-            <span class="seravek--bold typography__heading--3 typography--uppercase typography--inverse">QUESTIONS</span>
-          </h3>
-          <form class="questions__container padding--body">
-          <!-- <form class="questions__container padding--body" target="_blank" action="https://fabform.io/f/I_eZ57y" method="post"> -->
-            <div class="questions__questions">
-              <fieldset class="visually-hidden">
-                <label for="name-form" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">NAME?</label>
-                <input
-                  id="name-form"
-                  name="name-form"
-                  class="lxgw-wenkai-regular typography--inverse"
-                ></input>
-              </fieldset>
-              <fieldset class="questions__form-grouping questions__form-grouping--text-area">
-                <label id="music" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">FAVORITE SONGS?</label>
-                <textarea
-                  id="music"
-                  name="music"
-                  class="lxgw-wenkai-regular typography--inverse"
-                  placeholder="'How can we mend a broken heart?' by Kahil El'Zabar"></textarea>
-              </fieldset>
-              <fieldset class="questions__form-grouping">
-                <label for="color" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">FAVORITE COLOR?</label>
-                <div class="flex">
-                  <span class="lxgw-wenkai-regular typography--inverse typography__text--2">(Tap me!)</span>
-                  <sl-color-picker id="color" name="color" size="small" value="#46A8AB" label="Select a color"></sl-color-picker>
-                </div>
-              </fieldset>
-              <fieldset class="questions__form-grouping">
-                <label for="coffeetea" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">COFFEE OR TEA ORDER?</label>
-                <input
-                  id="coffeetea"
-                  name="coffeetea"
-                  class="lxgw-wenkai-regular typography--inverse"
-                  placeholder="Fruity boba tea"
-                  filled
-                ></input>
-              </fieldset>
-              <fieldset class="questions__form-grouping">
-                <label for="snacks" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">GO-TO DESSERT OR SNACKS?</label>
-                <input
-                  id="snacks"
-                  name="snacks"
-                  class="lxgw-wenkai-regular typography--inverse"
-                  placeholder="Canolis"
-                  filled
-                ></input>
-              </fieldset>
-              <fieldset class="questions__form-grouping">
-                <label for="drinks" class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">DRINK OF CHOICE?</label>
-                <input
-                  id="drinks"
-                  name="drinks"
-                  class="lxgw-wenkai-regular typography--inverse"
-                  placeholder="Lemonade"
-                  filled
-                ></input>
-              </fieldset>
-              <fieldset class="questions__form-grouping">
-                <label for="jewlery"  class="questions__label lxgw-wenkai-regular typography--inverse typography__text--1">JEWELRY?</label>
-                <div class="questions__switch">
-                  <span id="jewlery-value" class="lxgw-wenkai-regular typography--inverse typography__text--1">Gold</span><sl-switch id="jewlery" name="jewlery" size="small" checked></sl-switch>
-                </div>
-              </fieldset>
-              <p class=" center lxgw-wenkai-regular typography--inverse typography__text--2 padding--top">(You'll have to do a quick captcha after hitting Submit!)</p>
-              <button class="lorimer--medium typography--inverse typography__text--1" type="submit">Submit</button>
-            </div>
-          </form>
-        </div>
       </section>
     </main>
     <script src="scripts/index.js"></script>
