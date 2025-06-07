@@ -213,6 +213,10 @@ body {
     padding: 3rem 0;
 }
 
+.questions__container-optional {
+    padding-top: 24px;
+}
+
 .questions__container {
     width: 100%;
     max-width: 40rem;

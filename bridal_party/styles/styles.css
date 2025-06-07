@@ -11,7 +11,7 @@
  * Teal   - #279C7B
  * Blue   - #46A8AB
  */
- body {
+body {
     background-color: #DC252B;
 }
 
@@ -182,6 +182,7 @@
     width: 100%;
     max-width: 40rem;
     background-color: #DC252B;
+    padding: 4rem 2rem;
 }
 
 .questions {
@@ -209,7 +210,11 @@
 }
 
 .questions__questions {
-    padding: 1.5rem 0;
+    padding: 3rem 0;
+}
+
+.questions__container-optional {
+    padding-top: 24px;
 }
 
 .questions__container {

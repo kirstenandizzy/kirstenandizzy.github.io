@@ -2,7 +2,7 @@ let isNavOpen = false;
 
 document.getElementById('jewlery')?.addEventListener('sl-change', event => {
     console.log(event.target.checked ? 'checked' : 'not checked');
-    document.getElementById('jewlery-value').textContent = event.target.checked ? 'Gold' : 'Silver'
+    document.getElementById('jewlery-value').textContent = event.target.checked ? 'gold' : 'silver'
 });
 
 document.getElementById('hamburger')?.addEventListener('click', event => {
