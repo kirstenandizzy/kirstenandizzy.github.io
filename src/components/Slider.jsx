@@ -103,6 +103,23 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
     window.matchMedia('(max-width: 768px)').matches
   );
 
+  // Refs to avoid re-registering touch listeners on every value change
+  const valueRef = useRef(value);
+  const onChangeRef = useRef(onChange);
+  const minRef = useRef(min);
+  const maxRef = useRef(max);
+  const targetValueRef = useRef(value);
+  const animFrameRef = useRef(null);
+  const velocityRef = useRef(0);
+  const lastTouchTimeRef = useRef(0);
+  const lastTouchYRef = useRef(0);
+
+  // Keep refs in sync
+  useEffect(() => { valueRef.current = value; }, [value]);
+  useEffect(() => { onChangeRef.current = onChange; }, [onChange]);
+  useEffect(() => { minRef.current = min; }, [min]);
+  useEffect(() => { maxRef.current = max; }, [max]);
+
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
     const handler = (e) => setIsMobile(e.matches);
@@ -110,35 +127,119 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
     return () => mq.removeEventListener('change', handler);
   }, []);
 
+  // Lerp animation loop
+  const startAnimation = () => {
+    if (animFrameRef.current) return;
+
+    const animate = () => {
+      const current = valueRef.current;
+      const target = targetValueRef.current;
+      const diff = target - current;
+
+      if (Math.abs(diff) < 0.01) {
+        // Snap to target and stop
+        if (onChangeRef.current) onChangeRef.current(target);
+        animFrameRef.current = null;
+        return;
+      }
+
+      const next = current + diff * 0.18;
+      if (onChangeRef.current) onChangeRef.current(next);
+      animFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    animFrameRef.current = requestAnimationFrame(animate);
+  };
+
   // Handle touch scrolling on mobile
   useEffect(() => {
     const container = containerRef.current;
     if (!container || !isMobile) return;
 
+    const PIXELS_PER_HOUR = 40;
+    const DEAD_ZONE = 3; // px before slider starts responding
+
     const handleTouchStart = (e) => {
+      // Stop any ongoing momentum animation
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current);
+        animFrameRef.current = null;
+      }
       touchStartRef.current = e.touches[0].clientY;
+      lastTouchYRef.current = e.touches[0].clientY;
+      lastTouchTimeRef.current = Date.now();
+      velocityRef.current = 0;
+      targetValueRef.current = valueRef.current;
     };
+
+    let deadZonePassed = false;
+    let accumulatedDelta = 0;
 
     const handleTouchMove = (e) => {
       if (touchStartRef.current === null) return;
 
       const currentY = e.touches[0].clientY;
-      const deltaY = currentY - touchStartRef.current;
+      const now = Date.now();
+      const deltaY = currentY - lastTouchYRef.current;
 
-      // Mobile slider is vertical: scrolling down increases value, up decreases
-      // Each pixel of movement = 0.1 hours (6 minutes)
-      const pixelsPerHour = 4; // Adjust sensitivity as needed
-      const hoursDelta = deltaY / pixelsPerHour;
+      // Track velocity for momentum
+      const dt = now - lastTouchTimeRef.current;
+      if (dt > 0) {
+        velocityRef.current = deltaY / dt; // px per ms
+      }
+      lastTouchYRef.current = currentY;
+      lastTouchTimeRef.current = now;
 
-      if (onChange) {
-        onChange(Math.max(min, Math.min(max, value - hoursDelta)));
+      if (!deadZonePassed) {
+        accumulatedDelta += Math.abs(deltaY);
+        if (accumulatedDelta < DEAD_ZONE) return;
+        deadZonePassed = true;
       }
 
-      touchStartRef.current = currentY;
+      const hoursDelta = deltaY / PIXELS_PER_HOUR;
+      const newTarget = Math.max(
+        minRef.current,
+        Math.min(maxRef.current, targetValueRef.current - hoursDelta)
+      );
+      targetValueRef.current = newTarget;
+      startAnimation();
     };
 
     const handleTouchEnd = () => {
       touchStartRef.current = null;
+      deadZonePassed = false;
+      accumulatedDelta = 0;
+
+      // Apply momentum
+      const velocity = velocityRef.current; // px per ms
+      if (Math.abs(velocity) > 0.05) {
+        let v = velocity;
+        const FRICTION = 0.95;
+
+        const momentumAnimate = () => {
+          v *= FRICTION;
+          if (Math.abs(v) < 0.001) {
+            animFrameRef.current = null;
+            return;
+          }
+          const hoursDelta = (v * 16) / PIXELS_PER_HOUR; // ~16ms per frame
+          const newTarget = Math.max(
+            minRef.current,
+            Math.min(maxRef.current, targetValueRef.current - hoursDelta)
+          );
+          targetValueRef.current = newTarget;
+
+          const current = valueRef.current;
+          const diff = targetValueRef.current - current;
+          const next = current + diff * 0.18;
+          if (onChangeRef.current) onChangeRef.current(next);
+
+          animFrameRef.current = requestAnimationFrame(momentumAnimate);
+        };
+
+        if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+        animFrameRef.current = requestAnimationFrame(momentumAnimate);
+      }
     };
 
     container.addEventListener('touchstart', handleTouchStart, { passive: true });
@@ -149,8 +250,12 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
       container.removeEventListener('touchstart', handleTouchStart);
       container.removeEventListener('touchmove', handleTouchMove);
       container.removeEventListener('touchend', handleTouchEnd);
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current);
+        animFrameRef.current = null;
+      }
     };
-  }, [isMobile, min, max, value, onChange]);
+  }, [isMobile]);
 
   const handleChange = (e) => {
     const newValue = parseFloat(e.target.value);

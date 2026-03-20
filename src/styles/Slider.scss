@@ -259,6 +259,7 @@
     margin: 0;
     padding: 0 1rem 0 0;
     box-sizing: border-box;
+    touch-action: none; // prevent browser scroll from competing with custom touch handler
   }
 
   // Main content area becomes a horizontal flex row

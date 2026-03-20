@@ -11,16 +11,16 @@ const FAQ_ITEMS = [
     answer: 'The ceremony begins at 5:30 PM. Doors will open at 5:00 PM, and we recommend arriving early to find parking and get settled before the ceremony starts.'
   },
   {
-    question: 'What time does the first bus leave the hotel for the venue?',
-    answer: 'There will be two bus trips. The first bus will leave the hotel at 4:30 PM. Please plan to board the bus at least 5 minutes early.'
+    question: 'What time does the bus leave the hotel for the venue?',
+    answer: 'The bus boards at 4:15 PM, and will leave at 4:30 PM.'
   },
   {
     question: 'What time does the bus leave the venue to the hotel?',
-    answer: 'There will be two bus trips. The first bus will leave the venue at 10:30 PM, the second bus will leave the venue at 11:00 PM. Please plan to board the bus at least 5 minutes early.'
+    answer: 'The bus boards at 11:00 PM, and will leave at 11:15 PM.'
   },
   {
     question: 'What is the dress code?',
-    answer: 'Festive... Formal? Formal attire with colors encouraged.  The ceremony will be outdoors on the beach, and the rest of the evening will allow for both hanging out on the beach, or hanging out indoors or on the balcony.'
+    answer: 'Festive formal! The ceremony will be outdoors, on the beach (weather permitting) so prioritize your comfort. We will move inside after the ceremony, but you can still enjoy the beach and the balconies to your liking.'
   },
   {
     question: 'Are children invited?',
@@ -28,7 +28,7 @@ const FAQ_ITEMS = [
   },
   {
     question: 'What is the parking situation?',
-    answer: 'There is free parking available at the venue.'
+    answer: 'There is free parking available at the venue, though it may be limited.'
   },
 ];
 
