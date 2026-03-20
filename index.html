@@ -1,80 +1,17 @@
-<html>
+<!doctype html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="https://use.typekit.net/fxq2sgs.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Euphoria+Script&family=LXGW+WenKai+Mono+TC&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/light.css" />
-    <link rel="stylesheet" href="styles/custom_normalize.css">
-    <link rel="stylesheet" href="styles/generic.css">
-    <link rel="stylesheet" href="styles/typograpy.css">
-    <link rel="stylesheet" href="styles/styles.css">
-    <link rel="stylesheet" href="styles/mobile.css">
-
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/shoelace-autoloader.js"></script>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/components/details/details.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize.css/8.0.1/normalize.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&family=Indie+Flower&display=swap" rel="stylesheet">
+    <title>Our Wedding</title>
   </head>
   <body>
-    <header class="page-header padding--body">
-      <h1 class="page-header__heading">
-        <span class="seravek--bold typography__heading--1 typography--uppercase">izzy & kirsten</span>
-        <span class="lorimer--medium typography__subheading--1">♡｡ﾟ.(*♡´‿` 人´‿` ♡*)ﾟ♡ °・</span>
-      </h1>
-      <nav class="nav">
-        <button id="hamburger" class="nav__hamburger"><img src="assets/hamburger.png" alt="Open navigation menu"></button>
-        <ul id="hamburger__nav" class="nav__list seravek--bold typography--uppercase">
-          <li>
-            <button onclick='return linkClick()' class="typography__nav-link nav__close-button" aria-label="close">
-              <i class="fa-solid fa-circle-xmark fa-lg"></i>
-            </button>
-          </li>
-          <li><a id="blurb__link" onclick='return linkClick()' class="typography__nav-link typography--uppercase" href="#blurb">Blurb</a></li>
-        </ul>
-      </nav>
-    </header>
-    <main class="main" id="main">
-      <section class="section__welcome">
-        <canvas id="sprite-house" class="sprite-house"></canvas>
-        <div class="welcome padding--body">
-          <h2 class="welcome__heading">
-            <img  class="sprite sprite--1 floaty" src="assets/soot_sprites/body/13.png" alt="Ghibli soot sprite"/>
-            <img  class="sprite sprite--2 floaty" src="assets/soot_sprites/body/9.png" alt="Ghibli soot sprite"/>
-            <span class="seravek--bold typography__heading--2 typography--uppercase typography--inverse">save <span class="desktop-only">&nbsp;•&nbsp;</span>the <span class="desktop-only">&nbsp;•&nbsp;</span> date</span>
-            <span class="euphoria-regular typography__subheading--2 typography--inverse">we're getting married</span>
-          </h2>
-        </div>
-      </section>
-      <div class="divider-container">
-        <hr class="divider"/>
-        <a href="#blurb" class="divider-link" aria-label="Scroll to blurb section">
-          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
-          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
-          <i aria-hidden="true" class="fa-solid fa-circle-down fa-2xl divider-icon"></i>
-        </a>
-      </div>
-      <section class="section__blurb" id="blurb">
-        <div class="blurb">
-          <img  class="sprite sprite--3 floaty" src="assets/soot_sprites/body/11.png" alt="Ghibli soot sprite"/>
-          <img  class="sprite sprite--4 floaty" src="assets/soot_sprites/body/7.png" alt="Ghibli soot sprite"/>
-          <h3 class="blurb__heading">
-            <span class="seravek--bold typography__heading--3 typography--uppercase typography--inverse">BLurb</span>
-          </h3>
-          <p class="blurb__blurb lxgw-wenkai-regular typography--inverse typography__text--1" id="blurb">
-            <span>
-              heyo<span id="party-name"></span>!! i love you ~( ˘▾˘~) and i would love to have you with me during my wedding if you're down. here is some more placeholder text, yahoo! 😌
-            </span>
-          </p>
-        </div>
-      </section>
-    </main>
-    <script src="scripts/index.js"></script>
-    <script src="scripts/matter.min.js"></script>
-    <script  src="scripts/soot_sprites.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

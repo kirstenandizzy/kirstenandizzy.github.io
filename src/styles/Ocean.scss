@@ -1,0 +1,57 @@
+@use 'variables' as *;
+
+.ocean-canvas {
+  flex: 1;
+  max-height: 90vh;
+  width: 96%;
+  overflow: hidden;
+  border-radius: 40px;
+  margin: 0 auto;
+  position: relative;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  &__slider {
+    position: absolute;
+    top: 2rem;
+    z-index: 10;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    transition: opacity 0.3s ease;
+
+    &--hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+}
+
+// Mobile adjustments for canvas sizing
+@media (max-width: $bp-tablet) {
+  .ocean-canvas {
+    height: 100%;
+    max-height: none;
+    width: 100%;
+    border-radius: 0 !important;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .ocean-canvas__slider {
+    left: 0;
+    top: 0;
+    transform: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    justify-content: flex-start;
+  }
+}
