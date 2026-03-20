@@ -17,7 +17,6 @@
   flex-direction: column;
   overflow-y: auto;
   backdrop-filter: blur(60px);
-  -webkit-backdrop-filter: blur(60px);
   pointer-events: none;
 
   &--open {
