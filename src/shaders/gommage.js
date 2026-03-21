@@ -3,7 +3,7 @@
 // Two shader systems: TEXT (dissolution + glow), PETAL (instanced rose-curve billboards).
 
 export const GOMMAGE_CONFIG = {
-  maxPetals: 30,
+  maxPetals: 60,
   cycleSeconds: 10.0,
 };
 
@@ -89,6 +89,7 @@ export const PETAL_VERT = /* glsl */ `
   uniform float uWindGustStrength;
   uniform float uWindGustFreq;
   uniform float uDespawnX;
+  uniform float uSpawnX;
 
   // Varyings
   varying float vAlpha;
@@ -203,8 +204,14 @@ export const PETAL_VERT = /* glsl */ `
     pos *= scale;
     windDisp *= scale;
 
-    // Transform to world space: spawn position + wind displacement
-    vec3 worldPos = aSpawnPos + vec3(windDisp.x, windDisp.y, 0.0) + pos;
+    // Remap spawn X to fill viewport: aSpawnPos.x is in [-100, 0],
+    // normalize to [0, 1] then spread across visible area [uSpawnX, uDespawnX]
+    float spawnT = (aSpawnPos.x + 100.0) / 100.0; // 0..1
+    float viewWidth = uDespawnX - uSpawnX;
+    float remappedX = uSpawnX + spawnT * viewWidth;
+
+    // Transform to world space: remapped spawn + wind displacement
+    vec3 worldPos = vec3(remappedX, aSpawnPos.y, aSpawnPos.z) + vec3(windDisp.x, windDisp.y, 0.0) + pos;
 
     // Gentle floating motion: slight rise and fall to keep petals dancing in the air
     float floatBob = sin(age * 3.5 + seed * 6.2832) * 2.0;

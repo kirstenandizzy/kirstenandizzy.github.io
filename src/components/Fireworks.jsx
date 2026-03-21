@@ -97,7 +97,7 @@ function createFireworkPoints(shell, color, startPos, endPos) {
 
       vec3 pos = (dir * expand + grav_vec) * uScale;
       vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-      gl_PointSize = 12.0 * (1.0 - aDelay.x * 7.5) * twinkle * (1.0 / -mvPosition.z);
+      gl_PointSize = 8.0 * (1.0 - aDelay.x * 7.5) * twinkle * (1.0 / -mvPosition.z);
       gl_Position = projectionMatrix * mvPosition;
     }
   `;
@@ -112,7 +112,7 @@ function createFireworkPoints(shell, color, startPos, endPos) {
       if (r > 1.0) discard;
 
       float frac = fract(uTime);
-      float brightness = clamp((0.92 - frac*frac) * 3.5, 0.0, 1.0) * (1.0 - r*r);
+      float brightness = clamp((0.92 - frac*frac) * 3.5, 0.0, 1.0) * (1.0 - r*r*r);
       float timeFade = max(0.0, 1.0 - uTime * 0.25);  // very slow fade as particles fall
       float op = brightness * timeFade;
 

@@ -28,7 +28,7 @@ function makeRng(seed) {
 
 // ─── Build Petal Instanced Data ──────────────────────────────────────────────
 
-function buildPetalData(count, seed) {
+function buildPetalData(count, seed, isMobile = false) {
   const rng = makeRng(seed);
 
   const spawnPositions = new Float32Array(count * 3);
@@ -41,7 +41,9 @@ function buildPetalData(count, seed) {
     // Spawn position: petals start in the scene, distributed throughout
     const rx = rng() * 100 - 100;   // x ∈ [-100, 0] — further left off-screen, blown right
     const ry = rng() * 40 + 5;   // y ∈ [5, 45] — height range
-    const rz = rng() * 120 - 40;   // z ∈ [-40, 80] — wider spread in depth
+    const rz = isMobile
+      ? rng() * 120 + 200          // z ∈ [200, 320] — closer to mobile camera at z=280
+      : rng() * 120 - 40;          // z ∈ [-40, 80] — desktop spread
     spawnPositions[i * 3]     = rx;
     spawnPositions[i * 3 + 1] = ry;
     spawnPositions[i * 3 + 2] = rz;
@@ -80,6 +82,7 @@ const GommageText = forwardRef(({ timeOfDay }, ref) => {
     uWindGustStrength: { value: 0.35 },
     uWindGustFreq: { value: 0.12 },
     uDespawnX: { value: 100 },
+    uSpawnX: { value: -100 },
   });
 
   // ── Palette DataTexture (8×1 RGBA) ──────────────────────────────────────────
@@ -101,7 +104,8 @@ const GommageText = forwardRef(({ timeOfDay }, ref) => {
 
   // ── Petal instance data ──────────────────────────────────────────────────────
 
-  const petalData = useMemo(() => buildPetalData(maxPetals, 42), []);
+  const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+  const petalData = useMemo(() => buildPetalData(maxPetals, 42, isMobile), [isMobile]);
 
   // ── Petal geometry: Clone from GLB + InstancedBufferAttributes ──────────────
 
@@ -173,7 +177,9 @@ const GommageText = forwardRef(({ timeOfDay }, ref) => {
       const height = 2 * Math.tan(vFOV / 2) * distance;
       const width = height * camera.aspect;
       const rightEdge = camera.position.x + width / 2;
+      const leftEdge = camera.position.x - width / 2;
       petalUniforms.current.uDespawnX.value = rightEdge;
+      petalUniforms.current.uSpawnX.value = leftEdge;
     }
 
     if (petalMeshRef.current) {

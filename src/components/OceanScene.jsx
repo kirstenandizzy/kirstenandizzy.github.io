@@ -362,6 +362,16 @@ function SceneLighting({ lightX, lightY, lightZ, sunColorHex, ambientIntensity, 
   );
 }
 
+// ─── Camera tilt to focus on ocean ───
+
+function CameraTilt({ angle }) {
+  const { camera } = useThree();
+  useEffect(() => {
+    camera.rotation.x = angle;
+  }, [camera, angle]);
+  return null;
+}
+
 // ─── Main Scene ───
 
 function Scene({ timeOfDay }) {
@@ -561,7 +571,7 @@ export default function OceanScene({ isModalOpen }) {
 
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
   const cameraProps = isMobile
-    ? { position: [0, 10, 120], fov: 65, near: 1, far: 500000 }
+    ? { position: [0, 20, 280], fov: 55, near: 1, far: 500000 }
     : { position: [0, 15, 80], fov: 55, near: 1, far: 500000 };
 
   return (
@@ -578,6 +588,7 @@ export default function OceanScene({ isModalOpen }) {
         dpr={[1, 2]}
         shadows
       >
+        {isMobile && <CameraTilt angle={-0.15} />}
         <Scene timeOfDay={timeOfDay} />
       </Canvas>
       <div className={`ocean-canvas__slider${sliderVisible ? '' : ' ocean-canvas__slider--hidden'}`}>

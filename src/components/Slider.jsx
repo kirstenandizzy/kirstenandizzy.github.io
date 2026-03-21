@@ -128,7 +128,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
         return;
       }
 
-      const next = current + diff * 0.18;
+      const next = current + diff * 0.08;
       if (onChangeRef.current) onChangeRef.current(next);
       animFrameRef.current = requestAnimationFrame(animate);
     };
@@ -180,7 +180,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
         deadZonePassed = true;
       }
 
-      const hoursDelta = deltaY / PIXELS_PER_HOUR;
+      const hoursDelta = -deltaY / PIXELS_PER_HOUR;
       const newTarget = Math.max(
         minRef.current,
         Math.min(maxRef.current, targetValueRef.current + hoursDelta)
@@ -205,7 +205,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
             animFrameRef.current = null;
             return;
           }
-          const hoursDelta = (v * 16) / PIXELS_PER_HOUR;
+          const hoursDelta = -(v * 16) / PIXELS_PER_HOUR;
           const newTarget = Math.max(
             minRef.current,
             Math.min(maxRef.current, targetValueRef.current + hoursDelta)
@@ -238,6 +238,32 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
         animFrameRef.current = null;
       }
     };
+  }, [isMobile]);
+
+  // Smooth wheel scrolling on desktop
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || isMobile) return;
+
+    const PIXELS_PER_HOUR = 200;
+
+    const handleWheel = (e) => {
+      e.preventDefault();
+      // Sync target to current value if no animation is running
+      if (!animFrameRef.current) {
+        targetValueRef.current = valueRef.current;
+      }
+      const delta = e.deltaY / PIXELS_PER_HOUR;
+      const newTarget = Math.max(
+        minRef.current,
+        Math.min(maxRef.current, targetValueRef.current + delta)
+      );
+      targetValueRef.current = newTarget;
+      startAnimation();
+    };
+
+    container.addEventListener('wheel', handleWheel, { passive: false });
+    return () => container.removeEventListener('wheel', handleWheel);
   }, [isMobile]);
 
   const handleChange = (e) => {

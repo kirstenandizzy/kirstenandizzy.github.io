@@ -37,10 +37,10 @@ export const FIREWORKS_PALETTE = [
 // Shell types with world-scale gravity
 // grav: vertical droop relative to EXPAND_SCALE
 export const SHELL_TYPES = [
-  { name: 'chrysanthemum', particles: 400, grav: 0.75, step: 0.005, rainbow: false, weight: 35 },
-  { name: 'peony',         particles: 350, grav: 1.00, step: 0.005, rainbow: false, weight: 30 },
-  { name: 'willow',        particles: 300, grav: 1.80, step: 0.006, rainbow: false, weight: 25 },
-  { name: 'rainbow',       particles: 420, grav: 0.80, step: 0.005, rainbow: true,  weight: 10 },
+  { name: 'chrysanthemum', particles: 100, grav: 0.75, step: 0.005, rainbow: false, weight: 35 },
+  { name: 'peony',         particles: 88,  grav: 1.00, step: 0.005, rainbow: false, weight: 30 },
+  { name: 'willow',        particles: 75,  grav: 1.80, step: 0.006, rainbow: false, weight: 25 },
+  { name: 'rainbow',       particles: 105, grav: 0.80, step: 0.005, rainbow: true,  weight: 10 },
 ];
 
 // ─── Shader Injection Strings ──────────────────────────────────────────────
