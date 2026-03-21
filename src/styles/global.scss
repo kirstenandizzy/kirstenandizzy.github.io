@@ -56,11 +56,49 @@ a {
   &:hover {
     text-decoration: underline;
   }
+
+  // Ensure all children of anchors inherit the pointer cursor
+  * {
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+  }
 }
 
 button {
   touch-action: manipulation;
   cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+
+  * {
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+  }
+}
+
+// All interactive elements and roles get the pointer cursor
+label,
+select,
+summary,
+[role="button"],
+[role="link"],
+[role="tab"],
+[role="menuitem"],
+[role="option"],
+[role="checkbox"],
+[role="radio"],
+[role="switch"],
+[tabindex]:not([tabindex="-1"]),
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+input[type="checkbox"],
+input[type="radio"],
+input[type="file"],
+input[type="image"],
+input[type="range"],
+input[type="color"] {
+  cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+
+  * {
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+  }
 }
 
 // Global pink heart cursor assignments
@@ -73,7 +111,7 @@ input[type="tel"],
 input[type="number"],
 textarea,
 [contenteditable="true"] {
-  cursor: url('/cursors/pinkheart_textselect.cur'), text;
+  cursor: url('/cursors/pinkheart_handwriting.cur'), text;
 }
 
 [disabled],
