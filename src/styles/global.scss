@@ -7,6 +7,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  cursor: url('/cursors/pinkheart_normalselect.cur'), default;
 }
 
 html {
@@ -50,6 +51,7 @@ h1, h2, h3, h4, h5, h6 {
 a {
   color: $color-secondary;
   text-decoration: none;
+  cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
 
   &:hover {
     text-decoration: underline;
@@ -58,6 +60,68 @@ a {
 
 button {
   touch-action: manipulation;
+  cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+}
+
+// Global pink heart cursor assignments
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="url"],
+input[type="tel"],
+input[type="number"],
+textarea,
+[contenteditable="true"] {
+  cursor: url('/cursors/pinkheart_textselect.cur'), text;
+}
+
+[disabled],
+[aria-disabled="true"] {
+  cursor: url('/cursors/pinkheart_unavailable.ani'), url('/cursors/pinkheart_unavailable.cur'), not-allowed;
+}
+
+[title],
+[data-tooltip],
+abbr[title] {
+  cursor: url('/cursors/pinkheart_helpselect.cur'), help;
+}
+
+[draggable="true"] {
+  cursor: url('/cursors/pinkheart_move.cur'), move;
+}
+
+.wait,
+.loading {
+  cursor: url('/cursors/pinkheart_busy.ani'), url('/cursors/pinkheart_busy.cur'), wait;
+}
+
+.progress {
+  cursor: url('/cursors/pinkheart_workinginbackground.ani'), url('/cursors/pinkheart_workinginbackground.cur'), progress;
+}
+
+.crosshair {
+  cursor: url('/cursors/pinkheart_precisionselect.cur'), crosshair;
+}
+
+.cursor-move {
+  cursor: url('/cursors/pinkheart_move.cur'), move;
+}
+
+.resize-ew {
+  cursor: url('/cursors/pinkheart_horizontalresize.cur'), ew-resize;
+}
+
+.resize-ns {
+  cursor: url('/cursors/pinkheart_verticalresize.cur'), ns-resize;
+}
+
+.resize-nwse {
+  cursor: url('/cursors/pinkheart_diagonalresize1.cur'), nwse-resize;
+}
+
+.resize-nesw {
+  cursor: url('/cursors/pinkheart_diagonalresize2.cur'), nesw-resize;
 }
 
 .visually-hidden {

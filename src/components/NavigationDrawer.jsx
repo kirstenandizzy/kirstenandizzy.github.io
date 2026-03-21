@@ -18,6 +18,7 @@ export default function NavigationDrawer({ isMenuOpen, setIsMenuOpen, onLinkClic
       <nav className={`navigation__drawer${isMenuOpen ? ' navigation__drawer--open' : ''}`} role="navigation">
         <div className='navigation__drawer-title'>
           <h1 className='ballet-regular'>Kirsten and Israel</h1>
+          <p>｡ﾟ.(*♡´‿` 人´‿` ♡*)ﾟ♡ °・</p>
         </div>
         <ul className='navigation__drawer-links'>
           <li><a onClick={(e) => handleLinkClick(e, 'travel')}>Travel</a></li>

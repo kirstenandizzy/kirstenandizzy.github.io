@@ -47,7 +47,7 @@ export default function Navigation({ openModal, setOpenModal, setIsSceneExpanded
           <li>
             <div className='navigation__header-multi-line'>
               <h1 className='ballet-regular'>Kirsten and Israel</h1>
-              <p>Join us for a wedding on the Jersey Shore</p>
+              <p>｡ﾟ.(*♡´‿` 人´‿` ♡*)ﾟ♡ °・</p>
             </div>
           </li>
           <li>

@@ -144,9 +144,9 @@ export const PETAL_VERT = /* glsl */ `
     float seed = aBirthLifeSeedScale.z;
     float scale = aBirthLifeSeedScale.w;
 
-    // Calculate age as time since birth (unbounded) for smooth animations
-    // Despawn is handled by position-based fadeOut, not time
-    float age = (uTime - birthTime) / lifeDuration;
+    // Calculate age as time since birth, wrapped to [0,1) so petals recycle
+    float rawAge = (uTime - birthTime) / lifeDuration;
+    float age = fract(rawAge);
 
     // Wrap time to prevent precision issues and unbounded growth
     float wrappedTime = mod(uTime, 10000.0);
@@ -221,13 +221,11 @@ export const PETAL_VERT = /* glsl */ `
     float burst = 1.5 * ss(0.0, 0.15, age) * (1.0 - ss(0.1, 0.3, age));
     worldPos.y += burst;
 
-    // Position-based despawn: fade out when petal reaches right edge
-    float fadeOut = 1.0;
-    if (worldPos.x >= uDespawnX) {
-      // Petal has reached the right side, fade out
-      fadeOut = 1.0 - ss(0.8, 1.0, min(age, 1.0));
-    }
-    vAlpha = fadeIn * fadeOut;
+    // Fade out near end of cycle so petals don't pop when they reset
+    float cycleFadeOut = 1.0 - ss(0.85, 1.0, age);
+    // Also fade out when petal reaches right edge
+    float edgeFadeOut = worldPos.x >= uDespawnX ? (1.0 - ss(0.8, 1.0, age)) : 1.0;
+    vAlpha = fadeIn * min(cycleFadeOut, edgeFadeOut);
 
     // Transform normal to world space (since we only applied object-space rotations)
     vNormal = normalize(norm);

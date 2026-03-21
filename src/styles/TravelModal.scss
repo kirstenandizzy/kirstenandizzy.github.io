@@ -9,7 +9,7 @@
   box-sizing: border-box;
   min-width: 0;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     grid-template-columns: 1fr;
     gap: 1rem;
     max-height: none;
@@ -28,7 +28,7 @@
 .travel-card .card__body ul {
   padding-left: 1.5rem;
 
-  @media (max-width: 480px) {
+  @media (max-width: 768px) {
     padding-left: 1rem;
   }
 }

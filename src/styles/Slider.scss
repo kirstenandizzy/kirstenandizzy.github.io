@@ -18,7 +18,7 @@
       background: none;
       border: none;
       color: white;
-      cursor: pointer;
+      cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
       padding: 0;
       width: 2.5rem;
       text-align: center;
@@ -33,7 +33,7 @@
 
   &__label {
     text-align: center;
-    cursor: pointer;
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
     user-select: none;
 
     &--active {
@@ -85,6 +85,7 @@
     justify-content: flex-end;
     position: relative;
     top: 2rem;
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
   }
 
   &__event {
@@ -95,8 +96,14 @@
     gap: 0.25rem;
     pointer-events: auto;
     height: 100%;
-    cursor: pointer;
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
     user-select: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: inherit;
+    font: inherit;
 
     &::before {
       content: '';
@@ -156,6 +163,7 @@
       transition: opacity 0.2s;
       white-space: normal;
       word-break: break-word;
+      cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
     }
 
     &:hover {
@@ -214,7 +222,7 @@
       width: 12px; // ⚠️ MUST MATCH THUMB_WIDTH constant in Slider.jsx
       height: 12px;
       background: white;
-      cursor: pointer;
+      cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
       transform: rotate(45deg);
     }
 
@@ -222,7 +230,7 @@
       width: 12px; // ⚠️ MUST MATCH THUMB_WIDTH constant in Slider.jsx
       height: 12px;
       background: white;
-      cursor: pointer;
+      cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
       transform: rotate(45deg);
       border: none;
     }
@@ -323,7 +331,7 @@
     justify-content: center;
     color: white;
     font-size: 1rem;
-    cursor: pointer;
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
     user-select: none;
     transition: opacity 0.05s, transform 0.05s;
   }
@@ -346,7 +354,7 @@
     border-radius: 8px;
     padding: 0.5rem 0.75rem;
     color: white;
-    cursor: pointer;
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
     text-align: left;
     font-family: inherit;
     font-size: 0.85rem;

@@ -387,21 +387,19 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
         <div>
           <div className='slider__events'>
             {EVENTS.map((event) => (
-              <div
+              <button
                 key={event.eventLabel}
                 className='slider__event'
                 style={{ left: thumbPosition(event.value, 24) }}
                 title={event.eventLabel}
                 onClick={() => handleHourClick(event.value)}
-                role='button'
-                tabIndex={0}
               >
                 <div className='slider__event-metadata-container'>
                   <div className='slider__event-dot' />
                   <div className='slider__event-label'>{event.eventLabel}</div>
                   <div className='slider__event-label'>{event.timeLabel}</div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>

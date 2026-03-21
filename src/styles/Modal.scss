@@ -40,8 +40,10 @@
       z-index: -1;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
       padding: 1.5rem 1rem 1rem 1rem;
+      justify-content: flex-start;
+      padding-top: 5rem;
     }
 
     @media (max-width: 480px) {
@@ -76,7 +78,7 @@
     border: 1px solid #fff;
     color: #fff;
     font-size: 2.5rem;
-    cursor: pointer;
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
     opacity: 0.8;
     transition: opacity 0.2s, background 0.2s;
     padding: 0;
@@ -102,7 +104,7 @@
       animation: fadeOut 0.25s ease-out forwards;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
       top: 1rem;
       right: 0.75rem;
       width: 2.75rem;
