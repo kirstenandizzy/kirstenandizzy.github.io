@@ -206,5 +206,34 @@ export default function useCharacterController({ enabled = false, bounds = { lef
     };
   }, [enabled, speed, bounds.left, bounds.right]);
 
-  return { x, y, facing, action, grounded, isAttacking: action === 'tongue', handleTongueEnd };
+  // Mobile input methods — called by joystick/tap UI
+  const setMobileDirection = useCallback((dir) => {
+    // dir: 'left' | 'right' | null
+    keysDown.current.delete('left');
+    keysDown.current.delete('right');
+    if (dir) {
+      keysDown.current.add(dir);
+      setFacing(dir);
+      if (!attackingRef.current && groundedRef.current) setAction('walk');
+    } else {
+      if (!attackingRef.current && groundedRef.current) setAction('idle');
+    }
+  }, []);
+
+  const triggerJump = useCallback(() => {
+    if (groundedRef.current) {
+      vyRef.current = JUMP_VELOCITY;
+      groundedRef.current = false;
+      setGrounded(false);
+    }
+  }, []);
+
+  const triggerTongue = useCallback(() => {
+    if (!attackingRef.current) {
+      attackingRef.current = true;
+      setAction('tongue');
+    }
+  }, []);
+
+  return { x, y, facing, action, grounded, isAttacking: action === 'tongue', handleTongueEnd, setMobileDirection, triggerJump, triggerTongue };
 }

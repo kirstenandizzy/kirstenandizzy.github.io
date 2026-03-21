@@ -1,10 +1,12 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import PixelSprite from '../sprites/PixelSprite';
 import AnimatedSprite from '../sprites/animations/AnimatedSprite';
 import YoshiTongue from '../sprites/animations/YoshiTongue';
 import { pipeSheet, ALLOWED_PIPE_COLORS } from '../sprites/sheets/pipes';
 import { yoshiSheet, YOSHI_ANIMATIONS } from '../sprites/sheets/yoshi';
 import useCharacterController from '../hooks/useCharacterController';
+import MobileJoystick from './MobileJoystick';
 
 const PIPE_SCALE = 2;
 const CHARACTER_SCALE = 2;
@@ -63,7 +65,7 @@ export default function CanvasButton({ onClick }) {
     return 0;
   }, [pipeWidth, pipeHeight]);
 
-  const { x, y, facing, action, handleTongueEnd } = useCharacterController({
+  const { x, y, facing, action, handleTongueEnd, setMobileDirection, triggerJump, triggerTongue } = useCharacterController({
     enabled: characterState === 'active',
     bounds: moveBounds,
     speed: 120,
@@ -217,6 +219,14 @@ export default function CanvasButton({ onClick }) {
           Wedding Party
         </button>
       </div>
+      {characterState === 'active' && createPortal(
+        <MobileJoystick
+          onDirection={setMobileDirection}
+          onJump={triggerJump}
+          onTongue={triggerTongue}
+        />,
+        document.body
+      )}
     </div>
   );
 }
