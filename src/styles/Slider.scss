@@ -249,187 +249,122 @@
   }
 }
 
-// Mobile vertical slider layout
+// ──────────────────────────────────────────────
+// Mobile drum-picker layout
+// ──────────────────────────────────────────────
 @media (max-width: $bp-tablet) {
-  .slider {
+  .slider--mobile {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
     margin: 0;
-    padding: 0 1rem 0 0;
+    padding: 0 1rem 1rem;
     box-sizing: border-box;
-    touch-action: none; // prevent browser scroll from competing with custom touch handler
+    touch-action: none;
+    overscroll-behavior: none;
   }
 
-  // Main content area becomes a horizontal flex row
-  .slider__content {
+  .slider--mobile h3 {
+    width: 100%;
+    margin: 0 0 auto 0;
+    line-height: 1.5rem;
+    padding: 1.5rem 0 0 0;
+  }
+
+  .slider--mobile .slider__content {
+    flex: 0 0 auto;
     display: flex;
     flex-direction: row;
-    height: 80vh;
-    gap: 0.5rem;
-    align-items: stretch;
-    width: 100%;
-    min-width: 0;
-    margin: auto 0;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
   }
 
-  // Hour labels — vertical column on the right
-  .slider__timeline {
-    flex-shrink: 0;
-    width: 2.5rem;
-    height: 100%;
-    order: 3; // rightmost
-
-    button {
-      top: auto;
-      left: auto;
-      transform: translate(0, -50%); // center vertically on tick
-      position: absolute;
-      width: 100%;
-    }
-  }
-
-  // Tick marks — vertical column, ticks now horizontal strokes
-  .slider__ticks {
-    flex-shrink: 0;
-    width: 12px;
-    height: 100%;
-    order: 2;
-    margin-bottom: 0;
-
-    .slider__tick {
-      left: 0;
-      top: auto;
-      width: 12px;
-      height: 1px;
-      transform: translate(0, -50%);
-
-      &--hour {
-        width: 12px;
-        height: 1px;
-      }
-
-      &--half {
-        width: 3px;
-        height: 1px;
-      }
-    }
-  }
-
-  // Input track — thin vertical line in center
-  .slider__input-container {
-    flex-shrink: 0;
-    width: 1px;
-    height: 100%;
-    order: 1; // second from left
-  }
-
-  // The range input itself — vertical
-  .slider__input {
-    writing-mode: vertical-lr;
-    direction: rtl; // makes max at top, min at bottom
-    width: 1px;
-    height: 100%;
-    top: 0; // reset the -34px horizontal hack
+  // ── Drum window ──
+  .slider__window {
     position: relative;
-    background: transparent;
-    border-color: transparent;
-    color: transparent;
-
-    &::-webkit-slider-thumb {
-      width: 12px;
-      height: 12px;
-    }
-
-    &::-moz-range-thumb {
-      width: 12px;
-      height: 12px;
-    }
+    width: 5rem;
+    flex-shrink: 0;
+    height: 150px;
+    overflow: hidden;
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 25%,
+      black 75%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 25%,
+      black 75%,
+      transparent 100%
+    );
   }
 
-  // Time label — floats to the right of the thumb
-  .slider__time-label {
+  .slider__indicator {
     display: none;
   }
 
-  // Events wrapper — rightmost column
-  .slider > div:has(.slider__events) {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    order: 4;
-  }
-
-  .slider__events {
-    height: 100%;
-    width: auto;
-  }
-
-  // Individual events — horizontal layout (extend right from track dot)
-  .slider__event {
-    top: auto;
-    left: auto;
-    transform: translate(0, -50%);
-    width: auto;
-    height: auto;
+  .slider__strip {
+    will-change: transform;
     display: flex;
-    gap: 0.25rem;
-
-    &::before {
-      display: none;
-    }
-
-    .slider__event-metadata-container {
-      flex-direction: column;
-      top: auto;
-      justify-content: flex-start;
-      align-items: center;
-      position: relative;
-    }
+    flex-direction: column;
+    align-items: center;
   }
 
-  // Stagger event left position and width for readability
-  .slider__event:nth-child(1) {
-    left: 300px !important;
-    width: 8rem;
-    height: auto;
-  }
-  .slider__event:nth-child(2) {
-    left: 250px !important;
-    width: 7rem;
-    height: auto;
-  }
-  .slider__event:nth-child(3) {
-    left: 190px !important;
-    width: 6rem;
-    height: auto;
-  }
-  .slider__event:nth-child(4) {
-    left: 130px !important;
-    width: 5rem;
-    height: auto;
-  }
-  .slider__event:nth-child(5) {
-    left: 75px !important;
-    width: 4rem;
-    height: auto;
-  }
-  .slider__event:nth-child(6) {
-    left: 75px !important;
-    width: 4rem;
-    height: auto;
+  .slider__strip-item {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.05s, transform 0.05s;
   }
 
-  // Right-align event labels for cleaner look
-  .slider__event-label {
-    text-align: right;
-  }
-
-  h3 {
+  // ── Event list ──
+  .slider__mobile-events {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     width: 100%;
-    margin: 0;
-    line-height: 1.5rem;
-    padding: 1.5rem 0 0 0;
+    max-width: 280px;
+  }
+
+  .slider__mobile-event {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    color: white;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    font-size: 0.85rem;
+    transition: border-color 0.2s;
+
+    &:hover, &:active {
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+  }
+
+  .slider__mobile-event-time {
+    flex-shrink: 0;
+    font-weight: 500;
+    opacity: 0.8;
+    min-width: 3rem;
+  }
+
+  .slider__mobile-event-label {
+    opacity: 0.6;
   }
 }

@@ -29,26 +29,6 @@ const thumbPosition = (value, max, adjustment = 0) => {
   return `calc(${fraction} * (100% - ${THUMB_WIDTH}px) + ${THUMB_RADIUS}px${adjustStr})`;
 };
 
-/**
- * Calculate CSS top position for vertical slider (mobile).
- * Inverted fraction: value=max → top:0%, value=0 → top:100%.
- * This places max (12am/value 24) at the top and min (12am/value 0) at the bottom.
- *
- * @param {number} value - Current slider value (0 to max)
- * @param {number} max - Maximum slider value (typically 24 for hours)
- * @param {number} adjustment - Optional CSS offset in pixels (default: 0)
- * @returns {string} CSS calc() expression safe for use in inline styles
- */
-const thumbPositionV = (value, max, adjustment = 0) => {
-  if (value < 0 || value > max) {
-    console.warn(`thumbPositionV: value ${value} outside range [0, ${max}]`);
-  }
-  const fraction = (max - value) / max; // inverted
-  const adjustStr = adjustment !== 0
-    ? ` ${adjustment > 0 ? '+' : '-'} ${Math.abs(adjustment)}px`
-    : '';
-  return `calc(${fraction} * (100% - ${THUMB_WIDTH}px) + ${THUMB_RADIUS}px${adjustStr})`;
-};
 
 const HOURS = [
   { label: '12am', value: 0 },
@@ -95,9 +75,15 @@ const formatTimeOfDay = (hours) => {
   return `${displayHour}:${m.toString().padStart(2, '0')} ${meridiem}`;
 };
 
+// Height of each label in the drum strip (px)
+const STRIP_ITEM_HEIGHT = 40;
+// Height of the visible drum window (px)
+const WINDOW_HEIGHT = 150;
+
 export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }) {
   const timelineRef = useRef(null);
   const containerRef = useRef(null);
+  const windowRef = useRef(null);
   const touchStartRef = useRef(null);
   const [isMobile, setIsMobile] = useState(() =>
     window.matchMedia('(max-width: 768px)').matches
@@ -137,7 +123,6 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
       const diff = target - current;
 
       if (Math.abs(diff) < 0.01) {
-        // Snap to target and stop
         if (onChangeRef.current) onChangeRef.current(target);
         animFrameRef.current = null;
         return;
@@ -151,16 +136,15 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
     animFrameRef.current = requestAnimationFrame(animate);
   };
 
-  // Handle touch scrolling on mobile
+  // Handle touch scrolling on mobile — attaches to the drum window
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container || !isMobile) return;
+    const target = isMobile ? windowRef.current : null;
+    if (!target) return;
 
-    const PIXELS_PER_HOUR = 40;
-    const DEAD_ZONE = 3; // px before slider starts responding
+    const PIXELS_PER_HOUR = 30;
+    const DEAD_ZONE = 3;
 
     const handleTouchStart = (e) => {
-      // Stop any ongoing momentum animation
       if (animFrameRef.current) {
         cancelAnimationFrame(animFrameRef.current);
         animFrameRef.current = null;
@@ -182,10 +166,9 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
       const now = Date.now();
       const deltaY = currentY - lastTouchYRef.current;
 
-      // Track velocity for momentum
       const dt = now - lastTouchTimeRef.current;
       if (dt > 0) {
-        velocityRef.current = deltaY / dt; // px per ms
+        velocityRef.current = deltaY / dt;
       }
       lastTouchYRef.current = currentY;
       lastTouchTimeRef.current = now;
@@ -199,7 +182,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
       const hoursDelta = deltaY / PIXELS_PER_HOUR;
       const newTarget = Math.max(
         minRef.current,
-        Math.min(maxRef.current, targetValueRef.current - hoursDelta)
+        Math.min(maxRef.current, targetValueRef.current + hoursDelta)
       );
       targetValueRef.current = newTarget;
       startAnimation();
@@ -210,11 +193,10 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
       deadZonePassed = false;
       accumulatedDelta = 0;
 
-      // Apply momentum
-      const velocity = velocityRef.current; // px per ms
+      const velocity = velocityRef.current;
       if (Math.abs(velocity) > 0.05) {
         let v = velocity;
-        const FRICTION = 0.95;
+        const FRICTION = 0.94;
 
         const momentumAnimate = () => {
           v *= FRICTION;
@@ -222,10 +204,10 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
             animFrameRef.current = null;
             return;
           }
-          const hoursDelta = (v * 16) / PIXELS_PER_HOUR; // ~16ms per frame
+          const hoursDelta = (v * 16) / PIXELS_PER_HOUR;
           const newTarget = Math.max(
             minRef.current,
-            Math.min(maxRef.current, targetValueRef.current - hoursDelta)
+            Math.min(maxRef.current, targetValueRef.current + hoursDelta)
           );
           targetValueRef.current = newTarget;
 
@@ -242,14 +224,14 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
       }
     };
 
-    container.addEventListener('touchstart', handleTouchStart, { passive: true });
-    container.addEventListener('touchmove', handleTouchMove, { passive: true });
-    container.addEventListener('touchend', handleTouchEnd, { passive: true });
+    target.addEventListener('touchstart', handleTouchStart, { passive: true });
+    target.addEventListener('touchmove', handleTouchMove, { passive: true });
+    target.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {
-      container.removeEventListener('touchstart', handleTouchStart);
-      container.removeEventListener('touchmove', handleTouchMove);
-      container.removeEventListener('touchend', handleTouchEnd);
+      target.removeEventListener('touchstart', handleTouchStart);
+      target.removeEventListener('touchmove', handleTouchMove);
+      target.removeEventListener('touchend', handleTouchEnd);
       if (animFrameRef.current) {
         cancelAnimationFrame(animFrameRef.current);
         animFrameRef.current = null;
@@ -259,17 +241,72 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
 
   const handleChange = (e) => {
     const newValue = parseFloat(e.target.value);
-    if (onChange) {
-      onChange(newValue);
-    }
+    if (onChange) onChange(newValue);
   };
 
   const handleHourClick = (hourValue) => {
-    if (onChange) {
+    if (isMobile) {
+      targetValueRef.current = hourValue;
+      startAnimation();
+    } else if (onChange) {
       onChange(hourValue);
     }
   };
 
+  // --- Mobile drum picker rendering ---
+  if (isMobile) {
+    const totalStripHeight = HOURS.length * STRIP_ITEM_HEIGHT;
+    // value=0 → strip at top (first label centered), value=max → strip scrolled up
+    const stripOffset = -(value / max) * totalStripHeight + WINDOW_HEIGHT / 2;
+
+    return (
+      <div className='slider slider--mobile' ref={containerRef}>
+        <h3>
+          <span>Timeline of Events</span>
+          <span>Sunday, September 20th, 2026</span>
+        </h3>
+        <div className='slider__content'>
+          <div className='slider__window' ref={windowRef}>
+            <div className='slider__indicator' />
+            <div
+              className='slider__strip'
+              style={{ transform: `translateY(${stripOffset}px)` }}
+            >
+              {HOURS.map((hour) => {
+                const distance = Math.abs(hour.value - value);
+                const opacity = Math.max(0.2, 1 - distance * 0.15);
+                const scale = Math.max(0.7, 1 - distance * 0.04);
+                return (
+                  <div
+                    key={hour.value}
+                    className='slider__strip-item'
+                    style={{ opacity, transform: `scale(${scale})` }}
+                    onClick={() => handleHourClick(hour.value)}
+                  >
+                    {hour.label}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className='slider__mobile-events'>
+            {EVENTS.map((event) => (
+              <button
+                key={event.eventLabel}
+                className='slider__mobile-event'
+                onClick={() => handleHourClick(event.value)}
+              >
+                <span className='slider__mobile-event-time'>{event.timeLabel}</span>
+                <span className='slider__mobile-event-label'>{event.eventLabel}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // --- Desktop rendering (unchanged) ---
   return (
     <div className='slider' ref={containerRef}>
       <h3>
@@ -283,11 +320,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
               key={hour.value}
               className={`slider__label ${Math.round(value) === hour.value ? 'slider__label--active' : ''}`}
               onClick={() => handleHourClick(hour.value)}
-              style={{
-                [isMobile ? 'top' : 'left']: isMobile
-                  ? thumbPositionV(hour.value, 24)
-                  : thumbPosition(hour.value, 24)
-              }}
+              style={{ left: thumbPosition(hour.value, 24) }}
             >
               {hour.label}
             </button>
@@ -301,22 +334,14 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
               <div
                 key={i}
                 className={`slider__tick ${isHour ? 'slider__tick--hour' : 'slider__tick--half'}`}
-                style={{
-                  [isMobile ? 'top' : 'left']: isMobile
-                    ? thumbPositionV(tickValue, 24)
-                    : thumbPosition(tickValue, 24)
-                }}
+                style={{ left: thumbPosition(tickValue, 24) }}
               />
             );
           })}
         </div>
         <div
           className='slider__input-container'
-          style={{
-            '--slider-percentage': isMobile
-              ? thumbPositionV(value, 24, -10)
-              : thumbPosition(value, 24, -30)
-          }}
+          style={{ '--slider-percentage': thumbPosition(value, 24, -30) }}
         >
           <div className='slider__time-label'>
             {formatTimeOfDay(value)}
@@ -329,6 +354,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
             step={step}
             value={value}
             onChange={handleChange}
+            aria-label='Timeline slider'
           />
         </div>
         <div>
@@ -337,11 +363,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
               <div
                 key={event.eventLabel}
                 className='slider__event'
-                style={{
-                  [isMobile ? 'top' : 'left']: isMobile
-                    ? thumbPositionV(event.value, 24)
-                    : thumbPosition(event.value, 24)
-                }}
+                style={{ left: thumbPosition(event.value, 24) }}
                 title={event.eventLabel}
                 onClick={() => handleHourClick(event.value)}
                 role='button'
@@ -358,5 +380,5 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
         </div>
       </div>
     </div>
-);
+  );
 }
