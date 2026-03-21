@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.\\(json|jsx|js|tsx\\)$|^d\")",
+      "Bash(curl -sL \"https://www.spriters-resource.com/media/assets/5/4603.png?updated=1755472420\" -o /Users/kirstenrauffer/Documents/GitHub/kirstenandizzy.github.io/public/assets/pipes.png)",
+      "Bash(sips -g pixelWidth -g pixelHeight /Users/kirstenrauffer/Documents/GitHub/kirstenandizzy.github.io/public/assets/pipes.png)",
+      "WebFetch(domain:www.spriters-resource.com)"
+    ]
+  }
+}

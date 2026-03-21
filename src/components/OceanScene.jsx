@@ -22,6 +22,8 @@ import GommageText from './GommageText';
 import Fireworks from './Fireworks';
 import { computeSolarParams } from '../utils/solar';
 import { KuwaharaEffect } from '../effects/KuwaharaEffect';
+import CanvasButton from './CanvasButton';
+import '../styles/CanvasButton.scss';
 import { MOON_WORLD_POSITION, MOON_LIGHT_DIRECTION } from '../constants/scene';
 
 // Helper to blend hex colors
@@ -588,9 +590,10 @@ export default function OceanScene({ isModalOpen }) {
         dpr={[1, 2]}
         shadows
       >
-        {isMobile && <CameraTilt angle={-0.15} />}
+        {isMobile && <CameraTilt angle={-0.32} />}
         <Scene timeOfDay={timeOfDay} />
       </Canvas>
+      <CanvasButton />
       <div className={`ocean-canvas__slider${sliderVisible ? '' : ' ocean-canvas__slider--hidden'}`}>
         <Slider min={0} max={24} step={0.05} value={timeOfDay} onChange={setTimeOfDay} />
       </div>

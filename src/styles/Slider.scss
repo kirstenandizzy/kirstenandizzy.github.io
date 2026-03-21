@@ -266,7 +266,9 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: center;
+    position: relative;
+    top: -25px;
     margin: 0;
     padding: 0 1rem 1rem;
     box-sizing: border-box;
@@ -276,9 +278,9 @@
 
   .slider--mobile h3 {
     width: 100%;
-    margin: 0 0 auto 0;
+    margin: 0;
     line-height: 1.5rem;
-    padding: 1.5rem 0 0 0;
+    padding: 0 0 1rem 0;
   }
 
   .slider--mobile .slider__content {
@@ -349,8 +351,9 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 8px;
     padding: 0.5rem 0.75rem;
     color: white;

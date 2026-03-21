@@ -4,7 +4,7 @@ import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { PETAL_VERT, PETAL_FRAG, GOMMAGE_CONFIG } from '../shaders/gommage';
 
-const { maxPetals } = GOMMAGE_CONFIG;
+const { maxPetals: configMaxPetals } = GOMMAGE_CONFIG;
 
 // ─── Ghibli Color Palette ────────────────────────────────────────────────────
 
@@ -105,7 +105,8 @@ const GommageText = forwardRef(({ timeOfDay }, ref) => {
   // ── Petal instance data ──────────────────────────────────────────────────────
 
   const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
-  const petalData = useMemo(() => buildPetalData(maxPetals, 42, isMobile), [isMobile]);
+  const maxPetals = isMobile ? configMaxPetals : Math.floor(configMaxPetals / 2);
+  const petalData = useMemo(() => buildPetalData(maxPetals, 42, isMobile), [isMobile, maxPetals]);
 
   // ── Petal geometry: Clone from GLB + InstancedBufferAttributes ──────────────
 

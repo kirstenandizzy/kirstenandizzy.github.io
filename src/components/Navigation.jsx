@@ -9,9 +9,7 @@ export default function Navigation({ openModal, setOpenModal, setIsSceneExpanded
   const handleLinkClick = (e, link) => {
     e.preventDefault();
     setIsSceneExpanded(true); // slider fades, FLIP pins element
-    setTimeout(() => {
-      setOpenModal(link); // modal opens after ocean expand completes (450ms)
-    }, 450);
+    setOpenModal(link); // modal opens simultaneously with ocean expand
   };
 
   const handleCloseStart = () => {
