@@ -177,6 +177,10 @@ export default function CanvasButton({ onClick }) {
             }}
             onTransitionEnd={handleCharacterTransitionEnd}
           >
+            {/* Triangle indicator above Yoshi's head */}
+            {characterState === 'active' && (
+              <div className="yoshi-indicator" />
+            )}
             {/* Inner wrapper: flex-end aligns feet to ground, scaleX flips for facing */}
             <div style={{ display: 'flex', alignItems: 'flex-end', ...(facing === 'left' ? { transform: 'scaleX(-1)' } : {}) }}>
               {action === 'tongue' ? (
