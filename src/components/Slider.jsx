@@ -136,9 +136,9 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
     animFrameRef.current = requestAnimationFrame(animate);
   };
 
-  // Handle touch scrolling on mobile — attaches to the drum window
+  // Handle touch scrolling on mobile — attaches to the entire mobile container
   useEffect(() => {
-    const target = isMobile ? windowRef.current : null;
+    const target = isMobile ? containerRef.current : null;
     if (!target) return;
 
     const PIXELS_PER_HOUR = 30;
@@ -161,6 +161,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
 
     const handleTouchMove = (e) => {
       if (touchStartRef.current === null) return;
+      e.preventDefault(); // prevent iOS Safari from scrolling/rubber-banding
 
       const currentY = e.touches[0].clientY;
       const now = Date.now();
@@ -225,7 +226,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
     };
 
     target.addEventListener('touchstart', handleTouchStart, { passive: true });
-    target.addEventListener('touchmove', handleTouchMove, { passive: true });
+    target.addEventListener('touchmove', handleTouchMove, { passive: false });
     target.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {

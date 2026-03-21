@@ -559,10 +559,15 @@ export default function OceanScene({ isModalOpen }) {
     return () => window.removeEventListener('wheel', handleWheel);
   }, [isModalOpen]);
 
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  const cameraProps = isMobile
+    ? { position: [0, 10, 120], fov: 65, near: 1, far: 500000 }
+    : { position: [0, 15, 80], fov: 55, near: 1, far: 500000 };
+
   return (
     <div ref={containerRef} className="ocean-canvas">
       <Canvas
-        camera={{ position: [0, 15, 80], fov: 55, near: 1, far: 500000 }}
+        camera={cameraProps}
         gl={{
           antialias: true,
           toneMapping: THREE.NoToneMapping,
