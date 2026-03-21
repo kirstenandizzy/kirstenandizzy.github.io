@@ -50,8 +50,10 @@
 .pipe-clip {
   position: absolute;
   bottom: 100%;
-  left: 0;
-  right: 0;
+  // Extend across the full viewport so Yoshi can walk freely
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
   height: 300px;
   overflow: hidden;
   pointer-events: none;
@@ -64,6 +66,7 @@
   visibility: hidden;
   transform: translateX(-50%) translateY(calc(100% + 50px));
   transition: transform 0.4s ease-in;
+  z-index: 2; // Pipe renders in front of character during spawn
 
   > div {
     image-rendering: pixelated;
@@ -83,8 +86,38 @@
   }
 }
 
+.character-sprite {
+  position: absolute;
+  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: -webkit-crisp-edges;
+  // Start hidden below (inside pipe)
+  transform: translateX(-50%) translateY(100%);
+  transition: transform 0.35s ease-out;
+  z-index: 1; // Behind pipe during spawn/despawn
+
+  &.character-spawning {
+    // Rise up to standing position above pipe
+    transform: translateX(-50%) translateY(0);
+  }
+
+  &.character-active {
+    // Same transform as spawning end-state so there's no visual jump
+    transform: translateX(-50%) translateY(0);
+    transition: none;
+    z-index: 3; // In front of pipe when walking around
+  }
+
+  &.character-despawning {
+    transition: transform 0.3s ease-in;
+    transform: translateX(-50%) translateY(100%);
+    z-index: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .pipe-slide {
+  .pipe-slide,
+  .character-sprite {
     transition: none;
   }
 }
