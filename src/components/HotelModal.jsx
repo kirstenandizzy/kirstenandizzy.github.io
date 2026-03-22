@@ -16,7 +16,7 @@ export default function HotelModal({ isOpen, onClose, onCloseStart, closeDelay }
 
             <div className="hotel-card__pills">
               <span className="pill">Room Blocks Available</span>
-              <span className="pill">Bus Transportation Included</span>
+              <span className="pill">Bus Transportation Available</span>
             </div>
             <div className="hotel-card__book-btn">Book</div>
           </div>

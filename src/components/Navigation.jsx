@@ -5,12 +5,15 @@ import TravelModal from './TravelModal';
 import HotelModal from './HotelModal';
 import FAQModal from './FAQModal';
 import RSVPOverlay from './RSVPOverlay';
+import MessageSprite from './MessageSprite';
 
 export default function Navigation({ openModal, setOpenModal, setIsSceneExpanded, isMenuOpen, setIsMenuOpen }) {
   const handleLinkClick = (e, link) => {
     e.preventDefault();
     setIsSceneExpanded(true); // slider fades, FLIP pins element
-    setOpenModal(link); // modal opens simultaneously with ocean expand
+    setTimeout(() => {
+      setOpenModal(link);
+    }, 225); // delay modal until ocean finishes expanding
   };
 
   const handleCloseStart = () => {
@@ -44,10 +47,12 @@ export default function Navigation({ openModal, setOpenModal, setIsSceneExpanded
         {/* Desktop three-column layout — hidden on mobile */}
         <ul className='navigation__list navigation__list--desktop'>
           <li>
-            <div className='navigation__header-multi-line'>
-              <h1 className='ballet-regular'>Kirsten and Israel</h1>
-              <p>｡ﾟ.(*♡´‿` 人´‿` ♡*)ﾟ♡ °・</p>
-            </div>
+            <MessageSprite variant="horizontal">
+              <div className='navigation__header-multi-line'>
+                <h1 className='ballet-regular'>Kirsten and Israel</h1>
+                <p>｡ﾟ.(*♡´‿` 人´‿` ♡*)ﾟ♡ °・</p>
+              </div>
+            </MessageSprite>
           </li>
           <li>
             <div className='navigation__rsvp-container'>
@@ -56,6 +61,7 @@ export default function Navigation({ openModal, setOpenModal, setIsSceneExpanded
               </div>
               <h2><div className='navigation__rounded-full animate-pulse w-4 h-4'></div> <WaveText text='Open for RSVPs until August 20th, 2026' /></h2>
             </div>
+            <button className='navigation__rsvp-btn' onClick={(e) => handleLinkClick(e, 'rsvp')}>RSVP</button>
           </li>
           <li>
             <div>

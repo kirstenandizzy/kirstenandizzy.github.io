@@ -32,12 +32,12 @@ const FALCON_SPRITES = {
 
 export const falconSheet = new SpriteSheet('/assets/falcon.png', 585, 354, FALCON_SPRITES);
 
-export const FALCON_SCALE = 1.3;
+export const FALCON_SCALE = 1.4;
 
 export const FALCON_ANIMATIONS = {
   idle: { frames: ['idle-1', 'idle-2'], fps: 4, loop: false },
   walk: { frames: ['walk-1', 'walk-2', 'walk-3', 'walk-4', 'walk-5', 'walk-6'], fps: 10, loop: true },
   launch: { frames: ['launch-1', 'launch-2'], fps: 8, loop: true },
   fall: { frames: ['fall-1', 'fall-2', 'fall-3'], fps: 8, loop: false },
-  landed: { frames: ['landed-1', 'landed-2', 'landed-3', 'landed-4', 'landed-5', 'landed-6', 'landed-7', 'landed-8', 'landed-9'], fps: 8, loop: false },
+  landed: { frames: ['landed-1', 'landed-2', 'landed-3', 'landed-4', 'landed-5', 'landed-6', 'landed-7', 'landed-8', 'landed-9'], fps: 5, loop: false, holdLastFrame: 3 },
 };

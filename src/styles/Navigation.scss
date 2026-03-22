@@ -58,6 +58,23 @@
     align-items: center;
     gap: 0.5rem;
   }
+
+  &__list li:has(.navigation__rsvp-container) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__rsvp-btn {
+    background: black;
+    color: white;
+    border: none;
+    padding: 0.35rem 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+    border-radius: 20px;
+  }
 }
 
 .neon-sign {

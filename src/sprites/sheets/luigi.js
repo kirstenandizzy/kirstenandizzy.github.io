@@ -42,6 +42,6 @@ export const LUIGI_ANIMATIONS = {
   walk: { frames: ['walk-1', 'walk-2'], fps: 6, loop: true },
   launch: { frames: ['launch'], fps: 8, loop: true },
   fall: { frames: ['fall-1', 'fall-2', 'fall-3', 'fall-4', 'fall-5', 'fall-6', 'fall-7'], fps: 8, loop: false },
-  landed: { frames: ['landed-1', 'landed-2', 'landed-3', 'landed-4', 'landed-5', 'landed-6'], fps: 8, loop: false },
+  landed: { frames: ['landed-1', 'landed-2', 'landed-3', 'landed-4', 'landed-5', 'landed-6'], fps: 8, loop: false, holdLastFrame: 3 },
   emote: { frames: ['emote-1', 'emote-2', 'emote-3', 'emote-4', 'emote-5', 'emote-6'], fps: 1, loop: false },
 };

@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-export default function useSpriteAnimation({ frames, fps = 10, loop = true, playing = true, onComplete }) {
+export default function useSpriteAnimation({ frames, fps = 10, loop = true, playing = true, onComplete, holdLastFrame = 0 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const rafRef = useRef(null);
   const lastTimeRef = useRef(0);
   const indexRef = useRef(0);
   const playingRef = useRef(playing);
+  const holdCountRef = useRef(0);
 
   playingRef.current = playing;
 
@@ -22,6 +23,7 @@ export default function useSpriteAnimation({ frames, fps = 10, loop = true, play
     indexRef.current = 0;
     setCurrentIndex(0);
     lastTimeRef.current = 0;
+    holdCountRef.current = 0;
   }, [frames]);
 
   useEffect(() => {
@@ -47,6 +49,9 @@ export default function useSpriteAnimation({ frames, fps = 10, loop = true, play
           if (loop) {
             indexRef.current = 0;
             setCurrentIndex(0);
+          } else if (holdCountRef.current < holdLastFrame) {
+            // Hold on last frame for extra ticks before completing
+            holdCountRef.current += 1;
           } else {
             if (onComplete) onComplete();
             return;
@@ -65,7 +70,7 @@ export default function useSpriteAnimation({ frames, fps = 10, loop = true, play
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [frames, interval, loop, playing, onComplete]);
+  }, [frames, interval, loop, playing, onComplete, holdLastFrame]);
 
   return {
     currentFrame: frames[currentIndex] || frames[0],

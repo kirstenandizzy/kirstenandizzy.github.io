@@ -1,13 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import '../styles/Modal.scss';
 
 export default function Modal({ isOpen, onClose, onCloseStart, closeDelay = 0, className = '', children }) {
   const [isClosing, setIsClosing] = useState(false);
+  const closeRef = useRef(null);
 
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       setIsClosing(false);
+      // Auto-focus close button so it's immediately tabbable
+      requestAnimationFrame(() => {
+        closeRef.current?.focus();
+      });
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -30,7 +35,7 @@ export default function Modal({ isOpen, onClose, onCloseStart, closeDelay = 0, c
     <>
       <div className={`modal__backdrop ${isClosing ? 'modal__backdrop--closing' : ''} ${className}`} onClick={handleClose} />
       <div className={`modal__content ${className}`} onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}>
-        <button className={`modal__close${isClosing ? ' modal__close--closing' : ''}`} onClick={handleClose} aria-label='Close modal'>
+        <button ref={closeRef} className={`modal__close${isClosing ? ' modal__close--closing' : ''}`} onClick={handleClose} aria-label='Close modal'>
           ×
         </button>
         <div className={`modal__content-inner${isClosing ? ' modal__content-inner--closing' : ''}`} onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}>

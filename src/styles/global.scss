@@ -116,7 +116,7 @@ textarea,
 
 [disabled],
 [aria-disabled="true"] {
-  cursor: url('/cursors/pinkheart_unavailable.ani'), url('/cursors/pinkheart_unavailable.cur'), not-allowed;
+  cursor: url('/cursors/pinkheart_busy.cur'), wait;
 }
 
 [title],
@@ -131,11 +131,11 @@ abbr[title] {
 
 .wait,
 .loading {
-  cursor: url('/cursors/pinkheart_busy.ani'), url('/cursors/pinkheart_busy.cur'), wait;
+  cursor: url('/cursors/pinkheart_busy.cur'), wait;
 }
 
 .progress {
-  cursor: url('/cursors/pinkheart_workinginbackground.ani'), url('/cursors/pinkheart_workinginbackground.cur'), progress;
+  cursor: url('/cursors/pinkheart_workinginbackground.cur'), progress;
 }
 
 .crosshair {

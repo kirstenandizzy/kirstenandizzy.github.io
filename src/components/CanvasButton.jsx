@@ -33,15 +33,15 @@ const GIRLS_NPC_QUEUE = [
   { id: 'peach', sheet: peachSheet, animations: PEACH_ANIMATIONS, scale: PEACH_SCALE, facesRight: false },
   { id: 'toadette', sheet: toadetteSheet, animations: TOADETTE_ANIMATIONS, scale: TOADETTE_SCALE },
   { id: 'luigi', sheet: luigiSheet, animations: LUIGI_ANIMATIONS, scale: LUIGI_SCALE, launchSpeed: 650 },
-  { id: 'boo', sheet: booNPCSheet, animations: BOO_ANIMATIONS, scale: BOO_SCALE, wanderSpeed: 100, minIdleTime: 800, maxIdleTime: 2500, minWalkDist: 100, maxWalkDist: 280 },
-  { id: 'waluigi', sheet: waluigiSheet, animations: WALUIGI_ANIMATIONS, scale: WALUIGI_SCALE },
+  { id: 'boo', sheet: booNPCSheet, animations: BOO_ANIMATIONS, scale: BOO_SCALE, wanderSpeed: 100, minIdleTime: 800, maxIdleTime: 2500, minWalkDist: 100, maxWalkDist: 280, zIndex: 2 },
+  { id: 'waluigi', sheet: waluigiSheet, animations: WALUIGI_ANIMATIONS, scale: WALUIGI_SCALE, glowColor: '#9b59b6' },
 ];
 
 const GUYS_NPC_QUEUE = [
-  { id: 'donkey', sheet: donkeySheet, animations: DONKEY_ANIMATIONS, scale: DONKEY_SCALE },
+  { id: 'donkey', sheet: donkeySheet, animations: DONKEY_ANIMATIONS, scale: DONKEY_SCALE, zIndex: 2 },
   { id: 'samus', sheet: samusSheet, animations: SAMUS_ANIMATIONS, scale: SAMUS_SCALE },
   { id: 'falcon', sheet: falconSheet, animations: FALCON_ANIMATIONS, scale: FALCON_SCALE },
-  { id: 'jiggly', sheet: jigglySheet, animations: JIGGLY_ANIMATIONS, scale: JIGGLY_SCALE },
+  { id: 'jiggly', sheet: jigglySheet, animations: JIGGLY_ANIMATIONS, scale: JIGGLY_SCALE, glowColor: '#f1c40f' },
 ];
 
 const GUYS_IDS = new Set(GUYS_NPC_QUEUE.map(n => n.id));
@@ -114,6 +114,10 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen }) {
   // Ship state: 'hidden' | 'visible' | 'exiting'
   const [shipState, setShipState] = useState('hidden');
 
+  // Random glow colors for active button text
+  const [partyGlow, setPartyGlow] = useState(null);
+  const [groomGlow, setGroomGlow] = useState(null);
+
   // Guys pipe state
   const [guysPipeColor, setGuysPipeColor] = useState('green');
   const [guysPipeLeft, setGuysPipeLeft] = useState(0);
@@ -127,7 +131,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen }) {
       if (wrapperRef.current && clipRef.current) {
         const wrapperRect = wrapperRef.current.getBoundingClientRect();
         const clipRect = clipRef.current.getBoundingClientRect();
-        const left = wrapperRect.left - clipRect.left;
+        const left = wrapperRect.left - clipRect.left + 5;
         const right = wrapperRect.right - clipRect.left;
         setMoveBounds({ left, right });
       }
@@ -295,7 +299,10 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen }) {
     const clipRect = clipRef.current?.getBoundingClientRect();
     const viewportX = clipRect ? clipRect.left + eggX : eggX;
     // Convert bottom-based egg position to top-based viewport position
-    const viewportY = clipRect ? clipRect.bottom - (eggBottomY || 0) - 40 : window.innerHeight - 100;
+    // Balloon grows from its bottom edge (transform-origin: center bottom), so
+    // position its top so that bottom edge aligns with the egg.
+    const balloonSpriteHeight = 75; // ~30px sprite * 2.5 scale
+    const viewportY = clipRect ? clipRect.bottom - (eggBottomY || 0) - balloonSpriteHeight : window.innerHeight - 100;
     const color = BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)];
     const photo = NPC_PHOTO_MAP[npcId];
     balloonIdRef.current += 1;
@@ -338,7 +345,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen }) {
   }, []);
 
   const { x, y, facing, action, handleTongueEnd, setMobileDirection, triggerJump, triggerTongue } = useCharacterController({
-    enabled: characterState === 'active',
+    enabled: characterState === 'active' && !isModalOpen,
     bounds: moveBounds,
     speed: 120,
     initialX: pipeLeft,
@@ -414,7 +421,9 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen }) {
       setPipeColor(color1);
       setGuysPipeColor(pickRandomColor(color1));
       setPipeState('rising');
+      setPartyGlow(GHIBLI_PALETTE[Math.floor(Math.random() * GHIBLI_PALETTE.length)]);
     } else if (pipeState === 'visible' && (characterState === 'active' || characterState === 'hidden')) {
+      setPartyGlow(null);
       if (characterState === 'active') {
         // Start recall sequence — everyone walks back to pipe
         setRecalling(true);
@@ -543,6 +552,8 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen }) {
             maxWalkDist={npc.maxWalkDist}
             label={NPC_NAME_MAP[npc.id]}
             labelColor={npcColorsRef.current[npc.id]}
+            glowColor={npc.glowColor}
+            zIndex={npc.zIndex}
             recalling={recalling}
             recallTarget={pipeLeft}
             onReturned={() => handleNPCReturned(npc.id)}
@@ -573,6 +584,8 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen }) {
             maxWalkDist={npc.maxWalkDist}
             label={NPC_NAME_MAP[npc.id]}
             labelColor={npcColorsRef.current[npc.id]}
+            glowColor={npc.glowColor}
+            zIndex={npc.zIndex}
             recalling={recalling}
             recallTarget={guysPipeLeft}
             onReturned={() => handleGuysNPCReturned(npc.id)}
@@ -632,16 +645,26 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen }) {
       </div>
 
       <div className="canvas-button-container">
-        <button ref={guysButtonRef} onClick={(e) => {
+        <button ref={guysButtonRef} disabled={shipState === 'exiting'} className={groomGlow ? 'btn-glow' : undefined} style={groomGlow ? { '--btn-glow-color': groomGlow } : undefined} onClick={(e) => {
           if (onClick) onClick(e);
-          setShipState(s => s === 'hidden' ? 'visible' : s === 'visible' ? 'exiting' : s === 'exiting' ? 'hidden' : s);
+          setShipState(s => {
+            if (s === 'hidden') {
+              setGroomGlow(GHIBLI_PALETTE[Math.floor(Math.random() * GHIBLI_PALETTE.length)]);
+              return 'visible';
+            }
+            if (s === 'visible') {
+              setGroomGlow(null);
+              return 'exiting';
+            }
+            return s;
+          });
         }}>
           Bride & Groom
         </button>
         <button onClick={(e) => { if (onClick) onClick(e); if (onOpenModal) onOpenModal('rsvp'); }}>
           RSVP
         </button>
-        <button ref={buttonRef} onClick={handleWeddingPartyClick}>
+        <button ref={buttonRef} disabled={recalling || pipeState === 'retracting'} className={partyGlow ? 'btn-glow' : undefined} style={partyGlow ? { '--btn-glow-color': partyGlow } : undefined} onClick={handleWeddingPartyClick}>
           Wedding Party
         </button>
       </div>

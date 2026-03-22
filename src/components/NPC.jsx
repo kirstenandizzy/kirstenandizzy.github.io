@@ -30,6 +30,8 @@ export default function NPC({
   maxIdleTime,
   minWalkDist,
   maxWalkDist,
+  glowColor,
+  zIndex,
 }) {
   const [currentAnim, setCurrentAnim] = useState('launch');
   const [behaviorEnabled, setBehaviorEnabled] = useState(false);
@@ -243,17 +245,19 @@ export default function NPC({
       style={{
         left: displayX,
         bottom: displayY,
+        ...(zIndex != null ? { zIndex } : {}),
       }}
       onTransitionEnd={handleSinkTransitionEnd}
     >
       {(phase === 'landed' || behaviorEnabled) && !returning && label && (
         <CharacterLabel name={label} color={labelColor} />
       )}
-      <div style={{
+      <div className={glowColor ? 'passenger-glow' : undefined} style={{
         display: 'flex',
         alignItems: 'flex-end',
         justifyContent: 'center',
         width: stableWidth,
+        '--glow-color': glowColor,
         ...((displayFacing === 'right') !== facesRight ? { transform: 'scaleX(-1)' } : {}),
       }}>
         <AnimatedSprite

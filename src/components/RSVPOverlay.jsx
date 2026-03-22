@@ -161,7 +161,7 @@ function Envelope({ closing, done, children }) {
       <div className="envelope__card-slot">{children}</div>
       <div className="envelope__front" />
       <div className="envelope__opener" />
-      {(closing || done) && <p className="rsvp-success"><WaveText text="Thank you! We can't wait to celebrate with you." startAnimationDelay={done ? 500 : 2200} /></p>}
+      {(closing || done) && <p className="rsvp-success"><WaveText text="Thank you! Your RSVP has been sent." startAnimationDelay={done ? 500 : 2200} /></p>}
     </div>
   );
 }

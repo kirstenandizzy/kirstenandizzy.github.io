@@ -402,7 +402,14 @@
     text-align: center;
 
     input[type='checkbox'] {
-      display: none;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      border: 0;
     }
 
     input[type='checkbox'] + label {
@@ -412,6 +419,12 @@
       vertical-align: middle;
       cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
       font-size: 18px;
+    }
+
+    input[type='checkbox']:focus + label {
+      outline: 2px solid #e091b7;
+      outline-offset: 2px;
+      border-radius: 2px;
     }
 
     input[type='checkbox']:checked + label::after {

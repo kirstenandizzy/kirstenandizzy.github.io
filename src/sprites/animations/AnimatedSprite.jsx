@@ -11,6 +11,7 @@ export default function AnimatedSprite({ sheet, animations, animation, scale = 3
     loop: config.loop,
     playing: true,
     onComplete,
+    holdLastFrame: config.holdLastFrame || 0,
   });
 
   return (

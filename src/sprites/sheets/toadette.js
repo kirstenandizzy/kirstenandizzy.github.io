@@ -36,5 +36,5 @@ export const TOADETTE_ANIMATIONS = {
   walk: { frames: ['walk-1', 'walk-2', 'walk-3'], fps: 10, loop: true },
   launch: { frames: ['launch-1', 'launch-2', 'launch-3', 'launch-4', 'launch-5'], fps: 8, loop: true },
   fall: { frames: ['fall-1', 'fall-2', 'fall-3', 'fall-4', 'fall-5'], fps: 8, loop: false },
-  landed: { frames: ['landed-1', 'landed-2', 'landed-3', 'landed-4', 'landed-5'], fps: 8, loop: false },
+  landed: { frames: ['landed-1', 'landed-2', 'landed-3', 'landed-4', 'landed-5'], fps: 8, loop: false, holdLastFrame: 3 },
 };

@@ -37,12 +37,12 @@ function App() {
               setIsSceneExpanded(true);
               setTimeout(() => {
                 setOpenModal(link);
-              }, 450);
+              }, 225);
             }}
           />
           <main className="app__main">
             <Routes>
-              <Route path="/" element={<Home isModalOpen={isSceneExpanded} onOpenModal={(link) => { setIsSceneExpanded(true); setOpenModal(link); }} />} />
+              <Route path="/" element={<Home isModalOpen={isSceneExpanded} onOpenModal={(link) => { setIsSceneExpanded(true); setTimeout(() => setOpenModal(link), 225); }} />} />
             </Routes>
           </main>
         </div>

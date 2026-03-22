@@ -6,8 +6,9 @@ const EMOTE_CHANCE = 0.7;
 const IDLE_EMOTE_MIN = 1500; // ms — minimum time before emote check on single-frame idle
 const IDLE_EMOTE_MAX = 4000; // ms — maximum time
 
-export default function ShipPassenger({ sheet, animations, scale = 1.5, facesRight = true, offsetX = 0, offsetY = 0, label, labelColor }) {
+export default function ShipPassenger({ sheet, animations, scale = 1.5, facesRight = true, offsetX = 0, offsetY = 0, zIndex, label, labelColor, glowColor, freezeAfterEmote = false, idleEmoteMin = IDLE_EMOTE_MIN, idleEmoteMax = IDLE_EMOTE_MAX }) {
   const [currentAnim, setCurrentAnim] = useState('idle');
+  const [animKey, setAnimKey] = useState(0);
   const currentAnimRef = useRef('idle');
   const idleTimerRef = useRef(null);
 
@@ -30,7 +31,7 @@ export default function ShipPassenger({ sheet, animations, scale = 1.5, facesRig
   // Schedule a random emote check after a delay (for single-frame idle)
   const scheduleEmoteCheck = useCallback(() => {
     if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-    const delay = IDLE_EMOTE_MIN + Math.random() * (IDLE_EMOTE_MAX - IDLE_EMOTE_MIN);
+    const delay = idleEmoteMin + Math.random() * (idleEmoteMax - idleEmoteMin);
     idleTimerRef.current = setTimeout(() => {
       if (currentAnimRef.current !== 'idle') return;
       if (Math.random() < EMOTE_CHANCE) {
@@ -38,13 +39,14 @@ export default function ShipPassenger({ sheet, animations, scale = 1.5, facesRig
         if (animations[emote]) {
           currentAnimRef.current = emote;
           setCurrentAnim(emote);
+          setAnimKey(k => k + 1);
           return; // handleAnimComplete will call scheduleEmoteCheck when emote finishes
         }
       }
       // Didn't play emote, schedule another check
       scheduleEmoteCheck();
     }, delay);
-  }, [animations]);
+  }, [animations, idleEmoteMin, idleEmoteMax]);
 
   // Start the emote timer for single-frame idle on mount
   useEffect(() => {
@@ -58,9 +60,11 @@ export default function ShipPassenger({ sheet, animations, scale = 1.5, facesRig
 
   const handleAnimComplete = useCallback(() => {
     if (currentAnimRef.current === 'emote1' || currentAnimRef.current === 'emote2') {
-      // Return to idle after emote
       currentAnimRef.current = 'idle';
-      setCurrentAnim('idle');
+      if (!freezeAfterEmote) {
+        // Reset back to idle animation
+        setCurrentAnim('idle');
+      }
       // Restart timer if idle is single-frame
       if (isSingleFrameIdle) {
         scheduleEmoteCheck();
@@ -72,10 +76,11 @@ export default function ShipPassenger({ sheet, animations, scale = 1.5, facesRig
         if (animations[emote]) {
           currentAnimRef.current = emote;
           setCurrentAnim(emote);
+          setAnimKey(k => k + 1);
         }
       }
     }
-  }, [animations, isSingleFrameIdle, scheduleEmoteCheck]);
+  }, [animations, isSingleFrameIdle, freezeAfterEmote, scheduleEmoteCheck]);
 
   return (
     <div style={{
@@ -84,19 +89,22 @@ export default function ShipPassenger({ sheet, animations, scale = 1.5, facesRig
       left: `calc(50% + ${offsetX}px)`,
       transform: `translateX(-50%)${facesRight ? '' : ' scaleX(-1)'}`,
       pointerEvents: 'none',
+      zIndex,
     }}>
       {label && (
         <div style={facesRight ? undefined : { transform: 'scaleX(-1)' }}>
           <CharacterLabel name={label} color={labelColor} />
         </div>
       )}
-      <div style={{
+      <div className={glowColor ? 'passenger-glow' : undefined} style={{
         display: 'flex',
         alignItems: 'flex-end',
         justifyContent: 'center',
         width: stableWidth,
+        '--glow-color': glowColor,
       }}>
         <AnimatedSprite
+          key={animKey}
           sheet={sheet}
           animations={animations}
           animation={currentAnim}

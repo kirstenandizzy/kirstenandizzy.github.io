@@ -12,6 +12,7 @@ export default function Balloon({ sheet, animations, scale, startX, startY, colo
   const onPopRef = useRef(onPop);
   onPopRef.current = onPop;
   const balloonRef = useRef(null);
+  const innerRef = useRef(null);
   const yRef = useRef(startY);
   const startTimeRef = useRef(0);
 
@@ -21,6 +22,8 @@ export default function Balloon({ sheet, animations, scale, startX, startY, colo
     wobbleAmplitude: 15 + Math.random() * 20,
     wobbleDuration: 4 + Math.random() * 3,
   });
+
+  const GROW_DURATION = 0.4; // seconds
 
   useEffect(() => {
     const params = paramsRef.current;
@@ -48,6 +51,17 @@ export default function Balloon({ sheet, animations, scale, startX, startY, colo
         const elapsed = (timestamp - startTimeRef.current) / 1000;
         const wobbleX = Math.sin((elapsed / params.wobbleDuration) * 2 * Math.PI) * params.wobbleAmplitude;
         balloonRef.current.style.transform = `translate(${wobbleX}px, ${yRef.current}px)`;
+        balloonRef.current.style.opacity = 1;
+      }
+
+      if (innerRef.current) {
+        const elapsed = (timestamp - startTimeRef.current) / 1000;
+        // Grow-in: ease-out from 0 to 1 with slight overshoot
+        const t = Math.min(elapsed / GROW_DURATION, 1);
+        const growScale = t < 0.7
+          ? (t / 0.7) * 1.1
+          : 1.1 - 0.1 * ((t - 0.7) / 0.3);
+        innerRef.current.style.scale = growScale;
       }
 
       rafRef.current = requestAnimationFrame(tick);
@@ -85,32 +99,35 @@ export default function Balloon({ sheet, animations, scale, startX, startY, colo
       style={{
         left: startX,
         transform: `translate(0px, ${startY}px)`,
+        opacity: 0,
       }}
       onClick={handleClick}
     >
-      <div className="balloon-sprite">
-        <AnimatedSprite
-          sheet={sheet}
-          animations={animations}
-          animation={animation}
-          scale={scale}
-          onComplete={animation.endsWith('-pop') ? handlePopComplete : undefined}
-        />
-      </div>
-      {photo && (
-        <div
-          className={`balloon-photo${falling ? ' balloon-photo--falling' : ''}${photoExpanded ? ' balloon-photo--expanded' : ''}`}
-          style={{
-            opacity: photoStyle.opacity,
-          }}
-          onClick={(e) => {
-            e.stopPropagation();
-            setPhotoExpanded(v => !v);
-          }}
-        >
-          <img src={photo} alt="" />
+      <div ref={innerRef} className="balloon-inner" style={{ scale: 0 }}>
+        <div className="balloon-sprite">
+          <AnimatedSprite
+            sheet={sheet}
+            animations={animations}
+            animation={animation}
+            scale={scale}
+            onComplete={animation.endsWith('-pop') ? handlePopComplete : undefined}
+          />
         </div>
-      )}
+        {photo && (
+          <div
+            className={`balloon-photo${falling ? ' balloon-photo--falling' : ''}${photoExpanded ? ' balloon-photo--expanded' : ''}`}
+            style={{
+              opacity: photoStyle.opacity,
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setPhotoExpanded(v => !v);
+            }}
+          >
+            <img src={photo} alt="" />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

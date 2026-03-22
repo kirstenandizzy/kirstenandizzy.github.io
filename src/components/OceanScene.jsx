@@ -82,12 +82,22 @@ function OceanWater({ timeOfDay, lightX, lightY, lightZ, sunColorHex, moonLightI
   useEffect(() => {
     let mounted = true;
     const textureLoader = new THREE.TextureLoader();
-    textureLoader.load('/textures/waternormals.jpg', (tex) => {
-      if (!mounted) return; // Ignore if component unmounted
-      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-      setWaterNormals(tex);
-      if (onReady) onReady();
-    });
+    textureLoader.load(
+      '/textures/waternormals.jpg',
+      (tex) => {
+        if (!mounted) return; // Ignore if component unmounted
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        setWaterNormals(tex);
+        // Schedule DOM state update outside R3F's reconciler context
+        if (onReady) setTimeout(onReady, 0);
+      },
+      undefined,
+      () => {
+        // Texture failed to load — still dismiss the loader so the page isn't stuck
+        if (!mounted) return;
+        if (onReady) setTimeout(onReady, 0);
+      },
+    );
     return () => {
       mounted = false;
     };

@@ -1,4 +1,5 @@
 import '../styles/NavigationDrawer.scss';
+import MessageSprite from './MessageSprite';
 
 export default function NavigationDrawer({ isMenuOpen, setIsMenuOpen, onLinkClick }) {
   const handleLinkClick = (e, link) => {
@@ -16,10 +17,12 @@ export default function NavigationDrawer({ isMenuOpen, setIsMenuOpen, onLinkClic
 
       {/* Mobile drawer */}
       <nav className={`navigation__drawer${isMenuOpen ? ' navigation__drawer--open' : ''}`} role="navigation">
-        <div className='navigation__drawer-title'>
-          <h1 className='ballet-regular'>Kirsten and Israel</h1>
-          <p>｡ﾟ.(*♡´‿` 人´‿` ♡*)ﾟ♡ °・</p>
-        </div>
+        <MessageSprite variant="vertical">
+          <div className='navigation__drawer-title'>
+            <h1 className='ballet-regular'>Kirsten and Israel</h1>
+            <p>｡ﾟ.(*♡´‿` 人´‿` ♡*)ﾟ♡ °・</p>
+          </div>
+        </MessageSprite>
         <ul className='navigation__drawer-links'>
           <li><a onClick={(e) => handleLinkClick(e, 'rsvp')}>RSVP</a></li>
           <li><a onClick={(e) => handleLinkClick(e, 'travel')}>Travel</a></li>

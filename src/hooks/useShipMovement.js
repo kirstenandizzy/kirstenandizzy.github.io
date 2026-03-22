@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { TOTAL_ANGLES } from '../sprites/sheets/ship';
 
 const LERP_SPEED = 0.003;        // slow drift toward target
-const ENTRANCE_LERP = 0.008;     // faster speed for fly-in
+const ENTRANCE_LERP = 0.018;    // fast drift for fly-in/fly-out (meandering)
 const TARGET_THRESHOLD = 15;     // px — pick new target when this close
 const MIN_Y = 120;               // minimum bottom offset (above buttons)
 const MAX_Y = 280;               // maximum bottom offset
@@ -21,6 +21,7 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
   const [angleIndex, setAngleIndex] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
   const [movingRight, setMovingRight] = useState(true);
+  const [ready, setReady] = useState(false);
 
   const posRef = useRef({ x: 0, y: MIN_Y + 60 });
   const targetRef = useRef({ x: 0, y: MIN_Y + 60 });
@@ -63,11 +64,14 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
     // Cancel any pause so it starts moving immediately
     pausedRef.current = false;
     if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
-    // Pick a random side to exit toward
+    // Exit toward whichever side is closer
     const b = boundsRef.current;
-    const exitRight = Math.random() > 0.5;
-    const exitX = exitRight ? b.right + 400 : b.left - 400;
-    const exitY = MIN_Y + Math.random() * (MAX_Y - MIN_Y);
+    const pos = posRef.current;
+    const mid = (b.left + b.right) / 2;
+    const exitRight = pos.x > mid;
+    const vw = window.innerWidth;
+    const exitX = exitRight ? vw + 3000 : -3000;
+    const exitY = pos.y; // keep same height for a clean horizontal exit
     targetRef.current = { x: exitX, y: exitY };
     facingRightRef.current = exitRight;
   }, [dismissing]);
@@ -80,10 +84,11 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
     }
 
     const b = boundsRef.current;
-    // Fly in from a random side
+    // Start outside the actual viewport (clip div is 100vw)
+    const vw = window.innerWidth;
     const fromRight = Math.random() > 0.5;
-    const startX = fromRight ? b.right + 250 : b.left - 250;
-    const startY = MIN_Y + 60;
+    const startX = fromRight ? vw + 300 : -300;
+    const startY = (MIN_Y + MAX_Y) / 2;
     posRef.current = { x: startX, y: startY };
     enteringRef.current = true;
     exitingRef.current = false;
@@ -96,6 +101,8 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
     setY(startY);
     setMovingRight(!fromRight);
     setAngleIndex(initFrame);
+    setReady(true);
+    // First target = random waypoint within bounds (ship meanders toward it)
     pickTarget();
 
     const tick = () => {
@@ -113,9 +120,10 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
 
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (isExiting) {
-          // Check if ship has moved far enough off-screen
-          const b = boundsRef.current;
-          if (pos.x < b.left - 300 || pos.x > b.right + 300) {
+          // Check if ship has fully left the viewport
+          // The clip div is 100vw wide, so viewport in local coords is 0..innerWidth
+          const vw = window.innerWidth;
+          if (pos.x < -200 || pos.x > vw + 200) {
             if (!exitCalledRef.current) {
               exitCalledRef.current = true;
               onExitedRef.current?.();
@@ -123,8 +131,17 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
             return; // stop ticking
           }
         } else if (dist < TARGET_THRESHOLD) {
-          enteringRef.current = false;
-          startPause();
+          if (enteringRef.current) {
+            // During entrance: skip pause, immediately pick next waypoint.
+            // Once the ship is within bounds, transition to normal idle.
+            const b = boundsRef.current;
+            if (pos.x > b.left + 60 && pos.x < b.right - 60) {
+              enteringRef.current = false;
+            }
+            pickTarget();
+          } else {
+            startPause();
+          }
         }
       }
 
@@ -174,5 +191,5 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
     };
   }, [enabled, pickTarget, startPause]);
 
-  return { x, y, angleIndex, isMoving, movingRight };
+  return { x, y, angleIndex, isMoving, movingRight, ready };
 }

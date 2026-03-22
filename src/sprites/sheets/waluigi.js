@@ -41,7 +41,7 @@ export const WALUIGI_ANIMATIONS = {
   walk: { frames: ['walk-1', 'walk-2', 'walk-3', 'walk-4', 'walk-5', 'walk-6', 'walk-7', 'walk-8'], fps: 28, loop: true },
   launch: { frames: ['launch-1', 'launch-2'], fps: 8, loop: true },
   fall: { frames: ['fall'], fps: 8, loop: false },
-  landed: { frames: ['landed-1', 'landed-2', 'landed-3', 'landed-4'], fps: 8, loop: false },
+  landed: { frames: ['landed-1', 'landed-2', 'landed-3', 'landed-4'], fps: 8, loop: false, holdLastFrame: 4 },
   emote: { frames: ['emote-1', 'emote-2', 'emote-3'], fps: 1, loop: false },
   minionWalk: { frames: ['minion-walk-1', 'minion-walk-2'], fps: 8, loop: true },
 };

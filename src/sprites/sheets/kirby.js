@@ -39,6 +39,6 @@ export const KIRBY_SCALE = 1.5;
 export const KIRBY_ANIMATIONS = {
   idle: { frames: ['idle-1'], fps: 6, loop: true },
   walk: { frames: ['walk-1', 'walk-2', 'walk-3', 'walk-4', 'walk-5', 'walk-6', 'walk-7', 'walk-8', 'walk-9', 'walk-10', 'walk-11', 'walk-12'], fps: 10, loop: true },
-  emote1: { frames: ['emote1-1', 'emote1-2', 'emote1-3', 'emote1-4', 'emote1-5', 'emote1-6', 'emote1-7', 'emote1-8'], fps: 6, loop: false },
-  emote2: { frames: ['emote2-1', 'emote2-2', 'emote2-3', 'emote2-4'], fps: 6, loop: false },
+  emote1: { frames: ['emote1-1', 'emote1-2', 'emote1-3', 'emote1-4', 'emote1-5', 'emote1-6', 'emote1-7', 'emote1-8'], fps: 10, loop: false },
+  emote2: { frames: ['emote2-1', 'emote2-2', 'emote2-3', 'emote2-4'], fps: 10, loop: false },
 };
