@@ -8,10 +8,10 @@
     background: rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(20px);
     z-index: 999;
-    animation: fadeIn 0.25s ease-out backwards;
+    animation: fadeIn 0.75s ease-out backwards;
 
     &--closing {
-      animation: fadeOut 0.25s ease-out;
+      animation: fadeOut 0.45s ease-out;
     }
   }
 
@@ -62,10 +62,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    animation: fadeIn 0.25s ease-out backwards;
+    animation: fadeIn 0.75s ease-out backwards;
 
     &--closing {
-      animation: scaleOut 0.25s ease-out forwards;
+      animation: scaleOut 0.45s ease-out forwards;
       transform-origin: center center;
     }
   }
@@ -101,7 +101,7 @@
     }
 
     &--closing {
-      animation: fadeOut 0.25s ease-out forwards;
+      animation: fadeOut 0.45s ease-out forwards;
     }
 
     @media (max-width: 1024px) {

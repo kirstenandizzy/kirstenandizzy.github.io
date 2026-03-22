@@ -50,7 +50,7 @@ export default function Modal({ isOpen, onClose, onCloseStart, closeDelay = 0, c
     if (onCloseStart) onCloseStart();
     setTimeout(() => {
       setIsClosing(true);
-      setTimeout(onClose, 250);
+      setTimeout(onClose, 450);
     }, closeDelay);
   };
 

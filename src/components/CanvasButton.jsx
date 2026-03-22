@@ -585,6 +585,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
             recalling={recalling}
             recallTarget={pipeLeft}
             onReturned={() => handleNPCReturned(npc.id)}
+            canWander={allNPCsOut}
           />
         ))}
 
@@ -617,6 +618,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
             recalling={recalling}
             recallTarget={guysPipeLeft}
             onReturned={() => handleGuysNPCReturned(npc.id)}
+            canWander={allNPCsOut}
           />
         ))}
 

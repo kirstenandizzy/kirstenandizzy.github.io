@@ -11,7 +11,7 @@ const PROXIMITY_STOP = 55;     // px — stop walking if another NPC is this clo
 const BASE_EDGE_BIAS = 0.15;  // base fraction of distance-to-edge for initial clear walk
 const SCALE_EDGE_BONUS = 0.02; // extra fraction per unit of scale (bigger NPCs go further out)
 
-export default function useNPCBehavior({ enabled = false, initialX = 0, initialDirection, bounds, getNPCPositions, scale = 2, npcId, wanderSpeed, minIdleTime, maxIdleTime, minWalkDist, maxWalkDist }) {
+export default function useNPCBehavior({ enabled = false, canWander = true, initialX = 0, initialDirection, bounds, getNPCPositions, scale = 2, npcId, wanderSpeed, minIdleTime, maxIdleTime, minWalkDist, maxWalkDist }) {
   const WANDER_SPEED = wanderSpeed ?? DEFAULT_WANDER_SPEED;
   const MIN_IDLE_TIME = minIdleTime ?? DEFAULT_MIN_IDLE_TIME;
   const MAX_IDLE_TIME = maxIdleTime ?? DEFAULT_MAX_IDLE_TIME;
@@ -193,14 +193,30 @@ export default function useNPCBehavior({ enabled = false, initialX = 0, initialD
   scheduleWanderRef.current = scheduleWander;
   unstackOrWanderRef.current = unstackOrWander;
 
-  // Main behavior effect — idempotent so StrictMode cleanup+re-fire works
+  // Track whether the initial clear walk has finished
+  const clearDoneRef = useRef(false);
+  const canWanderRef = useRef(canWander);
+  canWanderRef.current = canWander;
+
+  // Main behavior effect — clear walk runs immediately, wander is gated by canWander
   useEffect(() => {
     if (!enabled) return;
+    clearDoneRef.current = false;
 
     const b = boundsRef.current;
     const startPos = xRef.current;
     // Run toward the edge the NPC is already facing (from launch direction)
     const dir = initialDirection === 'right' ? 'right' : 'left';
+
+    const onClearDone = () => {
+      clearDoneRef.current = true;
+      if (canWanderRef.current) {
+        unstackOrWanderRef.current();
+      } else {
+        // Stop and idle — the canWander effect below will kick off wandering later
+        setIsWalking(false);
+      }
+    };
 
     // Walk 20px * scale toward nearest edge, then continue to full edge target
     const quickDist = 20 * scale;
@@ -210,11 +226,11 @@ export default function useNPCBehavior({ enabled = false, initialX = 0, initialD
       const minFrac = BASE_EDGE_BIAS + scale * SCALE_EDGE_BONUS;
       const maxFrac = Math.min(minFrac + 0.15, 0.5);
       const distToEdge = dir === 'left' ? Math.abs(xRef.current - b.left) : Math.abs(b.right - xRef.current);
-      if (distToEdge < 5) { unstackOrWanderRef.current(); return; }
+      if (distToEdge < 5) { onClearDone(); return; }
       const dist = distToEdge * (minFrac + Math.random() * (maxFrac - minFrac));
       const rawTarget = dir === 'right' ? xRef.current + dist : xRef.current - dist;
       const adjusted = findNonOverlappingXRef.current(rawTarget, dir);
-      doWalkRef.current(adjusted, dir, unstackOrWanderRef.current, CLEAR_SPEED, true);
+      doWalkRef.current(adjusted, dir, onClearDone, CLEAR_SPEED, true);
     }, CLEAR_SPEED, true);
 
     return () => {
@@ -222,10 +238,18 @@ export default function useNPCBehavior({ enabled = false, initialX = 0, initialD
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       lastTimeRef.current = 0;
       setIsWalking(false);
+      clearDoneRef.current = false;
       // Reset position so StrictMode re-fire starts from landing spot
       xRef.current = startPos;
     };
   }, [enabled, scale]);
+
+  // When canWander becomes true after clear walk is done, start wandering
+  useEffect(() => {
+    if (canWander && clearDoneRef.current && enabled) {
+      unstackOrWanderRef.current();
+    }
+  }, [canWander, enabled]);
 
   return { x, facing, isWalking };
 }

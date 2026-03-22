@@ -32,6 +32,7 @@ export default function NPC({
   maxWalkDist,
   glowColor,
   zIndex,
+  canWander = true,
 }) {
   const [currentAnim, setCurrentAnim] = useState('launch');
   const [behaviorEnabled, setBehaviorEnabled] = useState(false);
@@ -71,6 +72,7 @@ export default function NPC({
   // Phase 2: Wander AI after landing
   const { x: wanderX, facing, isWalking } = useNPCBehavior({
     enabled: behaviorEnabled,
+    canWander,
     initialX: physicsX,
     initialDirection: launchDirection,
     bounds: moveBounds,
