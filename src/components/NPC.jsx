@@ -201,7 +201,7 @@ export default function NPC({
 
   // Report current position to parent for hit detection
   const displayX = returning ? returnX : (behaviorEnabled ? wanderX : physicsX);
-  const displayYForHit = sinking ? startY : (phase === 'landed' || behaviorEnabled ? 0 : physicsY);
+  const displayYForHit = (sinking || onPipe) ? startY : (phase === 'landed' || behaviorEnabled ? 0 : physicsY);
   useEffect(() => {
     if (onPositionUpdate && npcId && phase !== 'waiting') {
       onPositionUpdate(npcId, displayX, displayYForHit);
@@ -232,8 +232,8 @@ export default function NPC({
 
   // Not visible during waiting phase
   if (phase === 'waiting') return null;
-  // When sinking, position at pipe top so it slides down into pipe
-  const displayY = sinking ? startY : (phase === 'landed' ? 0 : physicsY);
+  // When on pipe or sinking, position at pipe top
+  const displayY = (sinking || onPipe) ? startY : (phase === 'landed' ? 0 : physicsY);
 
   // Determine facing direction
   let displayFacing;

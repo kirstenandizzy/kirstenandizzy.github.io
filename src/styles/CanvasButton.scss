@@ -101,13 +101,13 @@
   left: 50%;
   transform: translateX(-50%);
   width: 100vw;
-  height: 500px;
+  height: 100vh;
   overflow: visible;
   pointer-events: none;
   z-index: 1;
   // Clip bottom only: hide pipe/NPCs below, extend 50px into button area for sink-behind.
   // Top/left/right use large negative values = no clipping on those sides.
-  clip-path: inset(-100px -100px -50px -100px);
+  clip-path: inset(-100vh -100px -50px -100px);
 }
 
 .pipe-slide {
