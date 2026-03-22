@@ -289,7 +289,14 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
         <h3 style={{ '--i': 0 }}>
           <span>Timeline of Events</span>
           <span>Sunday, September 20th, 2026</span>
-          <span className='the-girl-next-door-regular'>Sea Bright, New Jersey</span>
+          <span className='the-girl-next-door-regular'>
+            <a className='location-link' href='https://www.google.com/maps?daddr=931+Ocean+Ave,+Sea+Bright,+NJ+07760' target='_blank' rel='noopener noreferrer'>
+              <span className='location-icon' aria-hidden='true'>
+                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor' width='1em' height='1em'><path d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z'/></svg>
+              </span>
+              Sea Bright, New Jersey
+            </a>
+          </span>
         </h3>
         <div className='slider__content' style={{ '--i': 1 }}>
           <div className='slider__window' ref={windowRef}>
@@ -339,7 +346,14 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
       <h3 style={{ '--i': 0 }}>
         <span>Timeline of Events</span>
         <span>Sunday, September 20th, 2026</span>
-        <span className='the-girl-next-door-regular'>Sea Bright, New Jersey</span>
+        <span className='the-girl-next-door-regular'>
+          <a className='location-link' href='https://www.google.com/maps?daddr=931+Ocean+Ave,+Sea+Bright,+NJ+07760' target='_blank' rel='noopener noreferrer'>
+            <span className='location-icon' aria-hidden='true'>
+              <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor' width='1em' height='1em'><path d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z'/></svg>
+            </span>
+            Sea Bright, New Jersey
+          </a>
+        </span>
       </h3>
       <div className='slider__content'>
         <div className='slider__timeline' style={{ '--i': 1 }} ref={timelineRef}>

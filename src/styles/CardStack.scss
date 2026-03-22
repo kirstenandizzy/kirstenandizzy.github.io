@@ -372,6 +372,12 @@
       transform: rotate(-2deg);
       display: block;
     }
+
+    &--tilted span {
+      position: relative;
+      top: 6px;
+      transform: rotate(1deg);
+    }
   }
 
   &__table {
