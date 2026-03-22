@@ -589,11 +589,19 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
     : { position: [0, 15, 80], fov: 55, near: 1, far: 500000 };
 
   const [sceneReady, setSceneReady] = useState(false);
+  const [loaderRemoved, setLoaderRemoved] = useState(false);
+
+  // Remove loader from DOM after fade-out transition completes
+  useEffect(() => {
+    if (!sceneReady) return;
+    const id = setTimeout(() => setLoaderRemoved(true), 600);
+    return () => clearTimeout(id);
+  }, [sceneReady]);
 
   return (
     <div ref={containerRef} className="ocean-canvas">
-      {!sceneReady && (
-        <div className="ocean-canvas__loader">
+      {!loaderRemoved && (
+        <div className={`ocean-canvas__loader${sceneReady ? ' ocean-canvas__loader--ready' : ''}`}>
           <div className="ocean-canvas__loader-dots">
             <span />
             <span />
