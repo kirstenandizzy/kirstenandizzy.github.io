@@ -1,10 +1,14 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
 const LAUNCH_SPEED = 450; // px/s
+const MOBILE_LAUNCH_SPEED = 300; // px/s — shorter arc on mobile to fit narrower platform
 const GRAVITY = 600;      // px/s² (floatier than Yoshi's 800)
 const LAUNCH_ANGLE = 75;  // degrees from horizontal
 
-export default function useNPCPhysics({ enabled = false, startX, startY, direction = 'left', launchSpeed = LAUNCH_SPEED }) {
+export default function useNPCPhysics({ enabled = false, startX, startY, direction = 'left', launchSpeed }) {
+  const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+  const defaultSpeed = isMobile ? MOBILE_LAUNCH_SPEED : LAUNCH_SPEED;
+  const resolvedSpeed = launchSpeed ?? defaultSpeed;
   const [x, setX] = useState(startX);
   const [y, setY] = useState(startY);
   const [phase, setPhase] = useState('waiting'); // 'waiting' | 'rising' | 'falling' | 'landed'
@@ -20,7 +24,7 @@ export default function useNPCPhysics({ enabled = false, startX, startY, directi
   const startXRef = useRef(startX);
   const startYRef = useRef(startY);
   const directionRef = useRef(direction);
-  const launchSpeedRef = useRef(launchSpeed);
+  const launchSpeedRef = useRef(resolvedSpeed);
 
   useEffect(() => {
     if (!enabled || phaseRef.current !== 'waiting') return;

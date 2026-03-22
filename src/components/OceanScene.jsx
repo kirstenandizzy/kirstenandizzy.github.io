@@ -427,6 +427,7 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
   const homeRectRef = useRef(null);
   const closeTimeoutRef = useRef(null);
   const canvasButtonTimeoutRef = useRef(null);
+  const savedHeightRef = useRef(null);
 
   useLayoutEffect(() => {
     const el = containerRef.current;
@@ -446,6 +447,11 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
       // Hide slider and canvas button (fades via CSS transition)
       setSliderVisible(false);
       setCanvasButtonVisible(false);
+
+      // Save container height before going fullscreen — on mobile, 100dvh
+      // can change during modal interaction (address bar show/hide), so we
+      // restore this exact height on close to prevent layout shift.
+      savedHeightRef.current = el.offsetHeight;
 
       // Capture current viewport position before style change
       const rect = el.getBoundingClientRect();
@@ -517,6 +523,11 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
 
         // Remove all inline styles at once
         el.removeAttribute('style');
+
+        // Restore pre-modal height to prevent layout shift from dvh changes
+        if (savedHeightRef.current != null) {
+          el.style.height = savedHeightRef.current + 'px';
+        }
 
         // Force synchronous reflow so browser recalculates layout
         void el.offsetHeight;

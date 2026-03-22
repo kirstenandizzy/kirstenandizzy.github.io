@@ -21,11 +21,11 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
   const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
   const minY = isMobile ? MOBILE_MIN_Y : MIN_Y;
   const rawMaxY = isMobile ? MOBILE_MAX_Y : MAX_Y;
-  // Cap maxY so the top of the ship stays at least 100px from the top of the viewport
-  // Ship rendered height = 65 (sprite) * 3 (SHIP_SCALE) = 195px
-  // top of ship = innerHeight - bottom - 195, so bottom <= innerHeight - 195 - 100
+  // Cap maxY so the top of the ship (including passengers & labels) stays ≥100px from viewport top
+  // Full visual height above bottom edge: ~300px (195px ship + 75px passengers + 29px labels)
+  // So bottom ≤ innerHeight - 300 - 100 = innerHeight - 400
   const maxY = typeof window !== 'undefined'
-    ? Math.min(rawMaxY, window.innerHeight - 295)
+    ? Math.min(rawMaxY, window.innerHeight - 400)
     : rawMaxY;
 
   const [x, setX] = useState(0);
@@ -134,6 +134,10 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
       if (!pausedRef.current) {
         pos.x += dx * speed;
         pos.y += dy * speed;
+        // Clamp so ship never drifts above maxY (too close to viewport top)
+        if (!isExiting) {
+          pos.y = Math.min(pos.y, maxYRef.current);
+        }
 
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (isExiting) {
