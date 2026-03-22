@@ -171,7 +171,8 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
           offsetX={-20}
           offsetY={75}
           zIndex={2}
-          label="kirsten"
+          label="kir"
+          hoverLabel="kirsten"
           labelColor="#f4a9a8"
           glowColor="#c89ef2"
           idleEmoteMin={800}

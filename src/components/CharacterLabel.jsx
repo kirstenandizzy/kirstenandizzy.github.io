@@ -1,16 +1,20 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 
-export default function CharacterLabel({ name, color, bounce, repeat, repeatInterval = 5000, hideInitial }) {
+export default function CharacterLabel({ name, hoverName, color, bounce, repeat, repeatInterval = 5000, hideInitial }) {
   const [showName, setShowName] = useState(!hideInitial);
+  const [hasShownOnce, setHasShownOnce] = useState(false);
   const timerRef = useRef(null);
   const intervalRef = useRef(null);
 
   // Auto-show label for a few seconds on mount (unless hideInitial)
   useEffect(() => {
     if (hideInitial) return;
-    timerRef.current = setTimeout(() => setShowName(false), 3000);
+    timerRef.current = setTimeout(() => {
+      setShowName(false);
+      if (hoverName) setHasShownOnce(true);
+    }, 3000);
     return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, [hideInitial]);
+  }, [hideInitial, hoverName]);
 
   // Repeating cycle: re-show label every repeatInterval ms
   useEffect(() => {
@@ -25,10 +29,11 @@ export default function CharacterLabel({ name, color, bounce, repeat, repeatInte
   }, [repeat, repeatInterval]);
 
   const handleTap = useCallback(() => {
+    if (hoverName && !hasShownOnce) setHasShownOnce(true);
     setShowName(true);
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => setShowName(false), 2000);
-  }, []);
+  }, [hoverName, hasShownOnce]);
 
   return (
     <div
@@ -37,7 +42,7 @@ export default function CharacterLabel({ name, color, bounce, repeat, repeatInte
       onClick={handleTap}
     >
       <span className={`character-label__name${showName ? ' character-label__name--visible' : ''}${!bounce ? ' character-label__name--npc' : ''}`}>
-        {name}
+        {hasShownOnce && hoverName ? hoverName : name}
       </span>
       {bounce && <div className="character-label__arrow character-label__arrow--bounce" />}
     </div>

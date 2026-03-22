@@ -139,7 +139,7 @@
 
 .character-label {
   position: absolute;
-  top: -1.8rem;
+  top: calc(-1.8rem - 5px);
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -164,6 +164,9 @@
     &--npc {
       font-size: 1.3rem;
       color: var(--indicator-color);
+      background: rgba(0, 0, 0, 0.55);
+      border-radius: 3px;
+      padding: 0.1rem 0.35rem;
     }
   }
 

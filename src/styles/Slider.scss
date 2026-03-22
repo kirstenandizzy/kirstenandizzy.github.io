@@ -138,7 +138,7 @@
     top: 0;
     transform: translate(-50%, 0);
     opacity: 0;
-    animation: slider-stagger-in 1s ease forwards;
+    animation: slider-event-in 1s ease forwards;
     animation-delay: calc(var(--i) * 300ms);
     display: flex;
     gap: 0.25rem;
@@ -310,6 +310,17 @@
       line-height: 24px;
       margin-top: 2px;
     }
+  }
+}
+
+@keyframes slider-event-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
   }
 }
 
