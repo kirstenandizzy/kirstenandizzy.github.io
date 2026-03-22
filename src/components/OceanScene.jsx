@@ -423,6 +423,7 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
   const [timeOfDay, setTimeOfDay] = useState(17); // Start at 5:00 PM
   const [sliderVisible, setSliderVisible] = useState(true);
   const [canvasButtonVisible, setCanvasButtonVisible] = useState(true);
+  const [buttonsActive, setButtonsActive] = useState(false);
   const containerRef = useRef();
   const homeRectRef = useRef(null);
   const closeTimeoutRef = useRef(null);
@@ -598,8 +599,9 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
         {isMobile && <CameraTilt angle={-0.32} />}
         <Scene timeOfDay={timeOfDay} onReady={() => setSceneReady(true)} isSafari={isSafari} />
       </Canvas>
-      <CanvasButton onOpenModal={onOpenModal} isModalOpen={isModalOpen} hideOverlay={!canvasButtonVisible} />
-      <div className={`ocean-canvas__slider${sliderVisible ? '' : ' ocean-canvas__slider--hidden'}`}>
+      <div className={`ocean-canvas__blur-overlay${buttonsActive ? ' ocean-canvas__blur-overlay--active' : ''}`} />
+      <CanvasButton onOpenModal={onOpenModal} isModalOpen={isModalOpen} hideOverlay={!canvasButtonVisible} onActiveChange={setButtonsActive} />
+      <div className={`ocean-canvas__slider${sliderVisible && !buttonsActive ? '' : ' ocean-canvas__slider--hidden'}`}>
         <Slider min={0} max={24} step={0.05} value={timeOfDay} onChange={setTimeOfDay} />
       </div>
     </div>

@@ -56,6 +56,22 @@
     40% { transform: scale(1); }
   }
 
+  &__blur-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    border-radius: inherit;
+
+    &--active {
+      opacity: 1;
+    }
+  }
+
   &__slider {
     position: absolute;
     top: 2rem;

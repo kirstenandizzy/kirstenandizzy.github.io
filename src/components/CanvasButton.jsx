@@ -98,7 +98,7 @@ function pickRandomColor(exclude) {
   return choices[Math.floor(Math.random() * choices.length)];
 }
 
-export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOverlay }) {
+export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOverlay, onActiveChange }) {
   const [pipeState, setPipeState] = useState('hidden');
   const [pipeColor, setPipeColor] = useState('green');
   const [pipeLeft, setPipeLeft] = useState(0);
@@ -122,6 +122,12 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
   const [guysPipeColor, setGuysPipeColor] = useState('green');
   const [guysPipeLeft, setGuysPipeLeft] = useState(0);
   const guysButtonRef = useRef(null);
+
+  // Notify parent when either button group is active
+  const buttonsActive = pipeState !== 'hidden' || shipState !== 'hidden';
+  useEffect(() => {
+    if (onActiveChange) onActiveChange(buttonsActive);
+  }, [buttonsActive, onActiveChange]);
 
   // Calculate bounds for character movement based on viewport
   const [moveBounds, setMoveBounds] = useState({ left: 0, right: 400 });
