@@ -99,7 +99,7 @@ export const BALLOON_ANIMATIONS = {
     fps: 6, loop: true,
   },
   'red-pop': {
-    frames: ['red-pop-1', 'red-pop-2', 'red-pop-3', 'red-pop-4', 'red-pop-5', 'red-pop-6', 'red-pop-7', 'red-pop-8', 'red-pop-9'],
+    frames: ['red-pop-7', 'red-pop-8', 'red-pop-9'],
     fps: 12, loop: false,
   },
   'orange-idle': {
@@ -107,7 +107,7 @@ export const BALLOON_ANIMATIONS = {
     fps: 6, loop: true,
   },
   'orange-pop': {
-    frames: ['orange-pop-1', 'orange-pop-2', 'orange-pop-3', 'orange-pop-4', 'orange-pop-5', 'orange-pop-6', 'orange-pop-7', 'orange-pop-8', 'orange-pop-9'],
+    frames: ['orange-pop-7', 'orange-pop-8', 'orange-pop-9'],
     fps: 12, loop: false,
   },
   'blue-idle': {
@@ -115,7 +115,7 @@ export const BALLOON_ANIMATIONS = {
     fps: 6, loop: true,
   },
   'blue-pop': {
-    frames: ['blue-pop-1', 'blue-pop-2', 'blue-pop-3', 'blue-pop-4', 'blue-pop-5', 'blue-pop-6', 'blue-pop-7', 'blue-pop-8', 'blue-pop-9'],
+    frames: ['blue-pop-7', 'blue-pop-8', 'blue-pop-9'],
     fps: 12, loop: false,
   },
   'gray-idle': {
@@ -123,7 +123,7 @@ export const BALLOON_ANIMATIONS = {
     fps: 6, loop: true,
   },
   'gray-pop': {
-    frames: ['gray-pop-1', 'gray-pop-2', 'gray-pop-3', 'gray-pop-4', 'gray-pop-5', 'gray-pop-6', 'gray-pop-7', 'gray-pop-8', 'gray-pop-9'],
+    frames: ['gray-pop-7', 'gray-pop-8', 'gray-pop-9'],
     fps: 12, loop: false,
   },
 };

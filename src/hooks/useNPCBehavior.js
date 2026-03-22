@@ -11,7 +11,7 @@ const PROXIMITY_STOP = 55;     // px — stop walking if another NPC is this clo
 const BASE_EDGE_BIAS = 0.15;  // base fraction of distance-to-edge for initial clear walk
 const SCALE_EDGE_BONUS = 0.02; // extra fraction per unit of scale (bigger NPCs go further out)
 
-export default function useNPCBehavior({ enabled = false, initialX = 0, bounds, getNPCPositions, scale = 2, npcId, wanderSpeed, minIdleTime, maxIdleTime, minWalkDist, maxWalkDist }) {
+export default function useNPCBehavior({ enabled = false, initialX = 0, initialDirection, bounds, getNPCPositions, scale = 2, npcId, wanderSpeed, minIdleTime, maxIdleTime, minWalkDist, maxWalkDist }) {
   const WANDER_SPEED = wanderSpeed ?? DEFAULT_WANDER_SPEED;
   const MIN_IDLE_TIME = minIdleTime ?? DEFAULT_MIN_IDLE_TIME;
   const MAX_IDLE_TIME = maxIdleTime ?? DEFAULT_MAX_IDLE_TIME;
@@ -199,9 +199,8 @@ export default function useNPCBehavior({ enabled = false, initialX = 0, bounds, 
 
     const b = boundsRef.current;
     const startPos = xRef.current;
-    const distToLeft = Math.abs(startPos - b.left);
-    const distToRight = Math.abs(startPos - b.right);
-    const dir = distToLeft <= distToRight ? 'left' : 'right';
+    // Run toward the edge the NPC is already facing (from launch direction)
+    const dir = initialDirection === 'right' ? 'right' : 'left';
 
     // Walk 20px * scale toward nearest edge, then continue to full edge target
     const quickDist = 20 * scale;

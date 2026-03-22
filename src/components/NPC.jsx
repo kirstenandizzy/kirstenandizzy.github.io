@@ -72,6 +72,7 @@ export default function NPC({
   const { x: wanderX, facing, isWalking } = useNPCBehavior({
     enabled: behaviorEnabled,
     initialX: physicsX,
+    initialDirection: launchDirection,
     bounds: moveBounds,
     getNPCPositions,
     scale,

@@ -38,7 +38,7 @@ export const WALUIGI_SCALE = 1.9; // matches Yoshi's rendered height
 
 export const WALUIGI_ANIMATIONS = {
   idle: { frames: ['idle-1', 'idle-2'], fps: 6, loop: false },
-  walk: { frames: ['walk-1', 'walk-2', 'walk-3', 'walk-4', 'walk-5', 'walk-6', 'walk-7', 'walk-8'], fps: 28, loop: true },
+  walk: { frames: ['walk-1', 'walk-2', 'walk-3', 'walk-4', 'walk-5', 'walk-6', 'walk-7', 'walk-8'], fps: 18, loop: true },
   launch: { frames: ['launch-1', 'launch-2'], fps: 8, loop: true },
   fall: { frames: ['fall'], fps: 8, loop: false },
   landed: { frames: ['landed-1', 'landed-2', 'landed-3', 'landed-4'], fps: 8, loop: false, holdLastFrame: 4 },

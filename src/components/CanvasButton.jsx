@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import PixelSprite from '../sprites/PixelSprite';
 import AnimatedSprite from '../sprites/animations/AnimatedSprite';
@@ -32,7 +32,7 @@ const CHARACTER_SCALE = 2;
 const GIRLS_NPC_QUEUE = [
   { id: 'peach', sheet: peachSheet, animations: PEACH_ANIMATIONS, scale: PEACH_SCALE, facesRight: false },
   { id: 'toadette', sheet: toadetteSheet, animations: TOADETTE_ANIMATIONS, scale: TOADETTE_SCALE },
-  { id: 'luigi', sheet: luigiSheet, animations: LUIGI_ANIMATIONS, scale: LUIGI_SCALE, launchSpeed: 650 },
+  { id: 'luigi', sheet: luigiSheet, animations: LUIGI_ANIMATIONS, scale: LUIGI_SCALE },
   { id: 'boo', sheet: booNPCSheet, animations: BOO_ANIMATIONS, scale: BOO_SCALE, wanderSpeed: 100, minIdleTime: 800, maxIdleTime: 2500, minWalkDist: 100, maxWalkDist: 280, zIndex: 2 },
   { id: 'waluigi', sheet: waluigiSheet, animations: WALUIGI_ANIMATIONS, scale: WALUIGI_SCALE, glowColor: '#9b59b6' },
 ];
@@ -172,6 +172,20 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
   const guysQueueIndex = useRef(0);
   const guysSpawnTimer = useRef(null);
 
+  // Track whether all NPCs from both queues have landed
+  const [allNPCsOut, setAllNPCsOut] = useState(false);
+
+  // Constrained bounds: girls stay left of their pipe, guys stay right of theirs until all are out
+  const PIPE_BUFFER = 40; // px — keep NPCs away from the pipe exit zone
+  const girlsBounds = useMemo(() => {
+    if (allNPCsOut) return moveBounds;
+    return { left: moveBounds.left, right: Math.max(moveBounds.left + 60, pipeLeft - PIPE_BUFFER) };
+  }, [allNPCsOut, moveBounds, pipeLeft]);
+  const guysBounds = useMemo(() => {
+    if (allNPCsOut) return moveBounds;
+    return { left: Math.min(moveBounds.right - 60, guysPipeLeft + PIPE_BUFFER), right: moveBounds.right };
+  }, [allNPCsOut, moveBounds, guysPipeLeft]);
+
   const getNPCPositions = useCallback(() => npcPositionsRef.current, []);
 
   const handleNPCPositionUpdate = useCallback((npcId, newX, newY) => {
@@ -218,28 +232,41 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
     guysQueueIndex.current += 1;
   }, []);
 
+  const checkAllNPCsOut = useCallback(() => {
+    // All NPCs are out only when every NPC from both queues has been launched AND landed
+    const allLaunched = npcQueueIndex.current >= GIRLS_NPC_QUEUE.length && guysQueueIndex.current >= GUYS_NPC_QUEUE.length;
+    if (!allLaunched) return;
+    const totalExpected = GIRLS_NPC_QUEUE.length + GUYS_NPC_QUEUE.length;
+    const totalLanded = npcPositionsRef.current.length;
+    if (totalLanded >= totalExpected) {
+      setAllNPCsOut(true);
+    }
+  }, []);
+
   const handleNPCLanded = useCallback((npcId, landedX) => {
     npcPositionsRef.current = npcPositionsRef.current
       .filter(p => p.id !== npcId)
       .concat({ id: npcId, x: landedX });
+    checkAllNPCsOut();
     // Don't launch next NPC if recalling
     if (!recallingRef.current) {
       npcSpawnTimer.current = setTimeout(() => {
         launchNextNPC();
       }, 1000);
     }
-  }, [launchNextNPC]);
+  }, [launchNextNPC, checkAllNPCsOut]);
 
   const handleGuysNPCLanded = useCallback((npcId, landedX) => {
     npcPositionsRef.current = npcPositionsRef.current
       .filter(p => p.id !== npcId)
       .concat({ id: npcId, x: landedX });
+    checkAllNPCsOut();
     if (!recallingRef.current) {
       guysSpawnTimer.current = setTimeout(() => {
         launchNextGuysNPC();
       }, 1000);
     }
-  }, [launchNextGuysNPC]);
+  }, [launchNextGuysNPC, checkAllNPCsOut]);
 
   // NPC returned to pipe during recall
   const handleNPCReturned = useCallback((npcId) => {
@@ -366,6 +393,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
     if (activeNPCs.length === 0 && activeGuysNPCs.length === 0 && characterState === 'hidden') {
       setPipeState('retracting');
       setRecalling(false);
+      setAllNPCsOut(false);
       npcQueueIndex.current = 0;
       guysQueueIndex.current = 0;
       npcPositionsRef.current = [];
@@ -539,7 +567,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
             startX={pipeLeft}
             startY={pipeHeight}
             launchDirection={npc.launchDirection}
-            moveBounds={moveBounds}
+            moveBounds={girlsBounds}
             getNPCPositions={getNPCPositions}
             onLanded={(landedX) => handleNPCLanded(npc.id, landedX)}
             onPositionUpdate={handleNPCPositionUpdate}
@@ -571,7 +599,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
             startX={guysPipeLeft}
             startY={pipeHeight}
             launchDirection={npc.launchDirection}
-            moveBounds={moveBounds}
+            moveBounds={guysBounds}
             getNPCPositions={getNPCPositions}
             onLanded={(landedX) => handleGuysNPCLanded(npc.id, landedX)}
             onPositionUpdate={handleNPCPositionUpdate}
