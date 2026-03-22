@@ -369,13 +369,15 @@
       font-family: courier, monospace;
       letter-spacing: 3px;
       font-size: 12px;
-      transform: rotate(-2deg);
+      position: relative;
+      top: -2px;
+      transform: rotate(-1deg);
       display: block;
     }
 
     &--tilted span {
       position: relative;
-      top: 6px;
+      top: 0px;
       transform: rotate(1deg);
     }
   }

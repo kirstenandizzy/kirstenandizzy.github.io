@@ -68,8 +68,6 @@ function RSVPForm({ dataRef, submitting }) {
           </div>
         )}
         <header className="rsvp-ticket__header">
-          <span className="rsvp-ticket__header-left">20</span>
-          <span className="rsvp-ticket__header-right">26</span>
           <div className="rsvp-ticket__header-center">092026</div>
         </header>
 
