@@ -18,9 +18,21 @@
 
 .faq-item {
   margin-bottom: 1rem;
+  opacity: 0;
+  animation: faq-stagger-in 0.4s ease forwards;
+  animation-delay: calc(var(--i) * 150ms);
 
   &:last-child {
     margin-bottom: 0;
+  }
+}
+
+@keyframes faq-stagger-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 

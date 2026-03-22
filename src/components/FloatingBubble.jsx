@@ -65,7 +65,7 @@ export default function FloatingBubble({ startX, startY, size, onDone }) {
         opacity: 0,
         pointerEvents: 'none',
         imageRendering: 'pixelated',
-        zIndex: 997,
+        zIndex: 998,
       }}
     />
   );

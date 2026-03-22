@@ -4,6 +4,7 @@ import { shipSheet, SHIP_SCALE } from '../sprites/sheets/ship';
 import { kirbySheet, KIRBY_ANIMATIONS, KIRBY_SCALE } from '../sprites/sheets/kirby';
 import { foxSheet, FOX_ANIMATIONS, FOX_SCALE } from '../sprites/sheets/fox';
 import ShipPassenger from './ShipPassenger';
+import CharacterLabel from './CharacterLabel';
 import FloatingPhoto from './FloatingPhoto';
 import useShipMovement from '../hooks/useShipMovement';
 
@@ -113,6 +114,16 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
       }}
     >
       <div className="ship-clickable" onClick={handleClick}>
+        <div style={{
+          position: 'absolute',
+          bottom: 'calc(100% + 25px)',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          pointerEvents: 'auto',
+          zIndex: 10,
+        }}>
+          <CharacterLabel name="click me" color="#f4a9a8" bounce repeat repeatInterval={6000} hideInitial />
+        </div>
         <PixelSprite
           sheet={shipSheet}
           name={frameName}

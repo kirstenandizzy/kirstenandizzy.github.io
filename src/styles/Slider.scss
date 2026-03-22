@@ -4,6 +4,16 @@
   width: 75%;
   margin: 0 auto;
 
+  > h3,
+  > .slider__content > .slider__timeline,
+  > .slider__content > .slider__ticks,
+  > .slider__content > .slider__input-container,
+  > .slider__content > div:has(.slider__events) {
+    opacity: 0;
+    animation: slider-stagger-in 0.5s ease forwards;
+    animation-delay: calc(var(--i) * 150ms);
+  }
+
   &__timeline {
     position: relative;
     width: 100%;
@@ -257,6 +267,17 @@
   }
 }
 
+@keyframes slider-stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 // ──────────────────────────────────────────────
 // Mobile drum-picker layout
 // ──────────────────────────────────────────────
@@ -281,9 +302,15 @@
     margin: 0;
     line-height: 1.5rem;
     padding: 0 0 1rem 0;
+    opacity: 0;
+    animation: slider-stagger-in 0.5s ease forwards;
+    animation-delay: calc(var(--i) * 150ms);
   }
 
   .slider--mobile .slider__content {
+    opacity: 0;
+    animation: slider-stagger-in 0.5s ease forwards;
+    animation-delay: calc(var(--i) * 150ms);
     flex: 0 0 auto;
     display: flex;
     flex-direction: row;
@@ -362,6 +389,9 @@
     font-family: inherit;
     font-size: 0.85rem;
     transition: border-color 0.2s;
+    opacity: 0;
+    animation: slider-stagger-in 0.4s ease forwards;
+    animation-delay: calc(var(--i) * 150ms);
 
     &:hover, &:active {
       border-color: rgba(255, 255, 255, 0.4);

@@ -21,8 +21,25 @@
   }
 }
 
-.travel-card h3 {
-  word-spacing: 0.05em;
+.travel-card {
+  opacity: 0;
+  animation: stagger-in 0.5s ease forwards;
+  animation-delay: calc(var(--i) * 150ms);
+
+  h3 {
+    word-spacing: 0.05em;
+  }
+}
+
+@keyframes stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .travel-card .card__body ul {

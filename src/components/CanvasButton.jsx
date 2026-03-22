@@ -529,7 +529,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
             onTransitionEnd={handleCharacterTransitionEnd}
           >
             {characterState === 'active' && !recalling && (
-              <CharacterLabel name="" color="#77dd77" bounce />
+              <CharacterLabel name="move me" color="#77dd77" bounce repeat repeatInterval={6000} />
             )}
             <div style={{ display: 'flex', alignItems: 'flex-end', ...(facing === 'left' ? { transform: 'scaleX(-1)' } : {}) }}>
               {action === 'tongue' ? (
@@ -649,7 +649,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
         </div>
 
         {/* Eggs (rendered after pipes so they appear in front) */}
-        {eggs.map(egg => (
+        {eggs.map((egg, i) => (
           <YoshiEgg
             key={egg.id}
             sheet={eggSheet}
@@ -657,6 +657,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
             rollDirection={egg.rollDirection || 'left'}
             rolling={recalling}
             bounds={moveBounds}
+            showLabel={i === eggs.length - 1}
             onHatch={(hatchX, hatchBottomY) => { removeEgg(egg.id); spawnBalloon(hatchX ?? egg.x, hatchBottomY, egg.npcId); }}
             onFallOff={() => removeEgg(egg.id)}
           />

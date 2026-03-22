@@ -286,11 +286,11 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
 
     return (
       <div className='slider slider--mobile' ref={containerRef}>
-        <h3>
+        <h3 style={{ '--i': 0 }}>
           <span>Timeline of Events</span>
           <span>Sunday, September 20th, 2026</span>
         </h3>
-        <div className='slider__content'>
+        <div className='slider__content' style={{ '--i': 1 }}>
           <div className='slider__window' ref={windowRef}>
             <div className='slider__indicator' />
             <div
@@ -315,10 +315,11 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
             </div>
           </div>
           <div className='slider__mobile-events'>
-            {EVENTS.map((event) => (
+            {EVENTS.map((event, i) => (
               <button
                 key={event.eventLabel}
                 className='slider__mobile-event'
+                style={{ '--i': i + 2 }}
                 onClick={() => handleHourClick(event.value)}
               >
                 <span className='slider__mobile-event-time'>{event.timeLabel}</span>
@@ -334,12 +335,12 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
   // --- Desktop rendering (unchanged) ---
   return (
     <div className='slider' ref={containerRef}>
-      <h3>
+      <h3 style={{ '--i': 0 }}>
         <span>Timeline of Events</span>
         <span>Sunday, September 20th, 2026</span>
       </h3>
       <div className='slider__content'>
-        <div className='slider__timeline' ref={timelineRef}>
+        <div className='slider__timeline' style={{ '--i': 1 }} ref={timelineRef}>
           {HOURS.map((hour) => (
             <button
               key={hour.value}
@@ -351,7 +352,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
             </button>
           ))}
         </div>
-        <div className='slider__ticks'>
+        <div className='slider__ticks' style={{ '--i': 2 }}>
           {Array.from({ length: 49 }, (_, i) => {
             const tickValue = i * 0.5;
             const isHour = i % 2 === 0;
@@ -366,7 +367,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
         </div>
         <div
           className='slider__input-container'
-          style={{ '--slider-percentage': thumbPosition(value, 24, -30) }}
+          style={{ '--i': 3, '--slider-percentage': thumbPosition(value, 24, -30) }}
         >
           <div className='slider__time-label'>
             {formatTimeOfDay(value)}
@@ -382,7 +383,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
             aria-label='Timeline slider'
           />
         </div>
-        <div>
+        <div style={{ '--i': 4 }}>
           <div className='slider__events'>
             {EVENTS.map((event) => (
               <button

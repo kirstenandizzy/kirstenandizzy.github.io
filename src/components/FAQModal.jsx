@@ -40,9 +40,9 @@ const FAQ_ITEMS = [
   },
 ];
 
-function FAQItem({ question, answer, isExpanded, onToggle }) {
+function FAQItem({ question, answer, isExpanded, onToggle, index }) {
   return (
-    <li className="faq-item">
+    <li className="faq-item" style={{ '--i': index }}>
       <button
         className="faq-item__header"
         onClick={onToggle}
@@ -74,6 +74,7 @@ export default function FAQModal({ isOpen, onClose, onCloseStart, closeDelay }) 
             {FAQ_ITEMS.map((item, index) => (
               <FAQItem
                 key={index}
+                index={index}
                 question={item.question}
                 answer={item.answer}
                 isExpanded={expandedIndex === index}

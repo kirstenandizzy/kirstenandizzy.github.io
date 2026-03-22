@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import PixelSprite from '../sprites/PixelSprite';
+import CharacterLabel from './CharacterLabel';
 import { EGG_STAGES, EGG_GROW_INTERVAL, EGG_SCALE } from '../sprites/sheets/egg';
 
 const EGG_ROLL_SPEED = 40; // px/s
 const FALL_GRAVITY = 600;  // px/s²
 
-export default function YoshiEgg({ sheet, x: initialX, rollDirection = 'left', rolling = false, bounds, onHatch, onFallOff }) {
+export default function YoshiEgg({ sheet, x: initialX, rollDirection = 'left', rolling = false, bounds, showLabel = true, onHatch, onFallOff }) {
   const [stage, setStage] = useState(0);
   const [eggX, setEggX] = useState(initialX);
   const [bottomY, setBottomY] = useState(0);
@@ -107,6 +108,9 @@ export default function YoshiEgg({ sheet, x: initialX, rollDirection = 'left', r
       style={{ left: eggX, bottom: bottomY }}
       onClick={handleClick}
     >
+      {stage >= 2 && showLabel && (
+        <CharacterLabel name="click me" color="#77dd77" bounce repeat repeatInterval={5000} />
+      )}
       <PixelSprite sheet={sheet} name={stageName} scale={EGG_SCALE} />
     </div>
   );

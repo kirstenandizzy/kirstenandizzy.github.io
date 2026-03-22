@@ -157,8 +157,8 @@
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
     white-space: nowrap;
     opacity: 0;
-    transition: opacity 0.2s ease;
-    margin-bottom: 0.15rem;
+    transition: opacity 0.8s ease;
+    margin-bottom: 0.35rem;
     pointer-events: none;
 
     &--npc {
@@ -319,7 +319,7 @@
   top: 0;
   pointer-events: auto;
   cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
-  z-index: 100;
+  z-index: 998;
   image-rendering: pixelated;
   image-rendering: -webkit-crisp-edges;
   will-change: transform;

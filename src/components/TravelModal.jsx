@@ -35,7 +35,7 @@ export default function TravelModal({ isOpen, onClose, onCloseStart, closeDelay 
     <Modal isOpen={isOpen} onClose={onClose} onCloseStart={onCloseStart} closeDelay={closeDelay}>
       <div className="travel-cards">
         {TRAVEL_OPTIONS.map((option, index) => (
-          <Card key={index} className="travel-card">
+          <Card key={index} className="travel-card" style={{ '--i': index }}>
             <CardHeader>
               <h3>{option.title}</h3>
             </CardHeader>
@@ -45,7 +45,7 @@ export default function TravelModal({ isOpen, onClose, onCloseStart, closeDelay 
           </Card>
         ))}
 
-        <Card className="travel-card">
+        <Card className="travel-card" style={{ '--i': TRAVEL_OPTIONS.length }}>
           <CardHeader>
             <h3>🚕 Local Taxis</h3>
           </CardHeader>

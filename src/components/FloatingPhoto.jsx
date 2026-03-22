@@ -110,7 +110,7 @@ export default function FloatingPhoto({ startX, startY, photo, onDone, autoPopDe
         top: 'auto',
         transform: 'translate(0px, 0px)',
         opacity: 0,
-        zIndex: small ? 99999 : 9999,
+        zIndex: small ? 998 : 998,
       }}
       onClick={handleClick}
     >

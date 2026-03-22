@@ -13,7 +13,7 @@ const CARDS = [
 
 const GUEST_ROWS = 8;
 
-function RSVPForm({ dataRef }) {
+function RSVPForm({ dataRef, submitting }) {
   const [names, setNames] = useState(() => Array.from({ length: GUEST_ROWS }, () => ''));
   const [checks, setChecks] = useState(
     () => Array.from({ length: GUEST_ROWS }, () => ({ yes: false, no: false }))
@@ -59,7 +59,14 @@ function RSVPForm({ dataRef }) {
 
   return (
     <div className="card-stack__card card-stack__card--form">
-      <div className="rsvp-ticket">
+      <div className={`rsvp-ticket${submitting ? ' rsvp-ticket--submitting' : ''}`}>
+        {submitting && (
+          <div className="rsvp-ticket__loader-dots">
+            <span />
+            <span />
+            <span />
+          </div>
+        )}
         <header className="rsvp-ticket__header">
           <span className="rsvp-ticket__header-left">20</span>
           <span className="rsvp-ticket__header-right">26</span>
@@ -96,23 +103,23 @@ function RSVPForm({ dataRef }) {
                     onChange={(e) => handleName(i, e.target.value)}
                   />
                 </td>
-                <td className="rsvp-ticket__td-check">
+                <td className="rsvp-ticket__td-check rsvp-ticket__td-check--yes" onClick={() => handleCheck(i, 'yes')}>
                   <input
                     type="checkbox"
                     id={`attend-yes-${i}`}
                     checked={checks[i].yes}
-                    onChange={() => handleCheck(i, 'yes')}
+                    readOnly
                   />
-                  <label htmlFor={`attend-yes-${i}`} />
+                  <label htmlFor={`attend-yes-${i}`} onClick={(e) => e.preventDefault()} />
                 </td>
-                <td className="rsvp-ticket__td-check">
+                <td className="rsvp-ticket__td-check rsvp-ticket__td-check--no" onClick={() => handleCheck(i, 'no')}>
                   <input
                     type="checkbox"
                     id={`attend-no-${i}`}
                     checked={checks[i].no}
-                    onChange={() => handleCheck(i, 'no')}
+                    readOnly
                   />
-                  <label htmlFor={`attend-no-${i}`} />
+                  <label htmlFor={`attend-no-${i}`} onClick={(e) => e.preventDefault()} />
                 </td>
               </tr>
             ))}
@@ -230,10 +237,10 @@ export default function RSVPOverlay({ isOpen, onClose, onCloseStart, closeDelay 
 
   const renderCard = useCallback((card) => {
     if (card.type === 'form') {
-      return <RSVPForm dataRef={dataRef} />;
+      return <RSVPForm dataRef={dataRef} submitting={submitting} />;
     }
     return null;
-  }, []);
+  }, [submitting]);
 
   const stack = CardStack({
     cards: CARDS,

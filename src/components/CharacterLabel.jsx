@@ -1,14 +1,28 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 
-export default function CharacterLabel({ name, color, bounce }) {
-  const [showName, setShowName] = useState(true);
+export default function CharacterLabel({ name, color, bounce, repeat, repeatInterval = 5000, hideInitial }) {
+  const [showName, setShowName] = useState(!hideInitial);
   const timerRef = useRef(null);
+  const intervalRef = useRef(null);
 
-  // Auto-show label for a few seconds on mount (e.g. when character lands)
+  // Auto-show label for a few seconds on mount (unless hideInitial)
   useEffect(() => {
+    if (hideInitial) return;
     timerRef.current = setTimeout(() => setShowName(false), 3000);
     return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, []);
+  }, [hideInitial]);
+
+  // Repeating cycle: re-show label every repeatInterval ms
+  useEffect(() => {
+    if (!repeat) return;
+    const startDelay = setTimeout(() => {
+      intervalRef.current = setInterval(() => {
+        setShowName(true);
+        timerRef.current = setTimeout(() => setShowName(false), 2000);
+      }, repeatInterval);
+    }, 3500);
+    return () => { clearTimeout(startDelay); clearInterval(intervalRef.current); };
+  }, [repeat, repeatInterval]);
 
   const handleTap = useCallback(() => {
     setShowName(true);

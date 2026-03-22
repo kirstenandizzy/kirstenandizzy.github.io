@@ -1,8 +1,8 @@
 import '../styles/Card.scss';
 
-export default function Card({ children, className = '' }) {
+export default function Card({ children, className = '', style }) {
   return (
-    <div className={`card ${className}`}>
+    <div className={`card ${className}`} style={style}>
       {children}
     </div>
   );

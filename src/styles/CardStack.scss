@@ -18,6 +18,7 @@
   align-items: center;
   gap: 1.5rem;
   position: relative;
+  animation: rsvpFadeIn 0.5s ease-out 0.15s backwards;
 
   &__stage {
     position: relative;
@@ -380,6 +381,10 @@
       padding: 5px;
       border-right: 1px solid #000;
       border-bottom: 1px solid #000;
+
+      &:hover {
+        background: rgba(255, 255, 150, 0.6);
+      }
     }
   }
 
@@ -412,8 +417,43 @@
     }
   }
 
+  &--submitting {
+    > *:not(.rsvp-ticket__loader-dots) {
+      opacity: 0.15;
+      pointer-events: none;
+    }
+  }
+
+  &__loader-dots {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    z-index: 10;
+
+    span {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #000;
+      animation: rsvp-loader-bounce 1.4s infinite ease-in-out both;
+
+      &:nth-child(1) { animation-delay: -0.32s; }
+      &:nth-child(2) { animation-delay: -0.16s; }
+    }
+  }
+
+  @keyframes rsvp-loader-bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+  }
+
   &__td-check {
     text-align: center;
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
 
     input[type='checkbox'] {
       position: absolute;
@@ -443,6 +483,12 @@
 
     input[type='checkbox']:checked + label::after {
       content: '\2713';
+      color: green;
+    }
+
+    &--no input[type='checkbox']:checked + label::after {
+      content: '\2717';
+      color: red;
     }
   }
 }
@@ -462,6 +508,17 @@
   100% {
     transform: translateY(60%) scale(0.2);
     opacity: 0;
+  }
+}
+
+@keyframes rsvpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
