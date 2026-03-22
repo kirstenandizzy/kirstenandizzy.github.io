@@ -511,33 +511,23 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
       // console.log('Setting up close animation timeout...');
       closeTimeoutRef.current = setTimeout(() => {
         // console.log('Close animation timeout fired, clearing styles', el.getAttribute('style'));
-        // Explicitly remove all inline styles
-        el.style.position = '';
-        el.style.top = '';
-        el.style.left = '';
-        el.style.width = '';
-        el.style.height = '';
-        el.style.maxHeight = '';
-        el.style.margin = '';
-        el.style.zIndex = '';
-        el.style.overflow = '';
-        el.style.borderRadius = '';
-        el.style.transform = '';
-        el.style.transition = '';
-        el.style.transformOrigin = '';
+        // Remove all inline styles at once — Safari iOS can retain
+        // stale layout from individual property clears
+        el.removeAttribute('style');
 
-        // console.log('After clearing:', el.getAttribute('style'));
         homeRectRef.current = null;
         setSliderVisible(true);
         closeTimeoutRef.current = null;
 
-        // Show canvas button last, after layout has settled
-        // Safari/mobile needs extra time for compositing to settle
-        const delay = isSafari ? 500 : 150;
-        canvasButtonTimeoutRef.current = setTimeout(() => {
-          setCanvasButtonVisible(true);
-          canvasButtonTimeoutRef.current = null;
-        }, delay);
+        // Force synchronous reflow so Safari recalculates layout
+        void el.offsetHeight;
+
+        // Wait for browser to paint the clean state, then reveal
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setCanvasButtonVisible(true);
+          });
+        });
       }, 350); // 0.3s animation + 50ms buffer
     }
   }, [isModalOpen]);

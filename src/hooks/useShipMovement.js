@@ -20,7 +20,11 @@ const FRAME_LERP = 0.12;         // how quickly displayed frame eases toward tar
 export default function useShipMovement({ enabled = false, dismissing = false, bounds = { left: 0, right: 400 }, onExited }) {
   const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
   const minY = isMobile ? MOBILE_MIN_Y : MIN_Y;
-  const maxY = isMobile ? MOBILE_MAX_Y : MAX_Y;
+  const rawMaxY = isMobile ? MOBILE_MAX_Y : MAX_Y;
+  // On mobile, cap maxY so the ship stays at least 75px from the top of the screen
+  const maxY = isMobile && typeof window !== 'undefined'
+    ? Math.min(rawMaxY, window.innerHeight - 75)
+    : rawMaxY;
 
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
