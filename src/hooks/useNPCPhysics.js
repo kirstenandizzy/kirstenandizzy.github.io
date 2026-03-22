@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-const LAUNCH_SPEED = 450; // px/s
-const MOBILE_LAUNCH_SPEED = 300; // px/s — shorter arc on mobile to fit narrower platform
+const LAUNCH_SPEED = 380; // px/s
+const MOBILE_LAUNCH_SPEED = 250; // px/s — shorter arc on mobile to fit narrower platform
 const GRAVITY = 600;      // px/s² (floatier than Yoshi's 800)
 const LAUNCH_ANGLE = 75;  // degrees from horizontal
 

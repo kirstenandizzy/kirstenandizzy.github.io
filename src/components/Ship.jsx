@@ -181,7 +181,7 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
         <ShipPassenger
           sheet={foxSheet}
           animations={FOX_ANIMATIONS}
-          scale={FOX_SCALE * 1.1}
+          scale={FOX_SCALE * 1.15}
           facesRight={movingRight}
           idleFacing="left"
           offsetX={20}
