@@ -7,24 +7,32 @@ import '../styles/FAQModal.scss';
 
 const FAQ_ITEMS = [
   {
+    question: 'Do you have a gift registry?',
+    answer: 'We do not have a registry! To save you the hassle of shopping, we are asking for cash gifts to go towards our honeymoon and future adventures.'
+  },
+  {
+    question: 'What is the dress code?',
+    answer: 'Formal, but colorful and beach-friendly! The ceremony will be outdoors on the beach (weather permitting) so prioritize your comfort. We will move inside after the ceremony, but you can still enjoy the beach and the balconies to your liking throughout.'
+  },
+  {
     question: 'What time should I arrive?',
     answer: 'The ceremony begins at 5:30 PM. Doors will open at 5:00 PM, and we recommend arriving early to find parking and get settled before the ceremony starts.'
   },
   {
     question: 'What time does the bus leave the hotel for the venue?',
-    answer: 'The bus boards at 4:15 PM, and will leave at 4:30 PM.'
+    answer: 'The bus boards at the Sonesta Select Hotel at 4:15 PM, and will leave at 4:30 PM.'
   },
   {
     question: 'What time does the bus leave the venue to the hotel?',
-    answer: 'The bus boards at 11:00 PM, and will leave at 11:15 PM.'
-  },
-  {
-    question: 'What is the dress code?',
-    answer: 'Festive formal! The ceremony will be outdoors, on the beach (weather permitting) so prioritize your comfort. We will move inside after the ceremony, but you can still enjoy the beach and the balconies to your liking.'
+    answer: 'The bus boards at 11:00 PM, and will leave at 11:15 PM to drop off guests at the Sonesta Select Hotel.'
   },
   {
     question: 'Are children invited?',
-    answer: 'Children are welcome! However, we do not have childcare available at the venue.'
+    answer: 'Children are welcome.'
+  },
+  {
+    question: 'Will dinner be served?',
+    answer: 'Absolutely! Dinner will be served at around 7:00 PM, followed by dessert and dancing.'
   },
   {
     question: 'What is the parking situation?',

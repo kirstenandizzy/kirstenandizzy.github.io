@@ -6,6 +6,8 @@ export default function Balloon({ sheet, animations, scale, startX, startY, colo
   const [falling, setFalling] = useState(false);
   const [photoStyle, setPhotoStyle] = useState({ opacity: 1, y: 0 });
   const [photoExpanded, setPhotoExpanded] = useState(false);
+  const [photoShrunk, setPhotoShrunk] = useState(false);
+  const shrinkTimerRef = useRef(null);
   const rafRef = useRef(null);
   const lastTimeRef = useRef(0);
   const popping = useRef(false);
@@ -68,7 +70,10 @@ export default function Balloon({ sheet, animations, scale, startX, startY, colo
     };
 
     rafRef.current = requestAnimationFrame(tick);
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (shrinkTimerRef.current) clearTimeout(shrinkTimerRef.current);
+    };
   }, [startX]);
 
   const handleClick = useCallback(() => {
@@ -115,13 +120,20 @@ export default function Balloon({ sheet, animations, scale, startX, startY, colo
         </div>
         {photo && (
           <div
-            className={`balloon-photo${falling ? ' balloon-photo--falling' : ''}${photoExpanded ? ' balloon-photo--expanded' : ''}`}
+            className={`balloon-photo${falling ? ' balloon-photo--falling' : ''}${photoExpanded ? ' balloon-photo--expanded' : ''}${photoShrunk ? ' balloon-photo--shrunk' : ''}`}
             style={{
               opacity: photoStyle.opacity,
             }}
             onClick={(e) => {
               e.stopPropagation();
-              setPhotoExpanded(v => !v);
+              const isMobile = !window.matchMedia('(hover: hover)').matches;
+              if (isMobile) {
+                setPhotoShrunk(true);
+                if (shrinkTimerRef.current) clearTimeout(shrinkTimerRef.current);
+                shrinkTimerRef.current = setTimeout(() => setPhotoShrunk(false), 2000);
+              } else {
+                setPhotoExpanded(v => !v);
+              }
             }}
           >
             <img src={photo} alt="" />
