@@ -80,6 +80,10 @@ export default function useNPCBehavior({ enabled = false, canWander = true, init
     setFacing(dir === 'right' ? 'right' : 'left');
     setIsWalking(true);
     lastTimeRef.current = 0;
+    const walkStartX = xRef.current;
+    let lastCheckDist = 0;
+    const STOP_CHECK_INTERVAL = 30; // px — check every 30px walked
+    const STOP_CHANCE = 0.5;
 
     const walk = (timestamp) => {
       if (lastTimeRef.current === 0) {
@@ -102,6 +106,21 @@ export default function useNPCBehavior({ enabled = false, canWander = true, init
       }
 
       xRef.current += moveDir * speed * dt;
+
+      // During normal wandering, chance to stop early every STOP_CHECK_INTERVAL px
+      if (!skipProximity) {
+        const traveled = Math.abs(xRef.current - walkStartX);
+        if (traveled - lastCheckDist >= STOP_CHECK_INTERVAL) {
+          lastCheckDist = Math.floor(traveled / STOP_CHECK_INTERVAL) * STOP_CHECK_INTERVAL;
+          if (Math.random() < STOP_CHANCE) {
+            setX(xRef.current);
+            setIsWalking(false);
+            lastTimeRef.current = 0;
+            if (onComplete) onComplete();
+            return;
+          }
+        }
+      }
 
       if ((moveDir > 0 && xRef.current >= finalTarget) ||
           (moveDir < 0 && xRef.current <= finalTarget)) {
@@ -151,10 +170,8 @@ export default function useNPCBehavior({ enabled = false, canWander = true, init
         dir = stacked.x < cur ? 'right' : 'left';
         skipProximity = true;
       } else {
-        // Normal: edge-biased random direction
-        const nearestEdge = distToLeft < distToRight ? 'left' : 'right';
-        const edgeChance = Math.min(0.75 + scale * 0.05, 0.95);
-        dir = Math.random() < edgeChance ? nearestEdge : (nearestEdge === 'left' ? 'right' : 'left');
+        // Normal: unbiased random direction
+        dir = Math.random() < 0.5 ? 'left' : 'right';
       }
     }
 

@@ -128,7 +128,7 @@ export default function FloatingPhoto({ startX, startY, photo, onDone, autoPopDe
     >
       <div ref={innerRef} className="balloon-inner" style={{ scale: 0 }}>
         <div
-          className={`floating-photo-container${tapped ? ' floating-photo-container--tapped' : ''}`}
+          className={`floating-photo-container${tapped ? ' floating-photo-container--tapped' : ''}${!photo ? ' floating-photo-container--no-photo' : ''}`}
           style={small ? { width: bubbleSize || 35, height: bubbleSize || 35 } : undefined}
         >
           {popAnim && (

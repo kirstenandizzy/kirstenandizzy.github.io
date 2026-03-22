@@ -353,12 +353,12 @@
   }
 
   &--expanded {
-    transform: scale(2.5);
+    transform: scale(3.75);
     z-index: 200;
   }
 
   &--shrunk {
-    transform: scale(1.5);
+    transform: scale(2.25);
     z-index: 200;
     transition: transform 0.3s ease-in-out, opacity 0.8s ease-in;
   }
@@ -473,6 +473,23 @@
   &--tapped {
     transform: scale(3.6);
     z-index: 200;
+  }
+
+  &--no-photo {
+    pointer-events: none;
+    cursor: default;
+
+    @media (hover: hover) {
+      &:hover {
+        transform: none;
+        z-index: auto;
+      }
+    }
+
+    &.floating-photo-container--tapped {
+      transform: none;
+      z-index: auto;
+    }
   }
 }
 

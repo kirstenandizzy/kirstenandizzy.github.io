@@ -7,6 +7,7 @@ export default function Balloon({ sheet, animations, scale, startX, startY, colo
   const [photoStyle, setPhotoStyle] = useState({ opacity: 1, y: 0 });
   const [photoExpanded, setPhotoExpanded] = useState(false);
   const [photoShrunk, setPhotoShrunk] = useState(false);
+  const photoTapped = useRef(false);
   const shrinkTimerRef = useRef(null);
   const rafRef = useRef(null);
   const lastTimeRef = useRef(0);
@@ -128,9 +129,18 @@ export default function Balloon({ sheet, animations, scale, startX, startY, colo
               e.stopPropagation();
               const isMobile = !window.matchMedia('(hover: hover)').matches;
               if (isMobile) {
+                if (photoTapped.current) {
+                  // Second tap — pop the balloon
+                  handleClick();
+                  return;
+                }
+                photoTapped.current = true;
                 setPhotoShrunk(true);
                 if (shrinkTimerRef.current) clearTimeout(shrinkTimerRef.current);
-                shrinkTimerRef.current = setTimeout(() => setPhotoShrunk(false), 2000);
+                shrinkTimerRef.current = setTimeout(() => {
+                  setPhotoShrunk(false);
+                  photoTapped.current = false;
+                }, 2000);
               } else {
                 setPhotoExpanded(v => !v);
               }
