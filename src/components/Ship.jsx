@@ -148,7 +148,7 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
       <div className="ship-clickable" onClick={handleClick}>
         <div style={{
           position: 'absolute',
-          bottom: 'calc(100% + 25px)',
+          bottom: 'calc(100% + 30px)',
           left: '50%',
           transform: 'translateX(-50%)',
           pointerEvents: 'auto',

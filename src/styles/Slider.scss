@@ -362,6 +362,19 @@
     opacity: 0;
     animation: slider-stagger-in 1s ease forwards;
     animation-delay: calc(var(--i) * 300ms);
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -1rem -2rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
   }
 
   .slider--mobile .slider__content {
