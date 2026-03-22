@@ -238,13 +238,17 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
     guysQueueIndex.current += 1;
   }, []);
 
+  const allNPCsOutRef = useRef(false);
   const checkAllNPCsOut = useCallback(() => {
+    // Once all NPCs are out, stay true — eating an NPC shouldn't freeze the rest
+    if (allNPCsOutRef.current) return;
     // All NPCs are out only when every NPC from both queues has been launched AND landed
     const allLaunched = npcQueueIndex.current >= GIRLS_NPC_QUEUE.length && guysQueueIndex.current >= GUYS_NPC_QUEUE.length;
     if (!allLaunched) return;
     const totalExpected = GIRLS_NPC_QUEUE.length + GUYS_NPC_QUEUE.length;
     const totalLanded = npcPositionsRef.current.length;
     if (totalLanded >= totalExpected) {
+      allNPCsOutRef.current = true;
       setAllNPCsOut(true);
     }
   }, []);
