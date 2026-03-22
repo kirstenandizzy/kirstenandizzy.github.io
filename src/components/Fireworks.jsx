@@ -97,7 +97,7 @@ function createFireworkPoints(shell, color, startPos, endPos) {
 
       vec3 pos = (dir * expand + grav_vec) * uScale;
       vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-      gl_PointSize = 14.0 * (1.0 - aDelay.x * 7.5) * twinkle * (1.0 / -mvPosition.z);
+      gl_PointSize = 20.0 * (1.0 - aDelay.x * 7.5) * twinkle * (1.0 / -mvPosition.z);
       gl_Position = projectionMatrix * mvPosition;
     }
   `;
@@ -116,10 +116,10 @@ function createFireworkPoints(shell, color, startPos, endPos) {
       float timeFade = max(0.0, 1.0 - uTime * 0.25);
 
       // Hot white-bright core that fades to the particle color at the edges
-      float core = exp(-r * 4.0);  // intense center falloff
-      vec3 glowColor = mix(vColor * 2.5, vec3(1.0, 1.0, 1.0), core * 0.85);
+      float core = exp(-r * 2.5);  // wider, more intense center falloff
+      vec3 glowColor = mix(vColor * 4.0, vec3(1.0, 1.0, 1.0), core * 0.9);
 
-      float op = brightness * timeFade * 2.5;
+      float op = brightness * timeFade * 4.0;
 
       gl_FragColor = vec4(glowColor * op, min(op, 1.0));
     }

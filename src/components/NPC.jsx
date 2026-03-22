@@ -44,6 +44,7 @@ export default function NPC({
   const [returning, setReturning] = useState(false);
   const [returnX, setReturnX] = useState(0);
   const [sinking, setSinking] = useState(false);
+  const [onPipe, setOnPipe] = useState(false);
   const returnXRef = useRef(0);
   const returnRafRef = useRef(null);
   const lastReturnTimeRef = useRef(0);
@@ -115,8 +116,13 @@ export default function NPC({
           (moveDir < 0 && returnXRef.current <= target)) {
         returnXRef.current = target;
         setReturnX(target);
-        // At pipe — start CSS sink transition (like Yoshi despawn)
-        setSinking(true);
+        // At pipe — hop on top, then despawn
+        currentAnimRef.current = 'idle';
+        setCurrentAnim('idle');
+        setOnPipe(true);
+        setTimeout(() => {
+          onReturnedRef.current?.();
+        }, 300);
         return;
       }
 

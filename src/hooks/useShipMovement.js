@@ -6,6 +6,8 @@ const ENTRANCE_LERP = 0.018;    // fast drift for fly-in/fly-out (meandering)
 const TARGET_THRESHOLD = 15;     // px — pick new target when this close
 const MIN_Y = 120;               // minimum bottom offset (above buttons)
 const MAX_Y = 280;               // maximum bottom offset
+const MOBILE_MIN_Y = 290;        // mobile: push ship higher
+const MOBILE_MAX_Y = 450;        // mobile: push ship higher
 const MIN_PAUSE = 4000;          // ms — minimum idle pause at each waypoint
 const MAX_PAUSE = 10000;         // ms — maximum idle pause at each waypoint
 const MOVING_THRESHOLD = 0.15;   // speed below this = passengers idle
@@ -16,6 +18,10 @@ const FRAME_LERP = 0.12;         // how quickly displayed frame eases toward tar
 // We only allow frames within ±MAX_TILT_FRAMES of horizontal (8 or 24).
 
 export default function useShipMovement({ enabled = false, dismissing = false, bounds = { left: 0, right: 400 }, onExited }) {
+  const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+  const minY = isMobile ? MOBILE_MIN_Y : MIN_Y;
+  const maxY = isMobile ? MOBILE_MAX_Y : MAX_Y;
+
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
   const [angleIndex, setAngleIndex] = useState(0);
@@ -23,8 +29,8 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
   const [movingRight, setMovingRight] = useState(true);
   const [ready, setReady] = useState(false);
 
-  const posRef = useRef({ x: 0, y: MIN_Y + 60 });
-  const targetRef = useRef({ x: 0, y: MIN_Y + 60 });
+  const posRef = useRef({ x: 0, y: minY + 60 });
+  const targetRef = useRef({ x: 0, y: minY + 60 });
   const rafRef = useRef(null);
   const pauseTimerRef = useRef(null);
   const pausedRef = useRef(false);
@@ -39,11 +45,16 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
   boundsRef.current = bounds;
   onExitedRef.current = onExited;
 
+  const minYRef = useRef(minY);
+  const maxYRef = useRef(maxY);
+  minYRef.current = minY;
+  maxYRef.current = maxY;
+
   const pickTarget = useCallback(() => {
     const b = boundsRef.current;
     const padX = 60;
     const tx = (b.left + padX) + Math.random() * (b.right - b.left - padX * 2);
-    const ty = MIN_Y + Math.random() * (MAX_Y - MIN_Y);
+    const ty = minYRef.current + Math.random() * (maxYRef.current - minYRef.current);
     targetRef.current = { x: tx, y: ty };
   }, []);
 
@@ -88,7 +99,7 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
     const vw = window.innerWidth;
     const fromRight = Math.random() > 0.5;
     const startX = fromRight ? vw + 300 : -300;
-    const startY = (MIN_Y + MAX_Y) / 2;
+    const startY = (minYRef.current + maxYRef.current) / 2;
     posRef.current = { x: startX, y: startY };
     enteringRef.current = true;
     exitingRef.current = false;

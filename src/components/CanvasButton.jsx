@@ -98,7 +98,7 @@ function pickRandomColor(exclude) {
   return choices[Math.floor(Math.random() * choices.length)];
 }
 
-export default function CanvasButton({ onClick, onOpenModal, isModalOpen }) {
+export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOverlay }) {
   const [pipeState, setPipeState] = useState('hidden');
   const [pipeColor, setPipeColor] = useState('green');
   const [pipeLeft, setPipeLeft] = useState(0);
@@ -488,7 +488,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen }) {
   if (action === 'walk') animationName = 'walk';
 
   return (
-    <div className={`canvas-button-wrapper${isModalOpen ? ' canvas-button-wrapper--hidden' : ''}`} ref={wrapperRef}>
+    <div className={`canvas-button-wrapper${hideOverlay ? ' canvas-button-wrapper--hidden' : ''}`} ref={wrapperRef}>
       <div className="pipe-clip" ref={clipRef} aria-hidden="true">
         {/* Character sprite */}
         {characterState !== 'hidden' && (
@@ -689,6 +689,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen }) {
           onDirection={setMobileDirection}
           onJump={triggerJump}
           onTongue={triggerTongue}
+          onClose={handleWeddingPartyClick}
         />,
         document.body
       )}

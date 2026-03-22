@@ -580,7 +580,7 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
         {isMobile && <CameraTilt angle={-0.32} />}
         <Scene timeOfDay={timeOfDay} onReady={() => setSceneReady(true)} isSafari={isSafari} />
       </Canvas>
-      <CanvasButton onOpenModal={onOpenModal} isModalOpen={isModalOpen} />
+      <CanvasButton onOpenModal={onOpenModal} isModalOpen={isModalOpen} hideOverlay={!sliderVisible} />
       <div className={`ocean-canvas__slider${sliderVisible ? '' : ' ocean-canvas__slider--hidden'}`}>
         <Slider min={0} max={24} step={0.05} value={timeOfDay} onChange={setTimeOfDay} />
       </div>

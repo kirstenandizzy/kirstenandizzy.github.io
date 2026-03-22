@@ -4,7 +4,7 @@ import '../styles/MobileJoystick.scss';
 const DEAD_ZONE = 10; // px from center before registering direction
 const KNOB_LIMIT = 30; // max px the knob can travel from center
 
-export default function MobileJoystick({ onDirection, onJump, onTongue }) {
+export default function MobileJoystick({ onDirection, onJump, onTongue, onClose }) {
   const stickRef = useRef(null);
   const originRef = useRef(null);
   const activeRef = useRef(false);
@@ -83,6 +83,12 @@ export default function MobileJoystick({ onDirection, onJump, onTongue }) {
           onTouchStart={(e) => { e.preventDefault(); onTongue(); }}
         >
           Tongue
+        </button>
+        <button
+          className="mobile-btn mobile-btn--close"
+          onTouchStart={(e) => { e.preventDefault(); onClose(); }}
+        >
+          Close
         </button>
       </div>
     </div>
