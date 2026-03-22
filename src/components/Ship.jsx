@@ -47,6 +47,7 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
           animations={KIRBY_ANIMATIONS}
           scale={KIRBY_SCALE * 1.25}
           facesRight={movingRight}
+          idleFacing="right"
           offsetX={-20}
           offsetY={75}
           zIndex={2}
@@ -61,6 +62,7 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
           animations={FOX_ANIMATIONS}
           scale={FOX_SCALE * 1.1}
           facesRight={movingRight}
+          idleFacing="left"
           offsetX={20}
           offsetY={75}
           zIndex={1}

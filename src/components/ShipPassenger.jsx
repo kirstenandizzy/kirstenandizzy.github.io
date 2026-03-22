@@ -6,7 +6,7 @@ const EMOTE_CHANCE = 0.7;
 const IDLE_EMOTE_MIN = 1500; // ms — minimum time before emote check on single-frame idle
 const IDLE_EMOTE_MAX = 4000; // ms — maximum time
 
-export default function ShipPassenger({ sheet, animations, scale = 1.5, facesRight = true, offsetX = 0, offsetY = 0, zIndex, label, labelColor, glowColor, freezeAfterEmote = false, idleEmoteMin = IDLE_EMOTE_MIN, idleEmoteMax = IDLE_EMOTE_MAX }) {
+export default function ShipPassenger({ sheet, animations, scale = 1.5, facesRight = true, idleFacing, offsetX = 0, offsetY = 0, zIndex, label, labelColor, glowColor, freezeAfterEmote = false, idleEmoteMin = IDLE_EMOTE_MIN, idleEmoteMax = IDLE_EMOTE_MAX }) {
   const [currentAnim, setCurrentAnim] = useState('idle');
   const [animKey, setAnimKey] = useState(0);
   const currentAnimRef = useRef('idle');
@@ -82,17 +82,23 @@ export default function ShipPassenger({ sheet, animations, scale = 1.5, facesRig
     }
   }, [animations, isSingleFrameIdle, freezeAfterEmote, scheduleEmoteCheck]);
 
+  // When idle/emote, use idleFacing if provided; otherwise follow ship direction
+  const isIdle = currentAnim === 'idle' || currentAnim === 'emote1' || currentAnim === 'emote2';
+  const effectiveFacesRight = isIdle && idleFacing != null
+    ? idleFacing === 'right'
+    : facesRight;
+
   return (
     <div style={{
       position: 'absolute',
       bottom: `calc(100% - ${offsetY}px)`,
       left: `calc(50% + ${offsetX}px)`,
-      transform: `translateX(-50%)${facesRight ? '' : ' scaleX(-1)'}`,
+      transform: `translateX(-50%)${effectiveFacesRight ? '' : ' scaleX(-1)'}`,
       pointerEvents: 'none',
       zIndex,
     }}>
       {label && (
-        <div style={facesRight ? undefined : { transform: 'scaleX(-1)' }}>
+        <div style={effectiveFacesRight ? undefined : { transform: 'scaleX(-1)' }}>
           <CharacterLabel name={label} color={labelColor} />
         </div>
       )}

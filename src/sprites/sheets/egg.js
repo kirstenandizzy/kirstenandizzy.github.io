@@ -9,5 +9,5 @@ const EGG_SPRITES = {
 export const eggSheet = new SpriteSheet('/assets/egg.png', 346, 159, EGG_SPRITES);
 
 export const EGG_STAGES = ['egg-small', 'egg-medium', 'egg-large'];
-export const EGG_GROW_INTERVAL = 3000; // ms between stage transitions
+export const EGG_GROW_INTERVAL = 1500; // ms between stage transitions
 export const EGG_SCALE = 0.4;          // egg-large at 0.4 ≈ 50x64px, roughly Yoshi-sized
