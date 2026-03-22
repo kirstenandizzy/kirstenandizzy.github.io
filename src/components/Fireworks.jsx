@@ -97,7 +97,7 @@ function createFireworkPoints(shell, color, startPos, endPos) {
 
       vec3 pos = (dir * expand + grav_vec) * uScale;
       vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-      gl_PointSize = 8.0 * (1.0 - aDelay.x * 7.5) * twinkle * (1.0 / -mvPosition.z);
+      gl_PointSize = 14.0 * (1.0 - aDelay.x * 7.5) * twinkle * (1.0 / -mvPosition.z);
       gl_Position = projectionMatrix * mvPosition;
     }
   `;
@@ -113,10 +113,15 @@ function createFireworkPoints(shell, color, startPos, endPos) {
 
       float frac = fract(uTime);
       float brightness = clamp((0.92 - frac*frac) * 3.5, 0.0, 1.0) * (1.0 - r*r*r);
-      float timeFade = max(0.0, 1.0 - uTime * 0.25);  // very slow fade as particles fall
-      float op = brightness * timeFade;
+      float timeFade = max(0.0, 1.0 - uTime * 0.25);
 
-      gl_FragColor = vec4(vColor, op);
+      // Hot white-bright core that fades to the particle color at the edges
+      float core = exp(-r * 4.0);  // intense center falloff
+      vec3 glowColor = mix(vColor * 2.5, vec3(1.0, 1.0, 1.0), core * 0.85);
+
+      float op = brightness * timeFade * 2.5;
+
+      gl_FragColor = vec4(glowColor * op, min(op, 1.0));
     }
   `;
 
@@ -195,7 +200,7 @@ function spawnFlashLight(state, scene, pos, color) {
   if (flashLights.length >= 3) return;
 
   const lightColor = color ? new THREE.Color().copy(color).multiplyScalar(1.2) : new THREE.Color('#fff8e7');
-  const light = new THREE.PointLight(lightColor, 12.0, 120, 2);
+  const light = new THREE.PointLight(lightColor, 25.0, 160, 2);
   light.position.copy(pos);
   scene.add(light);
 

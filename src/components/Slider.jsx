@@ -114,8 +114,9 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
   }, []);
 
   // Lerp animation loop
-  const startAnimation = () => {
-    if (animFrameRef.current) return;
+  const startAnimation = (force) => {
+    if (animFrameRef.current && !force) return;
+    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
 
     const animate = () => {
       const current = valueRef.current;
@@ -128,7 +129,8 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
         return;
       }
 
-      const next = current + diff * 0.08;
+      const lerpFactor = isMobile ? 0.04 : 0.08;
+      const next = current + diff * lerpFactor;
       if (onChangeRef.current) onChangeRef.current(next);
       animFrameRef.current = requestAnimationFrame(animate);
     };
@@ -272,12 +274,8 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
   };
 
   const handleHourClick = (hourValue) => {
-    if (isMobile) {
-      targetValueRef.current = hourValue;
-      startAnimation();
-    } else if (onChange) {
-      onChange(hourValue);
-    }
+    targetValueRef.current = hourValue;
+    startAnimation(true);
   };
 
   // --- Mobile drum picker rendering ---
