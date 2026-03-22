@@ -184,9 +184,9 @@ export function computeSolarParams(hours) {
   }
 
   // ── Fog ──
-  // Fog color matches horizon, constant visibility throughout day to prevent zoom illusion
-  const fogNear = 100;
-  const fogFar = 4000;
+  // Fog color matches horizon; push fog back at night for clearer skies
+  const fogNear = 100 + moonNightFactor * 400;
+  const fogFar = 4000 + moonNightFactor * 12000;
   const fogColor = skyHorizonHex;
 
   // ── Moon light intensity ──

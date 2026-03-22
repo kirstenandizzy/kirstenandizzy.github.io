@@ -255,11 +255,16 @@
 
 .npc-sprite {
   position: absolute;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
   image-rendering: pixelated;
   image-rendering: -webkit-crisp-edges;
   transform: translateX(-50%);
   z-index: 2;
+
+  * {
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+  }
 
   &.npc-landed {
     z-index: 3; // In front of pipe after landing
@@ -305,7 +310,7 @@
   transform-origin: bottom center;
 
   &.egg-medium { animation-duration: 0.8s; }
-  &.egg-large  { animation-duration: 0.5s; pointer-events: auto; cursor: pointer; }
+  &.egg-large  { animation-duration: 0.5s; pointer-events: auto; cursor: url('/cursors/pinkheart_linkselect.cur'), pointer; }
 }
 
 .balloon {
@@ -317,6 +322,10 @@
   image-rendering: pixelated;
   image-rendering: -webkit-crisp-edges;
   will-change: transform;
+
+  * {
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+  }
 }
 
 .balloon-inner {
@@ -333,7 +342,7 @@
   overflow: hidden;
   transition: opacity 0.8s ease-in, transform 0.2s ease-out;
   pointer-events: auto;
-  cursor: pointer;
+  cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
 
   @media (hover: hover) {
     &:hover {

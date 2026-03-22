@@ -8,15 +8,15 @@ export const FIREWORKS_CONFIG = {
   TIME_END:        24,     // midnight — La Fin
   FADE_IN:         0.1,    // quick fade at window start (fade in from 18:54 to 19:00)
   FADE_OUT:        0.05,   // quick fade at window end
-  BASE_INTERVAL:   2.2,    // seconds between spawns at normal rate
-  FINALE_INTERVAL: 0.45,   // seconds between spawns at finale rate (22–23h)
-  MAX_FIREWORKS:   40,     // pool cap
+  BASE_INTERVAL:   4.5,    // seconds between spawns at normal rate
+  FINALE_INTERVAL: 2.0,    // seconds between spawns at finale rate (22–23h)
+  MAX_FIREWORKS:   8,      // pool cap
   EXPAND_SCALE:    12.0,   // world-unit expansion radius of a burst
   // Scene positioning (camera [0,15,80], ocean y=0, moon at y=30 z=-80)
   LAUNCH_Y_MIN:    1,
   LAUNCH_Y_MAX:    4,
   BURST_Y_MIN:     38,
-  BURST_Y_MAX:     72,
+  BURST_Y_MAX:     50,
   SPREAD_X:        55,     // ±55 x
   Z_NEAR:         -30,
   Z_FAR:          -85,
@@ -37,10 +37,10 @@ export const FIREWORKS_PALETTE = [
 // Shell types with world-scale gravity
 // grav: vertical droop relative to EXPAND_SCALE
 export const SHELL_TYPES = [
-  { name: 'chrysanthemum', particles: 100, grav: 0.75, step: 0.005, rainbow: false, weight: 35 },
-  { name: 'peony',         particles: 88,  grav: 1.00, step: 0.005, rainbow: false, weight: 30 },
-  { name: 'willow',        particles: 75,  grav: 1.80, step: 0.006, rainbow: false, weight: 25 },
-  { name: 'rainbow',       particles: 105, grav: 0.80, step: 0.005, rainbow: true,  weight: 10 },
+  { name: 'chrysanthemum', particles: 60,  grav: 0.75, step: 0.005, rainbow: false, weight: 35 },
+  { name: 'peony',         particles: 50,  grav: 1.00, step: 0.005, rainbow: false, weight: 30 },
+  { name: 'willow',        particles: 45,  grav: 1.80, step: 0.006, rainbow: false, weight: 25 },
+  { name: 'rainbow',       particles: 65,  grav: 0.80, step: 0.005, rainbow: true,  weight: 10 },
 ];
 
 // ─── Shader Injection Strings ──────────────────────────────────────────────

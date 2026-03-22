@@ -3,12 +3,9 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import {
   EffectComposer,
   Bloom,
-  DepthOfField,
   ToneMapping,
   Vignette,
   SMAA,
-  N8AO,
-  wrapEffect,
 } from '@react-three/postprocessing';
 import { ToneMappingMode } from 'postprocessing';
 import * as THREE from 'three';
@@ -21,7 +18,6 @@ import Slider from './Slider';
 import GommageText from './GommageText';
 import Fireworks from './Fireworks';
 import { computeSolarParams } from '../utils/solar';
-import { KuwaharaEffect } from '../effects/KuwaharaEffect';
 import CanvasButton from './CanvasButton';
 import '../styles/CanvasButton.scss';
 import { MOON_WORLD_POSITION, MOON_LIGHT_DIRECTION } from '../constants/scene';
@@ -248,9 +244,7 @@ function GradientSky({ skyTopHex, skyMidHex, skyHorizonHex }) {
 
 // ─── Post Processing ───
 
-const KuwaharaComponent = wrapEffect(KuwaharaEffect);
-
-function PostProcessing({ timeOfDay }) {
+function PostProcessing({ timeOfDay, isSafari }) {
   // Receive timeOfDay as prop for bloom intensity scaling
 
   // Compute solar elevation for bloom intensity scaling
@@ -260,59 +254,19 @@ function PostProcessing({ timeOfDay }) {
     return Math.sin(solarAngle);
   }, [timeOfDay]);
 
-  // Hardcoded post-processing settings (previously exposed in Leva)
-  const kuwaharaEnabled = true;
-  const kuwaharaRadius = 2.0;
-  const kuwaharaSharpness = 6.0;
-  const bloomEnabled = true;
   const bloomIntensity = 0.4 + elevation * 0.5; // 0.4 at night/horizon → 0.9 at noon
-  const bloomThreshold = 0.9;
-  const bloomSmoothing = 0.6;
-  const dofEnabled = true;
-  const dofFocusDistance = 0.01;
-  const dofFocalLength = 0.02;
-  const dofBokehScale = 2.0;
-  const aoEnabled = true;
-  const aoIntensity = 1.0;
-  const vignetteEnabled = true;
-  const vignetteIntensity = 0.9;
 
   return (
-    <EffectComposer multisampling={8}>
-      {aoEnabled && (
-        <N8AO
-          aoRadius={5}
-          intensity={aoIntensity}
-          aoSamples={16}
-          denoiseSamples={4}
-        />
-      )}
+    <EffectComposer multisampling={isSafari ? 0 : 4}>
       <ToneMapping mode={ToneMappingMode.AGX} />
-      {bloomEnabled && (
-        <Bloom
-          intensity={bloomIntensity}
-          luminanceThreshold={bloomThreshold}
-          luminanceSmoothing={bloomSmoothing}
-          mipmapBlur
-        />
-      )}
-      {dofEnabled && (
-        <DepthOfField
-          focusDistance={dofFocusDistance}
-          focalLength={dofFocalLength}
-          bokehScale={dofBokehScale}
-        />
-      )}
+      <Bloom
+        intensity={bloomIntensity}
+        luminanceThreshold={0.9}
+        luminanceSmoothing={0.6}
+        mipmapBlur
+      />
       <SMAA />
-      {kuwaharaEnabled && (
-        <KuwaharaComponent
-          radius={kuwaharaRadius}
-          sharpness={kuwaharaSharpness}
-        />
-      )}
-      {vignetteEnabled && (
-        <Vignette eskil={false} offset={0.1} darkness={vignetteIntensity} />
-      )}
+      <Vignette eskil={false} offset={0.1} darkness={0.9} />
     </EffectComposer>
   );
 }
@@ -387,7 +341,7 @@ function CameraTilt({ angle }) {
 
 // ─── Main Scene ───
 
-function Scene({ timeOfDay, onReady }) {
+function Scene({ timeOfDay, onReady, isSafari }) {
   const { scene } = useThree();
   const petalDataRef = useRef();
 
@@ -433,20 +387,22 @@ function Scene({ timeOfDay, onReady }) {
       <Moon timeOfDay={timeOfDay} />
       <Fireworks timeOfDay={timeOfDay} />
       <GommageText ref={petalDataRef} timeOfDay={timeOfDay} />
-      <CloudSky
-        timeOfDay={timeOfDay}
-        lightX={solar.lightX}
-        lightY={solar.lightY}
-        lightZ={solar.lightZ}
-        sunColorHex={solar.sunColorHex}
-        cloudColorHex={solar.cloudColorHex}
-        shadowColorHex={solar.shadowColorHex}
-        fogColor={solar.fogColor}
-        fogNear={solar.fogNear}
-        fogFar={solar.fogFar}
-        moonLightIntensity={solar.moonLightIntensity}
-        moonColorHex={solar.moonColorHex}
-      />
+      {!isSafari && (
+        <CloudSky
+          timeOfDay={timeOfDay}
+          lightX={solar.lightX}
+          lightY={solar.lightY}
+          lightZ={solar.lightZ}
+          sunColorHex={solar.sunColorHex}
+          cloudColorHex={solar.cloudColorHex}
+          shadowColorHex={solar.shadowColorHex}
+          fogColor={solar.fogColor}
+          fogNear={solar.fogNear}
+          fogFar={solar.fogFar}
+          moonLightIntensity={solar.moonLightIntensity}
+          moonColorHex={solar.moonColorHex}
+        />
+      )}
       <OceanWater
         timeOfDay={timeOfDay}
         lightX={solar.lightX}
@@ -458,7 +414,7 @@ function Scene({ timeOfDay, onReady }) {
         skyHorizonHex={solar.skyHorizonHex}
         onReady={onReady}
       />
-      <PostProcessing timeOfDay={timeOfDay} />
+      <PostProcessing timeOfDay={timeOfDay} isSafari={isSafari} />
     </>
   );
 }
@@ -584,6 +540,7 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
   }, [isModalOpen]);
 
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   const cameraProps = isMobile
     ? { position: [0, 20, 280], fov: 55, near: 1, far: 500000 }
     : { position: [0, 15, 80], fov: 55, near: 1, far: 500000 };
@@ -612,17 +569,16 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
       <Canvas
         camera={cameraProps}
         gl={{
-          antialias: true,
+          antialias: false,
           toneMapping: THREE.NoToneMapping,
           outputColorSpace: THREE.SRGBColorSpace,
           powerPreference: 'high-performance',
-          pixelRatio: Math.min(window.devicePixelRatio, 2),
+          pixelRatio: Math.min(window.devicePixelRatio, isSafari ? 1.5 : 2),
         }}
-        dpr={[1, 2]}
-        shadows
+        dpr={isSafari ? [1, 1.5] : [1, 2]}
       >
         {isMobile && <CameraTilt angle={-0.32} />}
-        <Scene timeOfDay={timeOfDay} onReady={() => setSceneReady(true)} />
+        <Scene timeOfDay={timeOfDay} onReady={() => setSceneReady(true)} isSafari={isSafari} />
       </Canvas>
       <CanvasButton onOpenModal={onOpenModal} isModalOpen={isModalOpen} />
       <div className={`ocean-canvas__slider${sliderVisible ? '' : ' ocean-canvas__slider--hidden'}`}>

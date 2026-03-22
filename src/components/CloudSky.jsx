@@ -20,7 +20,7 @@ const CLOUD_VERTEX = /* glsl */ `
   }
 `;
 
-const CLOUD_FRAGMENT = /* glsl */ `
+const makeCloudFragment = (steps = 22) => /* glsl */ `
   precision highp float;
 
   uniform float time;
@@ -259,7 +259,7 @@ const CLOUD_FRAGMENT = /* glsl */ `
     tFar  = min(tFar, 25000.0);
 
     // Simplified ray march with fewer steps for stylized look
-    const int STEPS = 22;
+    const int STEPS = ${steps};
     float stepSize = (tFar - tNear) / float(STEPS);
 
     float transmittance = 1.0;
@@ -357,11 +357,12 @@ const CLOUD_FRAGMENT = /* glsl */ `
 
 // ─── React Component ───
 
-export default function CloudSky({ timeOfDay, lightX, lightY, lightZ, sunColorHex, cloudColorHex, shadowColorHex, fogColor, fogNear, fogFar, moonLightIntensity, moonColorHex }) {
+export default function CloudSky({ timeOfDay, lightX, lightY, lightZ, sunColorHex, cloudColorHex, shadowColorHex, fogColor, fogNear, fogFar, moonLightIntensity, moonColorHex, isSafari }) {
   const meshRef = useRef();
   const materialRef = useRef();
   const { camera } = useThree();
   const _cameraDir = useMemo(() => new THREE.Vector3(), []);
+  const cloudFragment = useMemo(() => makeCloudFragment(isSafari ? 12 : 22), [isSafari]);
 
   // Hardcoded lens flare position (previously exposed in Leva)
   const lensFlarePositionH = 1;
@@ -532,7 +533,7 @@ export default function CloudSky({ timeOfDay, lightX, lightY, lightZ, sunColorHe
       <shaderMaterial
         ref={materialRef}
         vertexShader={CLOUD_VERTEX}
-        fragmentShader={CLOUD_FRAGMENT}
+        fragmentShader={cloudFragment}
         side={THREE.BackSide}
         transparent
         depthWrite={false}
