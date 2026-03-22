@@ -51,7 +51,7 @@ const US_PHOTOS = [
 ];
 
 export default function Ship({ moveBounds, dismissing, onExited }) {
-  const { x, y, angleIndex, isMoving, movingRight, ready } = useShipMovement({
+  const { x, y, angleIndex, isMoving, movingRight, ready, goTo } = useShipMovement({
     enabled: true,
     dismissing,
     bounds: moveBounds,
@@ -63,6 +63,19 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
   useEffect(() => {
     if (ready) requestAnimationFrame(() => setVisible(true));
   }, [ready]);
+
+  // Navigate ship to ocean click location
+  useEffect(() => {
+    const handleOceanClick = (e) => {
+      const { x: clientX, y: clientY } = e.detail;
+      // Convert viewport coords to ship coords (left, bottom)
+      // Offset by ~150px to aim the ship's visual center at the click point
+      const bottomY = window.innerHeight - clientY - 150;
+      goTo(clientX, bottomY);
+    };
+    window.addEventListener('ocean-click', handleOceanClick);
+    return () => window.removeEventListener('ocean-click', handleOceanClick);
+  }, [goTo]);
 
   // Track latest position for click handler
   const posRef = useRef({ x: 0, y: 0 });

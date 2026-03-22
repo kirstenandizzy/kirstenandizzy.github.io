@@ -4,10 +4,10 @@ import { TOTAL_ANGLES } from '../sprites/sheets/ship';
 const LERP_SPEED = 0.005;        // slow drift toward target
 const ENTRANCE_LERP = 0.018;    // fast drift for fly-in/fly-out (meandering)
 const TARGET_THRESHOLD = 15;     // px — pick new target when this close
-const MIN_Y = 240;               // minimum bottom offset (above buttons)
-const MAX_Y = 400;               // maximum bottom offset
-const MOBILE_MIN_Y = 410;        // mobile: push ship higher
-const MOBILE_MAX_Y = 570;        // mobile: push ship higher
+const MIN_Y = 150;               // minimum bottom offset (above buttons)
+const MAX_Y = 675;               // maximum bottom offset
+const MOBILE_MIN_Y = 150;        // mobile: push ship higher
+const MOBILE_MAX_Y = 700;        // mobile: push ship higher
 const MIN_PAUSE = 1000;          // ms — minimum idle pause at each waypoint
 const MAX_PAUSE = 3500;          // ms — maximum idle pause at each waypoint
 const MOVING_THRESHOLD = 0.15;   // speed below this = passengers idle
@@ -21,11 +21,10 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
   const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
   const minY = isMobile ? MOBILE_MIN_Y : MIN_Y;
   const rawMaxY = isMobile ? MOBILE_MAX_Y : MAX_Y;
-  // Cap maxY so the top of the ship (including passengers & labels) stays ≥100px from viewport top
+  // Cap maxY so the top of the ship (including passengers & labels) stays visible
   // Full visual height above bottom edge: ~300px (195px ship + 75px passengers + 29px labels)
-  // So bottom ≤ innerHeight - 300 - 100 = innerHeight - 400
   const maxY = typeof window !== 'undefined'
-    ? Math.min(rawMaxY, window.innerHeight - 400)
+    ? Math.min(rawMaxY, window.innerHeight - 300)
     : rawMaxY;
 
   const [x, setX] = useState(0);
@@ -212,5 +211,13 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
     };
   }, [enabled, pickTarget, startPause]);
 
-  return { x, y, angleIndex, isMoving, movingRight, ready };
+  const goTo = useCallback((tx, ty) => {
+    // Cancel any pause so the ship starts moving immediately
+    pausedRef.current = false;
+    if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
+    const clampedY = Math.max(minYRef.current, Math.min(maxYRef.current, ty));
+    targetRef.current = { x: tx, y: clampedY };
+  }, []);
+
+  return { x, y, angleIndex, isMoving, movingRight, ready, goTo };
 }

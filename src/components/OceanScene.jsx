@@ -575,7 +575,9 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
   }, [sceneReady]);
 
   return (
-    <div ref={containerRef} className="ocean-canvas">
+    <div ref={containerRef} className="ocean-canvas" onClick={(e) => {
+      window.dispatchEvent(new CustomEvent('ocean-click', { detail: { x: e.clientX, y: e.clientY } }));
+    }}>
       {!loaderRemoved && (
         <div className={`ocean-canvas__loader${sceneReady ? ' ocean-canvas__loader--ready' : ''}`}>
           <div className="ocean-canvas__loader-dots">
