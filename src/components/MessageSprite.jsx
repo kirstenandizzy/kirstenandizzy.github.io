@@ -14,7 +14,7 @@ const LOOPING_ANIMATIONS = {
 
 export default function MessageSprite({ children, variant = 'horizontal', className }) {
   const [animation, setAnimation] = useState(null);
-  const [side, setSide] = useState('right');
+  const side = 'right';
   const tapTimerRef = useRef(null);
   const hoveringRef = useRef(false);
 
@@ -25,13 +25,10 @@ export default function MessageSprite({ children, variant = 'horizontal', classN
   const handleEnter = useCallback(() => {
     hoveringRef.current = true;
     setAnimation(pickRow());
-    if (variant === 'vertical') {
-      setSide(Math.random() < 0.5 ? 'left' : 'right');
-    }
     hoverIntervalRef.current = setInterval(() => {
       setAnimation(pickRow());
     }, 750);
-  }, [variant]);
+  }, []);
 
   const handleLeave = useCallback(() => {
     hoveringRef.current = false;
@@ -46,9 +43,6 @@ export default function MessageSprite({ children, variant = 'horizontal', classN
 
   const handleTap = useCallback(() => {
     setAnimation(pickRow());
-    if (variant === 'vertical') {
-      setSide(Math.random() < 0.5 ? 'left' : 'right');
-    }
     // Clear any existing tap timer
     if (tapTimerRef.current) clearTimeout(tapTimerRef.current);
     tapTimerRef.current = setTimeout(() => {
@@ -57,7 +51,7 @@ export default function MessageSprite({ children, variant = 'horizontal', classN
         setAnimation(null);
       }
     }, 2000);
-  }, [variant]);
+  }, []);
 
   const sheet = variant === 'horizontal' ? messageHorizontalSheet : messageVerticalSheet;
   const isHorizontal = variant === 'horizontal';

@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 
-export default function CharacterLabel({ name, hoverName, color, bounce, repeat, repeatInterval = 5000, hideInitial }) {
+export default function CharacterLabel({ name, hoverName, color, bounce, repeat, repeatInterval = 5000, hideInitial, fadeDelay = 3000 }) {
   const [showName, setShowName] = useState(!hideInitial);
   const [hasShownOnce, setHasShownOnce] = useState(false);
   const timerRef = useRef(null);
@@ -12,9 +12,9 @@ export default function CharacterLabel({ name, hoverName, color, bounce, repeat,
     timerRef.current = setTimeout(() => {
       setShowName(false);
       if (hoverName) setHasShownOnce(true);
-    }, 3000);
+    }, fadeDelay);
     return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, [hideInitial, hoverName]);
+  }, [hideInitial, hoverName, fadeDelay]);
 
   // Repeating cycle: re-show label every repeatInterval ms
   useEffect(() => {

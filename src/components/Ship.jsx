@@ -190,6 +190,7 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
           label="kiko"
           hoverLabel="israel"
           labelColor="#8fcaca"
+          labelFadeDelay={2000}
           glowColor="#8fcaca"
           freezeAfterEmote
         />

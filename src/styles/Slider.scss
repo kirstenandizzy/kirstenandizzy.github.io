@@ -335,6 +335,12 @@
   }
 }
 
+// Slide-in without opacity — preserves backdrop-filter on mobile elements
+@keyframes slider-slide-in {
+  from { transform: translateY(20px); }
+  to   { transform: translateY(0); }
+}
+
 // ──────────────────────────────────────────────
 // Mobile drum-picker layout
 // ──────────────────────────────────────────────
@@ -359,10 +365,17 @@
     margin: 0;
     line-height: 1.5rem;
     padding: 0 0 1rem 0;
-    opacity: 0;
-    animation: slider-stagger-in 1s ease forwards;
+    opacity: 1; // override base .slider h3 opacity — needed for backdrop-filter
+    // Use transform-only animation — opacity on parent kills backdrop-filter
+    transform: translateY(20px);
+    animation: slider-slide-in 1s ease forwards;
     animation-delay: calc(var(--i) * 300ms);
     position: relative;
+
+    // Dim text via children instead of parent opacity (preserves backdrop-filter)
+    > span {
+      opacity: 0.75;
+    }
 
     &::before {
       content: '';
@@ -378,8 +391,9 @@
   }
 
   .slider--mobile .slider__content {
-    opacity: 0;
-    animation: slider-stagger-in 1s ease forwards;
+    // Use transform-only animation — opacity on parent kills backdrop-filter on children
+    transform: translateY(20px);
+    animation: slider-slide-in 1s ease forwards;
     animation-delay: calc(var(--i) * 300ms);
     flex: 0 0 auto;
     display: flex;
@@ -450,6 +464,7 @@
     gap: 0.75rem;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 8px;
     padding: 0.5rem 0.75rem;
@@ -459,8 +474,9 @@
     font-family: inherit;
     font-size: 0.85rem;
     transition: border-color 0.2s;
-    opacity: 0;
-    animation: slider-stagger-in 0.8s ease forwards;
+    // Use transform-only animation to preserve backdrop-filter
+    transform: translateY(20px);
+    animation: slider-slide-in 0.8s ease forwards;
     animation-delay: calc(var(--i) * 300ms);
 
     &:hover, &:active {

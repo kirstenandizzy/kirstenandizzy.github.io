@@ -7,7 +7,7 @@ import '../styles/FAQModal.scss';
 
 const FAQ_ITEMS = [
   {
-    question: 'Where will the ceremony and reception be held?',
+    question: 'Where is the ceremony and reception?',
     answer: (<><strong>Windows on the Water</strong><br />931 Ocean Ave<br />Sea Bright, NJ 07760<br /><br />The ceremony will be outdoors weather permitting, and the rest of the evening will be outdoors/indoors at your leisure.</>)
   },
   {

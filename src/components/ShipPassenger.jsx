@@ -6,7 +6,7 @@ const EMOTE_CHANCE = 0.7;
 const IDLE_EMOTE_MIN = 1500; // ms — minimum time before emote check on single-frame idle
 const IDLE_EMOTE_MAX = 4000; // ms — maximum time
 
-export default function ShipPassenger({ sheet, animations, scale = 1.5, facesRight = true, idleFacing, offsetX = 0, offsetY = 0, zIndex, label, hoverLabel, labelColor, glowColor, freezeAfterEmote = false, idleEmoteMin = IDLE_EMOTE_MIN, idleEmoteMax = IDLE_EMOTE_MAX }) {
+export default function ShipPassenger({ sheet, animations, scale = 1.5, facesRight = true, idleFacing, offsetX = 0, offsetY = 0, zIndex, label, hoverLabel, labelColor, labelFadeDelay, glowColor, freezeAfterEmote = false, idleEmoteMin = IDLE_EMOTE_MIN, idleEmoteMax = IDLE_EMOTE_MAX }) {
   const [currentAnim, setCurrentAnim] = useState('idle');
   const [animKey, setAnimKey] = useState(0);
   const currentAnimRef = useRef('idle');
@@ -99,7 +99,7 @@ export default function ShipPassenger({ sheet, animations, scale = 1.5, facesRig
     }}>
       {label && (
         <div style={effectiveFacesRight ? undefined : { transform: 'scaleX(-1)' }}>
-          <CharacterLabel name={label} hoverName={hoverLabel} color={labelColor} />
+          <CharacterLabel name={label} hoverName={hoverLabel} color={labelColor} fadeDelay={labelFadeDelay} />
         </div>
       )}
       <div className={glowColor ? 'passenger-glow' : undefined} style={{
