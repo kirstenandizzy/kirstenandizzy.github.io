@@ -8,7 +8,7 @@ import '../styles/FAQModal.scss';
 const FAQ_ITEMS = [
   {
     question: 'Do you have a gift registry?',
-    answer: 'We do not have a registry! To save you the hassle of shopping, we are asking for cash gifts to go towards our honeymoon and future adventures.'
+    answer: 'We do not have a registry. We mean it when we say that your presence at our wedding is the greatest gift we could ask for, and we can’t wait to celebrate with you! If you did want to gift us something, we are asking for cash gifts to go towards our honeymoon and future adventures!'
   },
   {
     question: 'What is the dress code?',
