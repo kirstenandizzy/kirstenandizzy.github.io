@@ -63,21 +63,12 @@
   user-select: none;
   -webkit-user-select: none;
 
-  &--jump {
+  &--tongue {
     background: rgba(100, 200, 100, 0.15);
     border-color: rgba(100, 200, 100, 0.35);
 
     &:active {
       background: rgba(100, 200, 100, 0.3);
-    }
-  }
-
-  &--tongue {
-    background: rgba(100, 150, 255, 0.15);
-    border-color: rgba(100, 150, 255, 0.35);
-
-    &:active {
-      background: rgba(100, 150, 255, 0.3);
     }
   }
 

@@ -73,16 +73,10 @@ export default function MobileJoystick({ onDirection, onJump, onTongue, onClose 
       {/* Action buttons */}
       <div className="mobile-buttons">
         <button
-          className="mobile-btn mobile-btn--jump"
-          onTouchStart={(e) => { e.preventDefault(); onJump(); }}
-        >
-          Jump
-        </button>
-        <button
           className="mobile-btn mobile-btn--tongue"
           onTouchStart={(e) => { e.preventDefault(); onTongue(); }}
         >
-          Tongue
+          Action
         </button>
         <button
           className="mobile-btn mobile-btn--close"
