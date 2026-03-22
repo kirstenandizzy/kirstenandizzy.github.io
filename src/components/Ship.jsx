@@ -103,6 +103,7 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
       {
         id: newId,
         photo: chosenPhoto,
+        bubbleSize: 75 + (Math.random() * 40 - 20),
         spawnX: clampPhoto(cx + (Math.random() - 0.5) * photoSpread),
         spawnY: baseY,
       },
