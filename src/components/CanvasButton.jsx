@@ -129,6 +129,26 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
     if (onActiveChange) onActiveChange(buttonsActive);
   }, [buttonsActive, onActiveChange]);
 
+  // Listen for reset-party event from nav heading clicks
+  useEffect(() => {
+    const handleReset = () => {
+      // Dismiss Wedding Party (trigger recall if active)
+      if (characterState === 'active' && !recallingRef.current) {
+        setPartyGlow(null);
+        setRecalling(true);
+        setMinions([]);
+        setBalloons([]);
+      }
+      // Dismiss Bride & Groom ship
+      if (shipState === 'visible') {
+        setGroomGlow(null);
+        setShipState('exiting');
+      }
+    };
+    window.addEventListener('reset-party', handleReset);
+    return () => window.removeEventListener('reset-party', handleReset);
+  }, [characterState, shipState]);
+
   // Calculate bounds for character movement based on viewport
   const [moveBounds, setMoveBounds] = useState({ left: 0, right: 400 });
 

@@ -79,7 +79,7 @@ function SpawnedMessage({ spawn, onDone }) {
   );
 }
 
-export default function MessageSprite({ children, className }) {
+export default function MessageSprite({ children, className, onClick }) {
   const [spawns, setSpawns] = useState([]);
   const pickRow = () => (Math.random() < 0.5 ? 'row1' : 'row2');
 
@@ -96,7 +96,8 @@ export default function MessageSprite({ children, className }) {
   const handleTap = useCallback((e) => {
     if (e.type === 'touchstart') e.preventDefault();
     spawnMessage();
-  }, [spawnMessage]);
+    if (onClick) onClick();
+  }, [spawnMessage, onClick]);
 
   const handleEnter = useCallback(() => {
     spawnMessage();
