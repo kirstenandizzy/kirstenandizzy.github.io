@@ -13,13 +13,6 @@
     pointer-events: none;
   }
 
-  // WORKAROUND: On mobile, flex layout recalculates to a different height
-  // after modal close, pushing buttons down. Nudge up to compensate.
-  &--post-modal {
-    @media (max-width: 768px) {
-      transform: translate(-50%, -100%);
-    }
-  }
 }
 
 .canvas-button-container {

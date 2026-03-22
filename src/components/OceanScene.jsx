@@ -525,6 +525,11 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
         setSliderVisible(true);
         setCanvasButtonVisible(true);
         closeTimeoutRef.current = null;
+
+        // WORKAROUND: On mobile, the flex layout may settle to different
+        // dimensions after modal close. Fire a resize event so that
+        // CanvasButton recalculates pipe positions and movement bounds.
+        window.dispatchEvent(new Event('resize'));
       }, 350); // 0.3s animation + 50ms buffer
     }
   }, [isModalOpen]);
