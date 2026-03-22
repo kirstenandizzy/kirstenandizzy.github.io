@@ -603,15 +603,6 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
           />
         ))}
 
-        {/* Ship (Bride & Groom button) */}
-        {shipState !== 'hidden' && (
-          <Ship
-            moveBounds={moveBounds}
-            dismissing={shipState === 'exiting'}
-            onExited={() => setShipState('hidden')}
-          />
-        )}
-
         {/* Girls Pipe (Wedding Party button) */}
         <div
           className={`pipe-slide ${slideClass}`}
@@ -668,6 +659,14 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
           Wedding Party
         </button>
       </div>
+      {shipState !== 'hidden' && createPortal(
+        <Ship
+          moveBounds={moveBounds}
+          dismissing={shipState === 'exiting'}
+          onExited={() => setShipState('hidden')}
+        />,
+        document.body
+      )}
       {balloons.length > 0 && createPortal(
         balloons.map(b => (
           <Balloon

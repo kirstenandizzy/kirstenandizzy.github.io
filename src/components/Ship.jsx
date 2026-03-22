@@ -26,11 +26,12 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
     <div
       className="ship-sprite"
       style={{
-        position: 'absolute',
+        position: 'fixed',
         left: x,
         bottom: y,
         transform: 'translateX(-50%)',
         pointerEvents: 'none',
+        zIndex: 998,
         opacity: visible ? 1 : 0,
         transition: 'opacity 0.6s ease-in',
       }}

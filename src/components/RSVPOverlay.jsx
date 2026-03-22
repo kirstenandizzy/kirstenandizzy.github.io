@@ -181,23 +181,44 @@ export default function RSVPOverlay({ isOpen, onClose, onCloseStart, closeDelay 
     return () => clearTimeout(timer);
   }, [accepted, animDone]);
 
+  const validate = useCallback(() => {
+    const data = dataRef.current;
+    const filledGuests = [];
+    for (let i = 1; i <= GUEST_ROWS; i++) {
+      const name = data[`guest_${i}`];
+      const rsvp = data[`rsvp_${i}`];
+      if (name) filledGuests.push({ i, name, rsvp });
+    }
+    if (filledGuests.length === 0) {
+      return 'Please enter at least one guest name.';
+    }
+    const missing = filledGuests.some(g => g.rsvp !== 'yes' && g.rsvp !== 'no');
+    if (missing) {
+      return 'Please select attending or not for each guest.';
+    }
+    return null;
+  }, []);
+
   // Submit immediately on click, reading from dataRef (always in sync)
   const handleSubmit = useCallback(async () => {
-    const data = dataRef.current;
-    const hasGuest = Object.keys(data).some(k => k.startsWith('guest_') && data[k]);
-    if (!data || !hasGuest) return;
+    const validationError = validate();
+    if (validationError) {
+      setError(validationError);
+      return false;
+    }
 
     setSubmitting(true);
     setError(null);
     try {
-      await submitRSVP(data);
+      await submitRSVP(dataRef.current);
       dispatch(setRsvpStatus('accepted'));
     } catch {
       setError('Something went wrong! Please try again.');
     } finally {
       setSubmitting(false);
     }
-  }, [dispatch]);
+    return true;
+  }, [dispatch, validate]);
 
   const handleAccept = useCallback((card) => {
     if (card.type !== 'form') return;
@@ -229,21 +250,24 @@ export default function RSVPOverlay({ isOpen, onClose, onCloseStart, closeDelay 
             {stack?.element}
           </Envelope>
         </div>
-        {error && <p className="rsvp-error">{error}</p>}
         {!accepted && (
           <div className="rsvp-content__actions">
             <button
               className="rsvp-btn rsvp-btn--accept"
-              onClick={() => { handleSubmit(); setAccepted(true); stack?.accept(); }}
+              onClick={async () => { const ok = await handleSubmit(); if (ok) { setAccepted(true); stack?.accept(); } }}
               disabled={stack?.isAnimating || submitting}
               aria-label="Accept RSVP"
             >
               {submitting ? '…' : (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                </svg>
+                <>
+                  Send
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                  </svg>
+                </>
               )}
             </button>
+            {error && <p className="rsvp-error">{error}</p>}
           </div>
         )}
       </div>

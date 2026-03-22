@@ -31,11 +31,23 @@
     display: flex;
     gap: 2rem;
     justify-content: center;
+    align-items: center;
     position: absolute;
     bottom: -25px;
+    flex-direction: column;
+
+    &:has(:nth-child(2)) {
+        bottom: -60px;
+        gap: 1rem;
+      }
 
     @media (max-width: $bp-mobile) {
       bottom: -20px;
+
+      &:has(:nth-child(2)) {
+        bottom: -60px;
+        gap: 1rem;
+      }
     }
   }
 }
@@ -72,11 +84,13 @@
 // ── Accept / Reject Buttons ─────────────────────────────
 
 .rsvp-btn {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 22px;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  font-size: 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  gap: 8px;
   display: flex;
   align-items: center;
   justify-content: center;

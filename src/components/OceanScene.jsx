@@ -422,23 +422,30 @@ function Scene({ timeOfDay, onReady, isSafari }) {
 export default function OceanScene({ isModalOpen, onOpenModal }) {
   const [timeOfDay, setTimeOfDay] = useState(17); // Start at 5:00 PM
   const [sliderVisible, setSliderVisible] = useState(true);
+  const [canvasButtonVisible, setCanvasButtonVisible] = useState(true);
   const containerRef = useRef();
   const homeRectRef = useRef(null);
   const closeTimeoutRef = useRef(null);
+  const canvasButtonTimeoutRef = useRef(null);
 
   useLayoutEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
     if (isModalOpen) {
-      // Clear any pending close animation timeout
+      // Clear any pending close animation timeouts
       if (closeTimeoutRef.current) {
         clearTimeout(closeTimeoutRef.current);
         closeTimeoutRef.current = null;
       }
+      if (canvasButtonTimeoutRef.current) {
+        clearTimeout(canvasButtonTimeoutRef.current);
+        canvasButtonTimeoutRef.current = null;
+      }
 
-      // Hide slider (fades via CSS transition)
+      // Hide slider and canvas button (fades via CSS transition)
       setSliderVisible(false);
+      setCanvasButtonVisible(false);
 
       // Capture current viewport position before style change
       const rect = el.getBoundingClientRect();
@@ -523,6 +530,12 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
         homeRectRef.current = null;
         setSliderVisible(true);
         closeTimeoutRef.current = null;
+
+        // Show canvas button last, after layout has settled
+        canvasButtonTimeoutRef.current = setTimeout(() => {
+          setCanvasButtonVisible(true);
+          canvasButtonTimeoutRef.current = null;
+        }, 150);
       }, 350); // 0.3s animation + 50ms buffer
     }
   }, [isModalOpen]);
@@ -580,7 +593,7 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
         {isMobile && <CameraTilt angle={-0.32} />}
         <Scene timeOfDay={timeOfDay} onReady={() => setSceneReady(true)} isSafari={isSafari} />
       </Canvas>
-      <CanvasButton onOpenModal={onOpenModal} isModalOpen={isModalOpen} hideOverlay={!sliderVisible} />
+      <CanvasButton onOpenModal={onOpenModal} isModalOpen={isModalOpen} hideOverlay={!canvasButtonVisible} />
       <div className={`ocean-canvas__slider${sliderVisible ? '' : ' ocean-canvas__slider--hidden'}`}>
         <Slider min={0} max={24} step={0.05} value={timeOfDay} onChange={setTimeOfDay} />
       </div>
