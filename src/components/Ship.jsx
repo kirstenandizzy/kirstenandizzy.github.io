@@ -67,12 +67,25 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
     const baseY = cy + 195;
     const newId = photoIdRef.current++;
 
+    // Clamp X to keep bubbles + wobble within the viewport.
+    // FloatingPhoto wobble amplitude is up to 35px, photo container is 75px wide,
+    // small bubbles up to ~30px wide. Use generous margins to prevent overflow.
+    const vw = window.innerWidth;
+    const leftMargin = 40;            // wobble room on the left
+    const rightMarginPhoto = 115;     // 75px element + 35px wobble + 5px buffer
+    const rightMarginBubble = 70;     // ~30px element + 35px wobble + 5px buffer
+    const clampPhoto = (val) => Math.max(leftMargin, Math.min(vw - rightMarginPhoto, val));
+    const clampBubble = (val) => Math.max(leftMargin, Math.min(vw - rightMarginBubble, val));
+    // Scale spread to viewport so bubbles don't bunch at edges on mobile
+    const photoSpread = Math.min(240, vw * 0.5);
+    const bubbleSpread = Math.min(400, vw * 0.8);
+
     // Spawn the photo bubble
     const newItems = [
       {
         id: newId,
         photo: chosenPhoto,
-        spawnX: cx + (Math.random() - 0.5) * 240,
+        spawnX: clampPhoto(cx + (Math.random() - 0.5) * photoSpread),
         spawnY: baseY,
       },
     ];
@@ -86,7 +99,7 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
         small: true,
         bubbleSize: 10 + Math.random() * 20,
         autoPopDelay: 2000 + Math.random() * 8000,
-        spawnX: cx + (Math.random() - 0.5) * 400,
+        spawnX: clampBubble(cx + (Math.random() - 0.5) * bubbleSpread),
         spawnY: cy + Math.random() * 250,
       });
     }

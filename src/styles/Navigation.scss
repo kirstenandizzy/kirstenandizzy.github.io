@@ -180,6 +180,8 @@
     }
 
     &--open {
+      z-index: 1000000; // above drawer (999999) and overlay (999998)
+
       .navigation__hamburger-line--top {
         transform: translateY(7px) rotate(45deg);
       }
