@@ -33,12 +33,12 @@ const GIRLS_NPC_QUEUE = [
   { id: 'peach', sheet: peachSheet, animations: PEACH_ANIMATIONS, scale: PEACH_SCALE, facesRight: false },
   { id: 'toadette', sheet: toadetteSheet, animations: TOADETTE_ANIMATIONS, scale: TOADETTE_SCALE },
   { id: 'luigi', sheet: luigiSheet, animations: LUIGI_ANIMATIONS, scale: LUIGI_SCALE * 1.1 },
-  { id: 'boo', sheet: booNPCSheet, animations: BOO_ANIMATIONS, scale: BOO_SCALE, wanderSpeed: 100, minIdleTime: 800, maxIdleTime: 2500, minWalkDist: 100, maxWalkDist: 280, zIndex: 2 },
+  { id: 'boo', sheet: booNPCSheet, animations: BOO_ANIMATIONS, scale: BOO_SCALE, wanderSpeed: 100, minIdleTime: 800, maxIdleTime: 2500, minWalkDist: 100, maxWalkDist: 280, zIndex: 3 },
   { id: 'waluigi', sheet: waluigiSheet, animations: WALUIGI_ANIMATIONS, scale: WALUIGI_SCALE, glowColor: '#9b59b6' },
 ];
 
 const GUYS_NPC_QUEUE = [
-  { id: 'donkey', sheet: donkeySheet, animations: DONKEY_ANIMATIONS, scale: DONKEY_SCALE, zIndex: 2 },
+  { id: 'donkey', sheet: donkeySheet, animations: DONKEY_ANIMATIONS, scale: DONKEY_SCALE, zIndex: 3 },
   { id: 'samus', sheet: samusSheet, animations: SAMUS_ANIMATIONS, scale: SAMUS_SCALE },
   { id: 'falcon', sheet: falconSheet, animations: FALCON_ANIMATIONS, scale: FALCON_SCALE * 1.15 },
   { id: 'jiggly', sheet: jigglySheet, animations: JIGGLY_ANIMATIONS, scale: JIGGLY_SCALE, glowColor: '#f1c40f' },
