@@ -171,7 +171,7 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
           offsetX={-20}
           offsetY={75}
           zIndex={2}
-          label="kir"
+          label="kk"
           hoverLabel="kirsten"
           labelColor="#f4a9a8"
           glowColor="#c89ef2"
@@ -187,7 +187,8 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
           offsetX={20}
           offsetY={75}
           zIndex={1}
-          label="izzy"
+          label="kiko"
+          hoverLabel="israel"
           labelColor="#8fcaca"
           glowColor="#8fcaca"
           freezeAfterEmote

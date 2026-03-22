@@ -226,9 +226,10 @@ export default function StarField({ timeOfDay }) {
     bgMat.uniforms.uOpacity.value     = THREE.MathUtils.lerp(bgMat.uniforms.uOpacity.value,     night * 0.65, delta * 1.5);
     brightMat.uniforms.uOpacity.value = THREE.MathUtils.lerp(brightMat.uniforms.uOpacity.value, night,        delta * 1.5);
 
-    // Brightness control — applied in vertex shader as a multiplier
-    bgMat.uniforms.uBrightness.value     = brightness;
-    brightMat.uniforms.uBrightness.value = brightness;
+    // Brightness control — 3× at full night, base value during day
+    const nightBrightness = brightness * (1 + 2 * night);
+    bgMat.uniforms.uBrightness.value     = nightBrightness;
+    brightMat.uniforms.uBrightness.value = nightBrightness;
 
     // Dynamically control visible instance count (no reallocation)
     if (bgRef.current)     bgRef.current.count     = Math.min(bgCount, bgData.placed);
