@@ -5,6 +5,7 @@ export default function Balloon({ sheet, animations, scale, startX, startY, colo
   const [animation, setAnimation] = useState(`${color}-idle`);
   const [falling, setFalling] = useState(false);
   const [photoStyle, setPhotoStyle] = useState({ opacity: 1, y: 0 });
+  const [photoExpanded, setPhotoExpanded] = useState(false);
   const rafRef = useRef(null);
   const lastTimeRef = useRef(0);
   const popping = useRef(false);
@@ -98,9 +99,13 @@ export default function Balloon({ sheet, animations, scale, startX, startY, colo
       </div>
       {photo && (
         <div
-          className={`balloon-photo${falling ? ' balloon-photo--falling' : ''}`}
+          className={`balloon-photo${falling ? ' balloon-photo--falling' : ''}${photoExpanded ? ' balloon-photo--expanded' : ''}`}
           style={{
             opacity: photoStyle.opacity,
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            setPhotoExpanded(v => !v);
           }}
         >
           <img src={photo} alt="" />

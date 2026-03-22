@@ -12,11 +12,16 @@ import { yoshiSheet, YOSHI_ANIMATIONS } from '../sprites/sheets/yoshi';
 import { eggSheet } from '../sprites/sheets/egg';
 import { balloonSheet, BALLOON_ANIMATIONS, BALLOON_SCALE, BALLOON_COLORS } from '../sprites/sheets/balloon';
 import Balloon from './Balloon';
+import Ship from './Ship';
 import { peachSheet, PEACH_ANIMATIONS, PEACH_SCALE } from '../sprites/sheets/peach';
 import { toadetteSheet, TOADETTE_ANIMATIONS, TOADETTE_SCALE } from '../sprites/sheets/toadette';
 import { luigiSheet, LUIGI_ANIMATIONS, LUIGI_SCALE } from '../sprites/sheets/luigi';
 import { booSheet as booNPCSheet, BOO_ANIMATIONS, BOO_SCALE } from '../sprites/sheets/boo';
 import { waluigiSheet, WALUIGI_ANIMATIONS, WALUIGI_SCALE } from '../sprites/sheets/waluigi';
+import { samusSheet, SAMUS_ANIMATIONS, SAMUS_SCALE } from '../sprites/sheets/samus';
+import { falconSheet, FALCON_ANIMATIONS, FALCON_SCALE } from '../sprites/sheets/falcon';
+import { jigglySheet, JIGGLY_ANIMATIONS, JIGGLY_SCALE } from '../sprites/sheets/jiggly';
+import { donkeySheet, DONKEY_ANIMATIONS, DONKEY_SCALE } from '../sprites/sheets/donkey';
 import useCharacterController from '../hooks/useCharacterController';
 import MobileJoystick from './MobileJoystick';
 
@@ -24,13 +29,22 @@ import MobileJoystick from './MobileJoystick';
 const PIPE_SCALE = 2;
 const CHARACTER_SCALE = 2;
 
-const NPC_QUEUE = [
+const GIRLS_NPC_QUEUE = [
   { id: 'peach', sheet: peachSheet, animations: PEACH_ANIMATIONS, scale: PEACH_SCALE, facesRight: false },
   { id: 'toadette', sheet: toadetteSheet, animations: TOADETTE_ANIMATIONS, scale: TOADETTE_SCALE },
   { id: 'luigi', sheet: luigiSheet, animations: LUIGI_ANIMATIONS, scale: LUIGI_SCALE, launchSpeed: 650 },
-  { id: 'boo', sheet: booNPCSheet, animations: BOO_ANIMATIONS, scale: BOO_SCALE },
+  { id: 'boo', sheet: booNPCSheet, animations: BOO_ANIMATIONS, scale: BOO_SCALE, wanderSpeed: 100, minIdleTime: 800, maxIdleTime: 2500, minWalkDist: 100, maxWalkDist: 280 },
   { id: 'waluigi', sheet: waluigiSheet, animations: WALUIGI_ANIMATIONS, scale: WALUIGI_SCALE },
 ];
+
+const GUYS_NPC_QUEUE = [
+  { id: 'donkey', sheet: donkeySheet, animations: DONKEY_ANIMATIONS, scale: DONKEY_SCALE },
+  { id: 'samus', sheet: samusSheet, animations: SAMUS_ANIMATIONS, scale: SAMUS_SCALE },
+  { id: 'falcon', sheet: falconSheet, animations: FALCON_ANIMATIONS, scale: FALCON_SCALE },
+  { id: 'jiggly', sheet: jigglySheet, animations: JIGGLY_ANIMATIONS, scale: JIGGLY_SCALE },
+];
+
+const GUYS_IDS = new Set(GUYS_NPC_QUEUE.map(n => n.id));
 
 const NPC_NAME_MAP = {
   peach: 'erinn',
@@ -38,14 +52,22 @@ const NPC_NAME_MAP = {
   luigi: 'brooke',
   boo: 'wendy',
   waluigi: 'hayley',
+  samus: 'kurt',
+  falcon: 'matt',
+  jiggly: 'jake',
+  donkey: 'kris',
 };
 
 const NPC_PHOTO_MAP = {
-  peach: '/assets/bridal_party/erinn.png',
-  toadette: '/assets/bridal_party/tay.jpg',
-  luigi: '/assets/bridal_party/brooke.jpg',
-  boo: '/assets/bridal_party/wendy.jpg',
-  waluigi: '/assets/bridal_party/hayley.png',
+  peach: '/assets/party/erinn.png',
+  toadette: '/assets/party/tay.jpg',
+  luigi: '/assets/party/brooke.jpg',
+  boo: '/assets/party/wendy.jpg',
+  waluigi: '/assets/party/hayley.png',
+  samus: '/assets/party/kurt.jpg',
+  falcon: '/assets/party/matt.png',
+  jiggly: '/assets/party/jake.png',
+  donkey: '/assets/party/kris.jpg',
 };
 
 const GHIBLI_PALETTE = [
@@ -76,7 +98,7 @@ function pickRandomColor(exclude) {
   return choices[Math.floor(Math.random() * choices.length)];
 }
 
-export default function CanvasButton({ onClick, onOpenModal }) {
+export default function CanvasButton({ onClick, onOpenModal, isModalOpen }) {
   const [pipeState, setPipeState] = useState('hidden');
   const [pipeColor, setPipeColor] = useState('green');
   const [pipeLeft, setPipeLeft] = useState(0);
@@ -88,6 +110,14 @@ export default function CanvasButton({ onClick, onOpenModal }) {
   const npcColorsRef = useRef(buildNPCColors());
   const recallingRef = useRef(false);
   recallingRef.current = recalling;
+
+  // Ship state: 'hidden' | 'visible' | 'exiting'
+  const [shipState, setShipState] = useState('hidden');
+
+  // Guys pipe state
+  const [guysPipeColor, setGuysPipeColor] = useState('green');
+  const [guysPipeLeft, setGuysPipeLeft] = useState(0);
+  const guysButtonRef = useRef(null);
 
   // Calculate bounds for character movement based on viewport
   const [moveBounds, setMoveBounds] = useState({ left: 0, right: 400 });
@@ -127,11 +157,16 @@ export default function CanvasButton({ onClick, onOpenModal }) {
     return 0;
   }, [pipeWidth, pipeHeight]);
 
-  // NPC state
+  // Girls NPC state
   const [activeNPCs, setActiveNPCs] = useState([]);
   const npcQueueIndex = useRef(0);
   const npcSpawnTimer = useRef(null);
   const npcPositionsRef = useRef([]);
+
+  // Guys NPC state
+  const [activeGuysNPCs, setActiveGuysNPCs] = useState([]);
+  const guysQueueIndex = useRef(0);
+  const guysSpawnTimer = useRef(null);
 
   const getNPCPositions = useCallback(() => npcPositionsRef.current, []);
 
@@ -146,9 +181,10 @@ export default function CanvasButton({ onClick, onOpenModal }) {
     }
   }, []);
 
+  // Girls NPC launcher
   const launchNextNPC = useCallback(() => {
-    if (npcQueueIndex.current >= NPC_QUEUE.length) return;
-    const config = NPC_QUEUE[npcQueueIndex.current];
+    if (npcQueueIndex.current >= GIRLS_NPC_QUEUE.length) return;
+    const config = GIRLS_NPC_QUEUE[npcQueueIndex.current];
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
     const npc = { ...config, launchDirection: 'left' };
     if (isMobile && npc.launchSpeed) npc.launchSpeed = npc.launchSpeed * 0.75;
@@ -167,6 +203,17 @@ export default function CanvasButton({ onClick, onOpenModal }) {
     }
   }, []);
 
+  // Guys NPC launcher
+  const launchNextGuysNPC = useCallback(() => {
+    if (guysQueueIndex.current >= GUYS_NPC_QUEUE.length) return;
+    const config = GUYS_NPC_QUEUE[guysQueueIndex.current];
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const npc = { ...config, launchDirection: 'right' };
+    if (isMobile && npc.launchSpeed) npc.launchSpeed = npc.launchSpeed * 0.75;
+    setActiveGuysNPCs(prev => [...prev, npc]);
+    guysQueueIndex.current += 1;
+  }, []);
+
   const handleNPCLanded = useCallback((npcId, landedX) => {
     npcPositionsRef.current = npcPositionsRef.current
       .filter(p => p.id !== npcId)
@@ -179,9 +226,25 @@ export default function CanvasButton({ onClick, onOpenModal }) {
     }
   }, [launchNextNPC]);
 
+  const handleGuysNPCLanded = useCallback((npcId, landedX) => {
+    npcPositionsRef.current = npcPositionsRef.current
+      .filter(p => p.id !== npcId)
+      .concat({ id: npcId, x: landedX });
+    if (!recallingRef.current) {
+      guysSpawnTimer.current = setTimeout(() => {
+        launchNextGuysNPC();
+      }, 1000);
+    }
+  }, [launchNextGuysNPC]);
+
   // NPC returned to pipe during recall
   const handleNPCReturned = useCallback((npcId) => {
     setActiveNPCs(prev => prev.filter(n => n.id !== npcId));
+    npcPositionsRef.current = npcPositionsRef.current.filter(p => p.id !== npcId);
+  }, []);
+
+  const handleGuysNPCReturned = useCallback((npcId) => {
+    setActiveGuysNPCs(prev => prev.filter(n => n.id !== npcId));
     npcPositionsRef.current = npcPositionsRef.current.filter(p => p.id !== npcId);
   }, []);
 
@@ -193,11 +256,14 @@ export default function CanvasButton({ onClick, onOpenModal }) {
       npcSpawnTimer.current = setTimeout(() => {
         launchNextNPC();
       }, 1000);
+      guysSpawnTimer.current = setTimeout(() => {
+        launchNextGuysNPC();
+      }, 1000);
     }
     if (characterState === 'hidden') {
       spawnStarted.current = false;
     }
-  }, [characterState, launchNextNPC, recalling]);
+  }, [characterState, launchNextNPC, launchNextGuysNPC, recalling]);
 
   // Waluigi minion state
   const [minions, setMinions] = useState([]);
@@ -238,21 +304,33 @@ export default function CanvasButton({ onClick, onOpenModal }) {
 
   // Called when tongue hits an NPC during extension
   const handleTongueHit = useCallback((npcId) => {
-    setActiveNPCs(prev => prev.filter(n => n.id !== npcId));
+    const isGuy = GUYS_IDS.has(npcId);
+    if (isGuy) {
+      setActiveGuysNPCs(prev => prev.filter(n => n.id !== npcId));
+    } else {
+      setActiveNPCs(prev => prev.filter(n => n.id !== npcId));
+    }
     npcPositionsRef.current = npcPositionsRef.current.filter(p => p.id !== npcId);
     const dir = facingRef.current;
     const eggX = dir === 'right' ? xRef.current - 5 : xRef.current + 5;
     eggIdRef.current += 1;
     const rollDir = dir === 'right' ? 'left' : 'right';
     setEggs(prev => [...prev, { id: eggIdRef.current, x: eggX, rollDirection: rollDir, npcId }]);
-    // Queue next NPC spawn since this one was eaten
+    // Queue next NPC spawn from the correct queue since this one was eaten
     if (!recallingRef.current) {
-      if (npcSpawnTimer.current) clearTimeout(npcSpawnTimer.current);
-      npcSpawnTimer.current = setTimeout(() => {
-        launchNextNPC();
-      }, 1000);
+      if (isGuy) {
+        if (guysSpawnTimer.current) clearTimeout(guysSpawnTimer.current);
+        guysSpawnTimer.current = setTimeout(() => {
+          launchNextGuysNPC();
+        }, 1000);
+      } else {
+        if (npcSpawnTimer.current) clearTimeout(npcSpawnTimer.current);
+        npcSpawnTimer.current = setTimeout(() => {
+          launchNextNPC();
+        }, 1000);
+      }
     }
-  }, [launchNextNPC]);
+  }, [launchNextNPC, launchNextGuysNPC]);
 
   // Yoshi reached pipe during recall
   const handleRecallReached = useCallback(() => {
@@ -275,16 +353,17 @@ export default function CanvasButton({ onClick, onOpenModal }) {
   facingRef.current = facing;
   xRef.current = x;
 
-  // Check if all characters have returned and Yoshi is hidden → retract pipe
+  // Check if all characters have returned and Yoshi is hidden → retract pipes
   useEffect(() => {
     if (!recalling) return;
-    if (activeNPCs.length === 0 && characterState === 'hidden') {
+    if (activeNPCs.length === 0 && activeGuysNPCs.length === 0 && characterState === 'hidden') {
       setPipeState('retracting');
       setRecalling(false);
       npcQueueIndex.current = 0;
+      guysQueueIndex.current = 0;
       npcPositionsRef.current = [];
     }
-  }, [recalling, activeNPCs.length, characterState]);
+  }, [recalling, activeNPCs.length, activeGuysNPCs.length, characterState]);
 
   // Two-frame mount: render element at hidden position, then apply spawning class
   useEffect(() => {
@@ -298,6 +377,7 @@ export default function CanvasButton({ onClick, onOpenModal }) {
     return () => cancelAnimationFrame(raf);
   }, [characterState]);
 
+  // Girls pipe position (anchored to Wedding Party button)
   useEffect(() => {
     if (!buttonRef.current || !clipRef.current) return;
     const updatePipeLeft = () => {
@@ -310,6 +390,19 @@ export default function CanvasButton({ onClick, onOpenModal }) {
     return () => window.removeEventListener('resize', updatePipeLeft);
   }, []);
 
+  // Guys pipe position (anchored to Bride & Groom button)
+  useEffect(() => {
+    if (!guysButtonRef.current || !clipRef.current) return;
+    const updateGuysPipeLeft = () => {
+      const btnRect = guysButtonRef.current.getBoundingClientRect();
+      const clipRect = clipRef.current.getBoundingClientRect();
+      setGuysPipeLeft(btnRect.left - clipRect.left + btnRect.width / 2);
+    };
+    updateGuysPipeLeft();
+    window.addEventListener('resize', updateGuysPipeLeft);
+    return () => window.removeEventListener('resize', updateGuysPipeLeft);
+  }, []);
+
   const handleWeddingPartyClick = useCallback((e) => {
     if (onClick) onClick(e);
     if (pipeState === 'rising' || pipeState === 'retracting') return;
@@ -317,13 +410,16 @@ export default function CanvasButton({ onClick, onOpenModal }) {
     if (recalling) return; // already recalling
 
     if (pipeState === 'hidden') {
-      setPipeColor(pickRandomColor(pipeColor));
+      const color1 = pickRandomColor(pipeColor);
+      setPipeColor(color1);
+      setGuysPipeColor(pickRandomColor(color1));
       setPipeState('rising');
     } else if (pipeState === 'visible' && (characterState === 'active' || characterState === 'hidden')) {
       if (characterState === 'active') {
         // Start recall sequence — everyone walks back to pipe
         setRecalling(true);
         if (npcSpawnTimer.current) clearTimeout(npcSpawnTimer.current);
+        if (guysSpawnTimer.current) clearTimeout(guysSpawnTimer.current);
         setMinions([]); // minions just vanish
         setBalloons([]); // clear balloons
         // Eggs will roll off on their own
@@ -383,7 +479,7 @@ export default function CanvasButton({ onClick, onOpenModal }) {
   if (action === 'walk') animationName = 'walk';
 
   return (
-    <div className="canvas-button-wrapper" ref={wrapperRef}>
+    <div className={`canvas-button-wrapper${isModalOpen ? ' canvas-button-wrapper--hidden' : ''}`} ref={wrapperRef}>
       <div className="pipe-clip" ref={clipRef} aria-hidden="true">
         {/* Character sprite */}
         {characterState !== 'hidden' && (
@@ -396,7 +492,7 @@ export default function CanvasButton({ onClick, onOpenModal }) {
             onTransitionEnd={handleCharacterTransitionEnd}
           >
             {characterState === 'active' && !recalling && (
-              <CharacterLabel name="guest" color="#77dd77" />
+              <CharacterLabel name="" color="#77dd77" bounce />
             )}
             <div style={{ display: 'flex', alignItems: 'flex-end', ...(facing === 'left' ? { transform: 'scaleX(-1)' } : {}) }}>
               {action === 'tongue' ? (
@@ -423,21 +519,7 @@ export default function CanvasButton({ onClick, onOpenModal }) {
           </div>
         )}
 
-        {/* Eggs */}
-        {eggs.map(egg => (
-          <YoshiEgg
-            key={egg.id}
-            sheet={eggSheet}
-            x={egg.x}
-            rollDirection={egg.rollDirection || 'left'}
-            rolling={recalling}
-            bounds={moveBounds}
-            onHatch={(hatchX, hatchBottomY) => { removeEgg(egg.id); spawnBalloon(hatchX ?? egg.x, hatchBottomY, egg.npcId); }}
-            onFallOff={() => removeEgg(egg.id)}
-          />
-        ))}
-
-        {/* NPCs */}
+        {/* Girls NPCs */}
         {activeNPCs.map(npc => (
           <NPC
             key={npc.id}
@@ -454,11 +536,46 @@ export default function CanvasButton({ onClick, onOpenModal }) {
             onPositionUpdate={handleNPCPositionUpdate}
             facesRight={npc.facesRight !== false}
             launchSpeed={npc.launchSpeed}
+            wanderSpeed={npc.wanderSpeed}
+            minIdleTime={npc.minIdleTime}
+            maxIdleTime={npc.maxIdleTime}
+            minWalkDist={npc.minWalkDist}
+            maxWalkDist={npc.maxWalkDist}
             label={NPC_NAME_MAP[npc.id]}
             labelColor={npcColorsRef.current[npc.id]}
             recalling={recalling}
             recallTarget={pipeLeft}
             onReturned={() => handleNPCReturned(npc.id)}
+          />
+        ))}
+
+        {/* Guys NPCs */}
+        {activeGuysNPCs.map(npc => (
+          <NPC
+            key={npc.id}
+            npcId={npc.id}
+            sheet={npc.sheet}
+            animations={npc.animations}
+            scale={npc.scale}
+            startX={guysPipeLeft}
+            startY={pipeHeight}
+            launchDirection={npc.launchDirection}
+            moveBounds={moveBounds}
+            getNPCPositions={getNPCPositions}
+            onLanded={(landedX) => handleGuysNPCLanded(npc.id, landedX)}
+            onPositionUpdate={handleNPCPositionUpdate}
+            facesRight={npc.facesRight !== false}
+            launchSpeed={npc.launchSpeed}
+            wanderSpeed={npc.wanderSpeed}
+            minIdleTime={npc.minIdleTime}
+            maxIdleTime={npc.maxIdleTime}
+            minWalkDist={npc.minWalkDist}
+            maxWalkDist={npc.maxWalkDist}
+            label={NPC_NAME_MAP[npc.id]}
+            labelColor={npcColorsRef.current[npc.id]}
+            recalling={recalling}
+            recallTarget={guysPipeLeft}
+            onReturned={() => handleGuysNPCReturned(npc.id)}
           />
         ))}
 
@@ -473,7 +590,16 @@ export default function CanvasButton({ onClick, onOpenModal }) {
           />
         ))}
 
-        {/* Pipe */}
+        {/* Ship (Bride & Groom button) */}
+        {shipState !== 'hidden' && (
+          <Ship
+            moveBounds={moveBounds}
+            dismissing={shipState === 'exiting'}
+            onExited={() => setShipState('hidden')}
+          />
+        )}
+
+        {/* Girls Pipe (Wedding Party button) */}
         <div
           className={`pipe-slide ${slideClass}`}
           style={{ left: pipeLeft }}
@@ -481,10 +607,35 @@ export default function CanvasButton({ onClick, onOpenModal }) {
         >
           <PixelSprite sheet={pipeSheet} name={`${pipeColor}-pipe`} scale={PIPE_SCALE} />
         </div>
+
+        {/* Guys Pipe (Bride & Groom button) */}
+        <div
+          className={`pipe-slide ${slideClass}`}
+          style={{ left: guysPipeLeft }}
+        >
+          <PixelSprite sheet={pipeSheet} name={`${guysPipeColor}-pipe`} scale={PIPE_SCALE} />
+        </div>
+
+        {/* Eggs (rendered after pipes so they appear in front) */}
+        {eggs.map(egg => (
+          <YoshiEgg
+            key={egg.id}
+            sheet={eggSheet}
+            x={egg.x}
+            rollDirection={egg.rollDirection || 'left'}
+            rolling={recalling}
+            bounds={moveBounds}
+            onHatch={(hatchX, hatchBottomY) => { removeEgg(egg.id); spawnBalloon(hatchX ?? egg.x, hatchBottomY, egg.npcId); }}
+            onFallOff={() => removeEgg(egg.id)}
+          />
+        ))}
       </div>
 
       <div className="canvas-button-container">
-        <button onClick={onClick}>
+        <button ref={guysButtonRef} onClick={(e) => {
+          if (onClick) onClick(e);
+          setShipState(s => s === 'hidden' ? 'visible' : s === 'visible' ? 'exiting' : s === 'exiting' ? 'hidden' : s);
+        }}>
           Bride & Groom
         </button>
         <button onClick={(e) => { if (onClick) onClick(e); if (onOpenModal) onOpenModal('rsvp'); }}>

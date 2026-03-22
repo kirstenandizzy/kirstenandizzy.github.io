@@ -25,10 +25,14 @@ export default function NPC({
   recalling = false,
   recallTarget,
   onReturned,
+  wanderSpeed,
+  minIdleTime,
+  maxIdleTime,
+  minWalkDist,
+  maxWalkDist,
 }) {
   const [currentAnim, setCurrentAnim] = useState('launch');
   const [behaviorEnabled, setBehaviorEnabled] = useState(false);
-  const [emoteFrame, setEmoteFrame] = useState(null);
   const landedCalledRef = useRef(false);
   const currentAnimRef = useRef('launch');
   const onLandedRef = useRef(onLanded);
@@ -67,6 +71,13 @@ export default function NPC({
     initialX: physicsX,
     bounds: moveBounds,
     getNPCPositions,
+    scale,
+    npcId,
+    wanderSpeed,
+    minIdleTime,
+    maxIdleTime,
+    minWalkDist,
+    maxWalkDist,
   });
 
   // Start the return walk toward the pipe
@@ -80,7 +91,6 @@ export default function NPC({
     setReturnX(fromX);
     setCurrentAnim('walk');
     currentAnimRef.current = 'walk';
-    setEmoteFrame(null);
 
     lastReturnTimeRef.current = 0;
 
@@ -156,14 +166,8 @@ export default function NPC({
     setCurrentAnim(isWalking ? 'walk' : 'idle');
   }, [isWalking, behaviorEnabled]);
 
-  // Build display animations — when showing an emote, swap in a single random frame
-  const displayAnimations = useMemo(() => {
-    if (!emoteFrame || !animations.emote) return animations;
-    return {
-      ...animations,
-      emote: { frames: [emoteFrame, emoteFrame], fps: 1, loop: false },
-    };
-  }, [animations, emoteFrame]);
+  // Use animations directly — emote plays the full sequence as defined
+  const displayAnimations = animations;
 
   // When landed/idle/emote animation completes, transition to next state
   const handleAnimComplete = useCallback(() => {
@@ -178,14 +182,10 @@ export default function NPC({
       }
     } else if (currentAnimRef.current === 'idle' && animations.emote) {
       if (Math.random() < 0.4) {
-        const frames = animations.emote.frames;
-        const picked = frames[Math.floor(Math.random() * frames.length)];
-        setEmoteFrame(picked);
         currentAnimRef.current = 'emote';
         setCurrentAnim('emote');
       }
     } else if (currentAnimRef.current === 'emote') {
-      setEmoteFrame(null);
       currentAnimRef.current = 'idle';
       setCurrentAnim('idle');
     }

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import '../styles/WaveText.scss';
 
-const BUFFER_FOR_ANIMATION_TIME = 2500;
+const BUFFER_FOR_ANIMATION_TIME = 3500;
 const ANIMATION_DELAY = 500;
 
 export default function WaveText({ text, startAnimationDelay = ANIMATION_DELAY }) {

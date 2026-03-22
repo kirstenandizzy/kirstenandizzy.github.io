@@ -6,6 +6,12 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 20;
+  transition: opacity 0.3s ease;
+
+  &--hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 
 .canvas-button-container {
@@ -111,6 +117,11 @@
     transition: opacity 0.2s ease;
     margin-bottom: 0.15rem;
     pointer-events: none;
+
+    &--npc {
+      font-size: 1.3rem;
+      color: var(--indicator-color);
+    }
   }
 
   &__arrow {
@@ -120,11 +131,20 @@
     border-right: 0.5rem solid transparent;
     border-top: 0.5rem solid var(--indicator-color);
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+    &--bounce {
+      animation: arrow-bounce 0.8s ease-in-out infinite;
+    }
   }
 
   // Desktop: show on hover
   @media (hover: hover) {
     &:hover &__name { opacity: 1; }
+  }
+
+  // Mobile: extend tap area to cover entire sprite
+  @media (hover: none) {
+    padding-bottom: 8rem;
   }
 
   // Mobile: show via JS-toggled class, then fade
@@ -150,7 +170,7 @@
     // Same transform as spawning end-state so there's no visual jump
     transform: translateX(-50%) translateY(0);
     transition: none;
-    z-index: 3; // In front of pipe when walking around
+    z-index: 5; // In front of pipe and all NPCs when walking around
   }
 
   &.character-despawning {
@@ -191,7 +211,7 @@
   image-rendering: pixelated;
   animation: egg-wobble 1.2s ease-in-out infinite;
   pointer-events: none;
-  z-index: 1;
+  z-index: 3;
   transform-origin: bottom center;
 
   &.egg-medium { animation-duration: 0.8s; }
@@ -217,11 +237,19 @@
   height: 75px;
   border-radius: 50%;
   overflow: hidden;
-  transition: opacity 0.8s ease-in;
+  transition: opacity 0.8s ease-in, transform 0.2s ease-out;
+  pointer-events: auto;
+  cursor: pointer;
 
-  &:hover {
-    transform: scale(1.8);
-    transition: transform 0.2s ease-out;
+  @media (hover: hover) {
+    &:hover {
+      transform: scale(1.8);
+      z-index: 200;
+    }
+  }
+
+  &--expanded {
+    transform: scale(2.5);
     z-index: 200;
   }
 
@@ -232,6 +260,11 @@
     display: block;
     pointer-events: none;
   }
+}
+
+@keyframes arrow-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
