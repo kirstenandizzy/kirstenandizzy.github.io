@@ -23,8 +23,8 @@
 
 .travel-card {
   opacity: 0;
-  animation: stagger-in 0.5s ease forwards;
-  animation-delay: calc(var(--i) * 150ms);
+  animation: stagger-in 1s ease forwards;
+  animation-delay: calc(var(--i) * 300ms);
 
   h3 {
     word-spacing: 0.05em;

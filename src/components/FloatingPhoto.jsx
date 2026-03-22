@@ -63,7 +63,11 @@ export default function FloatingPhoto({ startX, startY, photo, onDone, autoPopDe
         const elapsed = (ts - startTime) / 1000;
         const wobbleX = Math.sin((elapsed / wobbleDur) * 2 * Math.PI) * wobbleAmp;
         el.style.transform = `translate(${wobbleX}px, ${y}px)`;
-        el.style.opacity = 1;
+        // Fade out based on proximity to top of viewport
+        const rect = el.getBoundingClientRect();
+        const screenTop = rect.top;
+        const fadeZone = window.innerHeight * 0.4;
+        el.style.opacity = screenTop < fadeZone ? Math.max(0, screenTop / fadeZone) : 1;
       }
 
       const inner = innerRef.current;

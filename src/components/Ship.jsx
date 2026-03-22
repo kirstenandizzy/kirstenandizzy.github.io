@@ -31,6 +31,23 @@ const US_PHOTOS = [
   '/assets/us/IMG_9681.JPG',
   '/assets/us/IMG_9793.JPG',
   '/assets/us/IMG_9795.JPG',
+  '/assets/us/361944397_1074022363567622_5011367401865994938_n.jpg',
+  '/assets/us/472556491_1798837570937235_6365342608124478053_n.jpg',
+  '/assets/us/472774765_564364133104050_6867948515238976685_n.jpg',
+  '/assets/us/573057034_18299144416283415_2933518403748701336_n.jpg',
+  '/assets/us/574767440_18299144425283415_3527273988870995111_n.jpg',
+  '/assets/us/628030738_18422576404191162_8931907093163855850_n.jpg',
+  '/assets/us/649221427_17903334087382774_8487318363958040341_n.jpg',
+  '/assets/us/650734638_18076128533625771_1112311911937791959_n.jpg',
+  '/assets/us/650792603_18073917134176698_3037898199400638246_n.jpg',
+  '/assets/us/652428674_18094368929081029_8327887845969051627_n.jpg',
+  '/assets/us/652764048_18097745416814919_5222731605218249911_n.jpg',
+  '/assets/us/652774933_18080458076071417_5936176016191988606_n.jpg',
+  '/assets/us/654114036_18016545287820933_7380745160412997139_n.jpg',
+  '/assets/us/655264111_18083534000594800_7318457668992851062_n.jpg',
+  '/assets/us/655980007_18083364356522554_979278767968073449_n.jpg',
+  '/assets/us/657270336_18100378408751745_1501406462696139114_n.jpg',
+  '/assets/us/us.jpg',
 ];
 
 export default function Ship({ moveBounds, dismissing, onExited }) {
@@ -60,9 +77,10 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
   }, []);
 
   const handleClick = useCallback(() => {
-    const idx = Math.floor(Math.random() * US_PHOTOS.length);
-
-    const chosenPhoto = US_PHOTOS[idx];
+    const activePhotos = new Set(photos.filter(p => p.photo).map(p => p.photo));
+    const available = US_PHOTOS.filter(p => !activePhotos.has(p));
+    const pool = available.length > 0 ? available : US_PHOTOS;
+    const chosenPhoto = pool[Math.floor(Math.random() * pool.length)];
     const { x: cx, y: cy } = posRef.current;
     const baseY = cy + 195;
     const newId = photoIdRef.current++;
@@ -108,7 +126,7 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
       ...prev.filter(p => p.photo !== chosenPhoto),
       ...newItems,
     ]);
-  }, []);
+  }, [photos]);
 
   const frameName = `angle-${angleIndex}`;
 

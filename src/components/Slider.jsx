@@ -401,11 +401,11 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
         </div>
         <div style={{ '--i': 4 }}>
           <div className='slider__events'>
-            {EVENTS.map((event) => (
+            {EVENTS.map((event, idx) => (
               <button
                 key={event.eventLabel}
                 className='slider__event'
-                style={{ left: thumbPosition(event.value, 24) }}
+                style={{ left: thumbPosition(event.value, 24), '--i': idx }}
                 title={event.eventLabel}
                 onClick={() => handleHourClick(event.value)}
               >

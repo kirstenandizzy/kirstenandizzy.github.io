@@ -6,6 +6,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3em;
+  transition: opacity 0.2s ease;
 
   &:hover {
     text-decoration: underline;
@@ -44,8 +45,8 @@
   > .slider__content > .slider__input-container,
   > .slider__content > div:has(.slider__events) {
     opacity: 0;
-    animation: slider-stagger-in 0.5s ease forwards;
-    animation-delay: calc(var(--i) * 150ms);
+    animation: slider-stagger-in 1s ease forwards;
+    animation-delay: calc(var(--i) * 300ms);
   }
 
   &__timeline {
@@ -136,6 +137,9 @@
     position: absolute;
     top: 0;
     transform: translate(-50%, 0);
+    opacity: 0;
+    animation: slider-stagger-in 1s ease forwards;
+    animation-delay: calc(var(--i) * 300ms);
     display: flex;
     gap: 0.25rem;
     pointer-events: auto;
@@ -345,14 +349,14 @@
     line-height: 1.5rem;
     padding: 0 0 1rem 0;
     opacity: 0;
-    animation: slider-stagger-in 0.5s ease forwards;
-    animation-delay: calc(var(--i) * 150ms);
+    animation: slider-stagger-in 1s ease forwards;
+    animation-delay: calc(var(--i) * 300ms);
   }
 
   .slider--mobile .slider__content {
     opacity: 0;
-    animation: slider-stagger-in 0.5s ease forwards;
-    animation-delay: calc(var(--i) * 150ms);
+    animation: slider-stagger-in 1s ease forwards;
+    animation-delay: calc(var(--i) * 300ms);
     flex: 0 0 auto;
     display: flex;
     flex-direction: row;
@@ -432,8 +436,8 @@
     font-size: 0.85rem;
     transition: border-color 0.2s;
     opacity: 0;
-    animation: slider-stagger-in 0.4s ease forwards;
-    animation-delay: calc(var(--i) * 150ms);
+    animation: slider-stagger-in 0.8s ease forwards;
+    animation-delay: calc(var(--i) * 300ms);
 
     &:hover, &:active {
       border-color: rgba(255, 255, 255, 0.4);

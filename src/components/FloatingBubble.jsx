@@ -35,9 +35,11 @@ export default function FloatingBubble({ startX, startY, size, onDone }) {
         const wobbleX = Math.sin((elapsed / wobbleDur) * 2 * Math.PI) * wobbleAmp;
         const t = Math.min(elapsed / GROW_DURATION, 1);
         const scale = t < 0.7 ? (t / 0.7) * 1.1 : 1.1 - 0.1 * ((t - 0.7) / 0.3);
-        // Fade out near the top
-        const fadeStart = -(startY + 120) * 0.6;
-        const opacity = y < fadeStart ? Math.max(0, 1 - (y - fadeStart) / (-(startY + 120) - fadeStart)) : 1;
+        // Fade out based on proximity to top of viewport
+        const rect = el.getBoundingClientRect();
+        const screenTop = rect.top;
+        const fadeZone = window.innerHeight * 0.4;
+        const opacity = screenTop < fadeZone ? Math.max(0, screenTop / fadeZone) : 1;
         el.style.transform = `translate(${wobbleX}px, ${y}px) scale(${scale})`;
         el.style.opacity = opacity;
       }
