@@ -16,7 +16,7 @@ const FAQ_ITEMS = [
   },
   {
     question: 'What is the dress code?',
-    answer: 'Formal, but colorful and beach-friendly! The ceremony will be outdoors on the beach (weather permitting) so prioritize your comfort. We will move inside after the ceremony, but you can still enjoy the beach and the balconies to your liking throughout.'
+    answer: 'Formal, colorful attire encouraged! The ceremony will be outdoors on the beach (weather permitting) so prioritize your comfort. We will move inside after the ceremony, but you can still enjoy the beach and the balconies to your liking throughout.'
   },
   {
     question: 'What time should I arrive?',
