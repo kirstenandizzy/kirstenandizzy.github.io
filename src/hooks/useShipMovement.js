@@ -1,15 +1,15 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { TOTAL_ANGLES } from '../sprites/sheets/ship';
 
-const LERP_SPEED = 0.003;        // slow drift toward target
+const LERP_SPEED = 0.005;        // slow drift toward target
 const ENTRANCE_LERP = 0.018;    // fast drift for fly-in/fly-out (meandering)
 const TARGET_THRESHOLD = 15;     // px — pick new target when this close
 const MIN_Y = 240;               // minimum bottom offset (above buttons)
 const MAX_Y = 400;               // maximum bottom offset
 const MOBILE_MIN_Y = 410;        // mobile: push ship higher
 const MOBILE_MAX_Y = 570;        // mobile: push ship higher
-const MIN_PAUSE = 4000;          // ms — minimum idle pause at each waypoint
-const MAX_PAUSE = 10000;         // ms — maximum idle pause at each waypoint
+const MIN_PAUSE = 1000;          // ms — minimum idle pause at each waypoint
+const MAX_PAUSE = 3500;          // ms — maximum idle pause at each waypoint
 const MOVING_THRESHOLD = 0.15;   // speed below this = passengers idle
 const MAX_TILT_FRAMES = 2;       // max sprite-frame tilt from horizontal
 const FRAME_LERP = 0.12;         // how quickly displayed frame eases toward target

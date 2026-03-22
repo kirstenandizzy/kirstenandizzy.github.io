@@ -66,8 +66,16 @@ export default function FloatingPhoto({ startX, startY, photo, onDone, autoPopDe
         // Fade out based on proximity to top of viewport
         const rect = el.getBoundingClientRect();
         const screenTop = rect.top;
-        const fadeZone = window.innerHeight * 0.4;
-        el.style.opacity = screenTop < fadeZone ? Math.max(0, screenTop / fadeZone) : 1;
+        const vh = window.innerHeight;
+        const mobile = vh < 768;
+        let opacity;
+        const hardZone = vh * (mobile ? 0.1 : 0.15);
+        if (screenTop < hardZone) {
+          opacity = Math.max(0, screenTop / hardZone) * 0.9;
+        } else {
+          opacity = 0.9 + 0.1 * Math.min(1, (screenTop - hardZone) / (vh * 0.4));
+        }
+        el.style.opacity = opacity;
       }
 
       const inner = innerRef.current;
