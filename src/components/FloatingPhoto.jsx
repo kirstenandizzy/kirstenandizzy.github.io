@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import AnimatedSprite from '../sprites/animations/AnimatedSprite';
 import { balloonSheet, BALLOON_ANIMATIONS, BALLOON_SCALE } from '../sprites/sheets/balloon';
 
-export default function FloatingPhoto({ startX, startY, photo, onDone }) {
+export default function FloatingPhoto({ startX, startY, photo, onDone, autoPopDelay, small, bubbleSize }) {
   const elRef = useRef(null);
   const innerRef = useRef(null);
   const onDoneRef = useRef(onDone);
@@ -15,6 +15,19 @@ export default function FloatingPhoto({ startX, startY, photo, onDone }) {
   const [tapped, setTapped] = useState(false);
 
   const GROW_DURATION = 0.4;
+
+  // Auto-pop after delay (for companion bubbles)
+  useEffect(() => {
+    if (!autoPopDelay) return;
+    const timer = setTimeout(() => {
+      if (!popping.current) {
+        popping.current = true;
+        setPopAnim('gray-pop');
+        setPhotoVisible(false);
+      }
+    }, autoPopDelay);
+    return () => clearTimeout(timer);
+  }, [autoPopDelay]);
 
   useEffect(() => {
     const driftSpeed = 12 + Math.random() * 6;
@@ -97,19 +110,22 @@ export default function FloatingPhoto({ startX, startY, photo, onDone }) {
         top: 'auto',
         transform: 'translate(0px, 0px)',
         opacity: 0,
-        zIndex: 9999,
+        zIndex: small ? 99999 : 9999,
       }}
       onClick={handleClick}
     >
       <div ref={innerRef} className="balloon-inner" style={{ scale: 0 }}>
-        <div className={`floating-photo-container${tapped ? ' floating-photo-container--tapped' : ''}`}>
+        <div
+          className={`floating-photo-container${tapped ? ' floating-photo-container--tapped' : ''}`}
+          style={small ? { width: bubbleSize || 35, height: bubbleSize || 35 } : undefined}
+        >
           {popAnim && (
             <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
               <AnimatedSprite
                 sheet={balloonSheet}
                 animations={BALLOON_ANIMATIONS}
                 animation={popAnim}
-                scale={BALLOON_SCALE * 0.7}
+                scale={small ? BALLOON_SCALE * 0.4 : BALLOON_SCALE * 0.7}
                 onComplete={handlePopComplete}
               />
             </div>
@@ -117,11 +133,13 @@ export default function FloatingPhoto({ startX, startY, photo, onDone }) {
           {photoVisible && (
             <img src="/bubble.png" alt="" className="floating-photo-bubble" />
           )}
-          <div
-            className={`floating-photo-img${!photoVisible ? ' floating-photo-img--popping' : ''}`}
-          >
-            <img src={photo} alt="" />
-          </div>
+          {photo && (
+            <div
+              className={`floating-photo-img${!photoVisible ? ' floating-photo-img--popping' : ''}`}
+            >
+              <img src={photo} alt="" />
+            </div>
+          )}
         </div>
       </div>
     </div>,

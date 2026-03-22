@@ -42,7 +42,7 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
   const posRef = useRef({ x: 0, y: 0 });
   posRef.current = { x, y };
 
-  // Floating photos state
+  // Floating photos + companion bubbles state
   const [photos, setPhotos] = useState([]);
   const photoIdRef = useRef(0);
 
@@ -54,15 +54,37 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
     const idx = Math.floor(Math.random() * US_PHOTOS.length);
 
     const chosenPhoto = US_PHOTOS[idx];
+    const { x: cx, y: cy } = posRef.current;
+    const baseY = cy + 195;
     const newId = photoIdRef.current++;
-    setPhotos(prev => [
-      ...prev.filter(p => p.photo !== chosenPhoto),
+
+    // Spawn the photo bubble
+    const newItems = [
       {
         id: newId,
         photo: chosenPhoto,
-        spawnX: posRef.current.x + (Math.random() - 0.5) * 140,
-        spawnY: posRef.current.y + 195,
+        spawnX: cx + (Math.random() - 0.5) * 240,
+        spawnY: baseY,
       },
+    ];
+
+    // Spawn 2-3 small companion bubbles spread widely, can spawn below the ship
+    const bubbleCount = 2 + Math.floor(Math.random() * 2);
+    for (let i = 0; i < bubbleCount; i++) {
+      newItems.push({
+        id: photoIdRef.current++,
+        photo: null,
+        small: true,
+        bubbleSize: 10 + Math.random() * 20,
+        autoPopDelay: 2000 + Math.random() * 8000,
+        spawnX: cx + (Math.random() - 0.5) * 400,
+        spawnY: cy + Math.random() * 250,
+      });
+    }
+
+    setPhotos(prev => [
+      ...prev.filter(p => p.photo !== chosenPhoto),
+      ...newItems,
     ]);
   }, []);
 
@@ -125,6 +147,9 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
           startX={p.spawnX}
           startY={p.spawnY}
           photo={p.photo}
+          small={p.small}
+          bubbleSize={p.bubbleSize}
+          autoPopDelay={p.autoPopDelay}
           onDone={() => removePhoto(p.id)}
         />
       ))}
