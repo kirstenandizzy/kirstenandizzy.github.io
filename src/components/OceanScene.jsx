@@ -532,10 +532,12 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
         closeTimeoutRef.current = null;
 
         // Show canvas button last, after layout has settled
+        // Safari/mobile needs extra time for compositing to settle
+        const delay = isSafari ? 500 : 150;
         canvasButtonTimeoutRef.current = setTimeout(() => {
           setCanvasButtonVisible(true);
           canvasButtonTimeoutRef.current = null;
-        }, 150);
+        }, delay);
       }, 350); // 0.3s animation + 50ms buffer
     }
   }, [isModalOpen]);
