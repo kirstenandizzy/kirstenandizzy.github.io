@@ -19,6 +19,7 @@ const US_PHOTOS = [
   '/assets/us/IMG_2720.JPG',
   '/assets/us/IMG_4817.JPG',
   '/assets/us/IMG_7203.JPG',
+  '/assets/us/IMG_5028.png',
   '/assets/us/IMG_7621.JPG',
   '/assets/us/IMG_7862.JPG',
   '/assets/us/IMG_8295.JPG',
