@@ -85,6 +85,11 @@ function RSVPForm({ dataRef, submitting }) {
           <span className="rsvp-ticket__date-value"><span>September 20, 2026</span></span>
         </div>
 
+        <div className="rsvp-ticket__date-row">
+          <span className="rsvp-ticket__date-label">location:</span>
+          <span className="rsvp-ticket__date-value"><span>Windows on the Water, Sea Bright, NJ 07760</span></span>
+        </div>
+
         <table className="rsvp-ticket__table">
           <thead>
             <tr>

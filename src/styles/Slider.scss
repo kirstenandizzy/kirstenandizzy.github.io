@@ -78,7 +78,7 @@
   > div:has(.slider__events) {
     position: relative;
     width: 100%;
-    margin-top: 0.5rem;
+    margin-top: 2.25rem;
   }
 
   &__events {
@@ -258,11 +258,18 @@
     span:nth-child(1) {
       font-size: 1.15rem;
       opacity: .75;
+      line-height: 20px
     }
 
     span:nth-child(2) {
       font-size: 1.25rem;
       font-weight: 700;
+    }
+
+    span:nth-child(3) {
+      font-size: 1.15rem;
+      opacity: .75;
+      line-height: 24px;
     }
   }
 }

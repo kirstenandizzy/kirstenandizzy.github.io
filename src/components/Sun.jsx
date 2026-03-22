@@ -73,7 +73,7 @@ export default function Sun({ timeOfDay }) {
     const angle = progress * Math.PI;
     return new THREE.Vector3(
       Math.sin(angle) * 60,
-      Math.sin(angle) * 25 + 20,
+      Math.sin(angle) * 45 + 20,
       -80
     );
   }, [timeOfDay]);

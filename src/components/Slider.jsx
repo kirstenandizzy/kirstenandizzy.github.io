@@ -289,6 +289,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
         <h3 style={{ '--i': 0 }}>
           <span>Timeline of Events</span>
           <span>Sunday, September 20th, 2026</span>
+          <span className='the-girl-next-door-regular'>Sea Bright, New Jersey</span>
         </h3>
         <div className='slider__content' style={{ '--i': 1 }}>
           <div className='slider__window' ref={windowRef}>
@@ -338,6 +339,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
       <h3 style={{ '--i': 0 }}>
         <span>Timeline of Events</span>
         <span>Sunday, September 20th, 2026</span>
+        <span className='the-girl-next-door-regular'>Sea Bright, New Jersey</span>
       </h3>
       <div className='slider__content'>
         <div className='slider__timeline' style={{ '--i': 1 }} ref={timelineRef}>

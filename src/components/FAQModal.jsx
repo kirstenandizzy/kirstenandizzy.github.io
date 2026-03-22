@@ -7,6 +7,10 @@ import '../styles/FAQModal.scss';
 
 const FAQ_ITEMS = [
   {
+    question: 'Where will the ceremony and reception be held?',
+    answer: (<><strong>Windows on the Water</strong><br />931 Ocean Ave<br />Sea Bright, NJ 07760<br /><br />The ceremony will be outdoors weather permitting, and the rest of the evening will be outdoors/indoors at your leisure.</>)
+  },
+  {
     question: 'Do you have a gift registry?',
     answer: 'We do not have a registry. We mean it when we say that your presence at our wedding is the greatest gift we could ask for, and we can’t wait to celebrate with you! If you did want to gift us something, we are asking for cash gifts to go towards our honeymoon and future adventures!'
   },

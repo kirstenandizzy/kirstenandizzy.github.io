@@ -49,8 +49,8 @@ export default function Navigation({ openModal, setOpenModal, setIsSceneExpanded
           <li>
             <MessageSprite variant="horizontal">
               <div className='navigation__header-multi-line'>
-                <h1 className='ballet-regular'>Kirsten and Israel</h1>
-                <p>｡ﾟ.(*♡´‿` 人´‿` ♡*)ﾟ♡ °・</p>
+                <h1 className='the-girl-next-door-regular'>Kirsten and Israel</h1>
+                <p>｡ﾟ♡.(*♡´‿` 人´‿` ♡*)ﾟ♡ °・</p>
               </div>
             </MessageSprite>
           </li>
