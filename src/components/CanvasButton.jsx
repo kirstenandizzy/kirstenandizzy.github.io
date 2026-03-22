@@ -99,6 +99,21 @@ function pickRandomColor(exclude) {
 }
 
 export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOverlay }) {
+  // WORKAROUND: On mobile, the flex layout sometimes recalculates to a
+  // different height after a modal close, pushing the canvas buttons down.
+  // We track "returned from modal" and apply a CSS nudge to compensate.
+  const [postModal, setPostModal] = useState(false);
+  const wasModalOpenRef = useRef(false);
+  useEffect(() => {
+    if (isModalOpen) {
+      wasModalOpenRef.current = true;
+    } else if (wasModalOpenRef.current) {
+      wasModalOpenRef.current = false;
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      if (isMobile) setPostModal(true);
+    }
+  }, [isModalOpen]);
+
   const [pipeState, setPipeState] = useState('hidden');
   const [pipeColor, setPipeColor] = useState('green');
   const [pipeLeft, setPipeLeft] = useState(0);
@@ -488,7 +503,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
   if (action === 'walk') animationName = 'walk';
 
   return (
-    <div className={`canvas-button-wrapper${hideOverlay ? ' canvas-button-wrapper--hidden' : ''}`} ref={wrapperRef}>
+    <div className={`canvas-button-wrapper${hideOverlay ? ' canvas-button-wrapper--hidden' : ''}${postModal ? ' canvas-button-wrapper--post-modal' : ''}`} ref={wrapperRef}>
       <div className="pipe-clip" ref={clipRef} aria-hidden="true">
         {/* Character sprite */}
         {characterState !== 'hidden' && (
