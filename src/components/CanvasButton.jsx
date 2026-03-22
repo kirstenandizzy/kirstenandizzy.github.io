@@ -40,7 +40,7 @@ const GIRLS_NPC_QUEUE = [
 const GUYS_NPC_QUEUE = [
   { id: 'donkey', sheet: donkeySheet, animations: DONKEY_ANIMATIONS, scale: DONKEY_SCALE, zIndex: 2 },
   { id: 'samus', sheet: samusSheet, animations: SAMUS_ANIMATIONS, scale: SAMUS_SCALE },
-  { id: 'falcon', sheet: falconSheet, animations: FALCON_ANIMATIONS, scale: FALCON_SCALE * 0.9 },
+  { id: 'falcon', sheet: falconSheet, animations: FALCON_ANIMATIONS, scale: FALCON_SCALE * 1.15 },
   { id: 'jiggly', sheet: jigglySheet, animations: JIGGLY_ANIMATIONS, scale: JIGGLY_SCALE, glowColor: '#f1c40f' },
 ];
 
