@@ -510,24 +510,21 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
       // After collapse animation completes, restore to normal CSS flow and fade slider back in
       // console.log('Setting up close animation timeout...');
       closeTimeoutRef.current = setTimeout(() => {
-        // console.log('Close animation timeout fired, clearing styles', el.getAttribute('style'));
-        // Remove all inline styles at once — Safari iOS can retain
-        // stale layout from individual property clears
+        // Ensure body overflow is settled before we restore layout —
+        // Modal.jsx clears it at ~250ms but the timing can race on mobile
+        document.body.style.overflow = '';
+        document.body.classList.remove('modal-open');
+
+        // Remove all inline styles at once
         el.removeAttribute('style');
+
+        // Force synchronous reflow so browser recalculates layout
+        void el.offsetHeight;
 
         homeRectRef.current = null;
         setSliderVisible(true);
+        setCanvasButtonVisible(true);
         closeTimeoutRef.current = null;
-
-        // Force synchronous reflow so Safari recalculates layout
-        void el.offsetHeight;
-
-        // Wait for browser to paint the clean state, then reveal
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            setCanvasButtonVisible(true);
-          });
-        });
       }, 350); // 0.3s animation + 50ms buffer
     }
   }, [isModalOpen]);

@@ -21,9 +21,11 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
   const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
   const minY = isMobile ? MOBILE_MIN_Y : MIN_Y;
   const rawMaxY = isMobile ? MOBILE_MAX_Y : MAX_Y;
-  // On mobile, cap maxY so the ship stays at least 75px from the top of the screen
-  const maxY = isMobile && typeof window !== 'undefined'
-    ? Math.min(rawMaxY, window.innerHeight - 75)
+  // Cap maxY so the top of the ship stays at least 100px from the top of the viewport
+  // Ship rendered height = 65 (sprite) * 3 (SHIP_SCALE) = 195px
+  // top of ship = innerHeight - bottom - 195, so bottom <= innerHeight - 195 - 100
+  const maxY = typeof window !== 'undefined'
+    ? Math.min(rawMaxY, window.innerHeight - 295)
     : rawMaxY;
 
   const [x, setX] = useState(0);
