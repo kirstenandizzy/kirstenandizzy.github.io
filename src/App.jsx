@@ -42,7 +42,7 @@ function App() {
           />
           <main className="app__main">
             <Routes>
-              <Route path="/" element={<Home isModalOpen={isSceneExpanded} />} />
+              <Route path="/" element={<Home isModalOpen={isSceneExpanded} onOpenModal={(link) => { setIsSceneExpanded(true); setOpenModal(link); }} />} />
             </Routes>
           </main>
         </div>

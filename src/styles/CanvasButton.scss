@@ -50,14 +50,16 @@
 .pipe-clip {
   position: absolute;
   bottom: 100%;
-  // Extend across the full viewport so Yoshi can walk freely
   left: 50%;
   transform: translateX(-50%);
   width: 100vw;
-  height: 300px;
-  overflow: hidden;
+  height: 500px;
+  overflow: visible;
   pointer-events: none;
   z-index: 1;
+  // Clip bottom only: hide pipe/NPCs below, extend 50px into button area for sink-behind.
+  // Top/left/right use large negative values = no clipping on those sides.
+  clip-path: inset(-100px -100px -50px -100px);
 }
 
 .pipe-slide {
@@ -86,19 +88,47 @@
   }
 }
 
-.yoshi-indicator {
-  width: 0;
-  height: 0;
-  border-left: 0.5rem solid transparent;
-  border-right: 0.5rem solid transparent;
-  border-top: 0.5rem solid #77dd77;
+.character-label {
   position: absolute;
-  top: -1rem;
+  top: -1.8rem;
   left: 50%;
   transform: translateX(-50%);
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
   z-index: 4;
+  // Extend hover area down over the character sprite
+  padding-bottom: 4rem;
+
+  &__name {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    margin-bottom: 0.15rem;
+    pointer-events: none;
+  }
+
+  &__arrow {
+    width: 0;
+    height: 0;
+    border-left: 0.5rem solid transparent;
+    border-right: 0.5rem solid transparent;
+    border-top: 0.5rem solid var(--indicator-color);
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  // Desktop: show on hover
+  @media (hover: hover) {
+    &:hover &__name { opacity: 1; }
+  }
+
+  // Mobile: show via JS-toggled class, then fade
+  &__name--visible { opacity: 1; }
 }
 
 .character-sprite {
@@ -130,9 +160,87 @@
   }
 }
 
+.npc-sprite {
+  position: absolute;
+  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: -webkit-crisp-edges;
+  transform: translateX(-50%);
+  z-index: 2;
+
+  &.npc-landed {
+    z-index: 3; // In front of pipe after landing
+  }
+
+  &.npc-sinking {
+    transition: transform 0.3s ease-in;
+    transform: translateX(-50%) translateY(100%);
+    z-index: 1; // Behind pipe so it slides behind it
+  }
+}
+
+@keyframes egg-wobble {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(8deg); }
+  75%      { transform: rotate(-8deg); }
+}
+
+.yoshi-egg {
+  position: absolute;
+  bottom: 0;
+  image-rendering: pixelated;
+  animation: egg-wobble 1.2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+  transform-origin: bottom center;
+
+  &.egg-medium { animation-duration: 0.8s; }
+  &.egg-large  { animation-duration: 0.5s; pointer-events: auto; cursor: pointer; }
+}
+
+.balloon {
+  position: fixed;
+  top: 0;
+  pointer-events: auto;
+  cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+  z-index: 100;
+  image-rendering: pixelated;
+  image-rendering: -webkit-crisp-edges;
+  will-change: transform;
+}
+
+.balloon-photo {
+  position: absolute;
+  top: 70px;
+  left: -15px;
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  overflow: hidden;
+  transition: opacity 0.8s ease-in;
+
+  &:hover {
+    transform: scale(1.8);
+    transition: transform 0.2s ease-out;
+    z-index: 200;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .pipe-slide,
   .character-sprite {
     transition: none;
+  }
+  .yoshi-egg {
+    animation: none;
+    transition-duration: 0s;
   }
 }

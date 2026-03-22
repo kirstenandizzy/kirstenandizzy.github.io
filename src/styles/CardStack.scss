@@ -1,0 +1,237 @@
+@use 'variables' as *;
+
+// ── RSVP Content (inside Modal) ─────────────────────────
+
+.rsvp-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+
+  &__stage {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__actions {
+    z-index: 999;
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    position: absolute;
+    bottom: -25px;
+  }
+}
+
+// ── Accept / Reject Buttons ─────────────────────────────
+
+.rsvp-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+  transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+
+  &:hover:not(:disabled) {
+    transform: scale(1.12);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  &--reject {
+    background: #e66868;
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      background: #d45555;
+    }
+  }
+
+  &--accept {
+    background: #81d47d;
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      background: #6ec46a;
+    }
+  }
+}
+
+// ── Envelope (sits below the card) ──────────────────────
+
+.envelope-wrapper {
+  position: absolute;
+  width: 200px;
+  height: 120px;
+  perspective: 800px;
+  perspective-origin: 50% 0;
+  bottom: -200px;
+
+  @media (max-width: $bp-mobile) {
+    width: 160px;
+    height: 100px;
+  }
+}
+
+.envelope__back {
+  position: absolute;
+  inset: 0;
+  background-color: #e9b004;
+  z-index: 1;
+  border-radius: 0 0 6px 6px;
+}
+
+.envelope__front {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #ffc000 50%, #ffcc00 50%);
+  clip-path: polygon(0 100%, 50% 20%, 100% 100%);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.envelope__opener {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background-color: #d19d02;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  z-index: 4;
+  transform-origin: 50% 0%;
+  // Starts open (flipped up/back)
+  transform: rotateX(180deg);
+  pointer-events: none;
+}
+
+// After card flies in, close the flap
+.envelope-wrapper--closing .envelope__opener {
+  animation: flapClose 0.6s ease-in 0.2s forwards;
+}
+
+// ── Card Stack ──────────────────────────────────────────
+
+.card-stack {
+  position: relative;
+  width: 520px;
+  aspect-ratio: 4 / 5;
+  z-index: 2; // Above envelope
+
+  @media (max-width: $bp-mobile) {
+    width: 90vw;
+  }
+
+  &__item {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+
+    &--accept {
+      animation: cardIntoEnvelope 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    &--reject {
+      animation: slametReject 0.5s forwards;
+      transform-origin: 50% 100%;
+    }
+  }
+
+  &__card {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    box-sizing: border-box;
+    color: $color-text;
+    font-family: $font-body;
+    text-align: center;
+
+    h2 {
+      font-family: $font-heading;
+      font-weight: 500;
+      font-size: 1.5rem;
+      margin: 0 0 0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    p {
+      font-weight: 300;
+      font-size: 1rem;
+      margin: 0;
+      opacity: 0.8;
+    }
+  }
+}
+
+// ── Keyframes ───────────────────────────────────────────
+
+// Card shrinks and slides down into the envelope below
+@keyframes cardIntoEnvelope {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(85%) scale(0.25);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(70%) scale(0.2);
+    opacity: 1;
+  }
+}
+
+@keyframes slametReject {
+  to {
+    opacity: 0;
+    transform: rotate3d(1, 0, 0, -90deg);
+  }
+}
+
+// Opener flap closes from open (180deg) to flat (0deg)
+@keyframes flapClose {
+  0%   { transform: rotateX(180deg); }
+  100% { transform: rotateX(0deg); }
+}
+
+// ── Reduced Motion ──────────────────────────────────────
+
+@media (prefers-reduced-motion: reduce) {
+  .card-stack__item {
+    transition: none !important;
+
+    &--accept,
+    &--reject {
+      animation: none !important;
+      opacity: 0;
+      transition: opacity 0.15s ease-out !important;
+    }
+  }
+
+  .envelope__opener {
+    animation: none !important;
+  }
+
+  .envelope-wrapper--closing .envelope__opener {
+    transform: rotateX(0deg);
+  }
+}

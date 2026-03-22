@@ -4,6 +4,7 @@ import WaveText from './WaveText';
 import TravelModal from './TravelModal';
 import HotelModal from './HotelModal';
 import FAQModal from './FAQModal';
+import RSVPOverlay from './RSVPOverlay';
 
 export default function Navigation({ openModal, setOpenModal, setIsSceneExpanded, isMenuOpen, setIsMenuOpen }) {
   const handleLinkClick = (e, link) => {
@@ -88,6 +89,10 @@ export default function Navigation({ openModal, setOpenModal, setIsSceneExpanded
       )}
       {createPortal(
         <FAQModal isOpen={openModal === 'faq'} onClose={closeModal} onCloseStart={handleCloseStart} closeDelay={0} />,
+        document.body
+      )}
+      {createPortal(
+        <RSVPOverlay isOpen={openModal === 'rsvp'} onClose={closeModal} onCloseStart={handleCloseStart} closeDelay={0} />,
         document.body
       )}
     </>

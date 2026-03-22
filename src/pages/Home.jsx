@@ -4,10 +4,10 @@ import Slider from '../components/Slider';
 import '../styles/Home.scss';
 import '../styles/Ocean.scss';
 
-function Home({ isModalOpen }) {
+function Home({ isModalOpen, onOpenModal }) {
   return (
     <section className="home">
-      <OceanScene isModalOpen={isModalOpen} />
+      <OceanScene isModalOpen={isModalOpen} onOpenModal={onOpenModal} />
     </section>
   );
 }

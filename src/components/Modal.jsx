@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import '../styles/Modal.scss';
 
-export default function Modal({ isOpen, onClose, onCloseStart, closeDelay = 0, children }) {
+export default function Modal({ isOpen, onClose, onCloseStart, closeDelay = 0, className = '', children }) {
   const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
@@ -28,8 +28,8 @@ export default function Modal({ isOpen, onClose, onCloseStart, closeDelay = 0, c
 
   return (
     <>
-      <div className={`modal__backdrop ${isClosing ? 'modal__backdrop--closing' : ''}`} onClick={handleClose} />
-      <div className='modal__content'>
+      <div className={`modal__backdrop ${isClosing ? 'modal__backdrop--closing' : ''} ${className}`} onClick={handleClose} />
+      <div className={`modal__content ${className}`}>
         <button className={`modal__close${isClosing ? ' modal__close--closing' : ''}`} onClick={handleClose} aria-label='Close modal'>
           ×
         </button>

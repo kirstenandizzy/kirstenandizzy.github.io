@@ -48,7 +48,7 @@ const smoothstep = (edge0, edge1, x) => {
   return t * t * (3 - 2 * t);
 };
 
-function OceanWater({ timeOfDay, lightX, lightY, lightZ, sunColorHex, moonLightIntensity, moonColorHex, skyHorizonHex }) {
+function OceanWater({ timeOfDay, lightX, lightY, lightZ, sunColorHex, moonLightIntensity, moonColorHex, skyHorizonHex, onReady }) {
 
   // Compute water color based on sky colors and time of day
   // Water reflects the sky, so use the horizon/mid sky colors but darker and more saturated
@@ -86,6 +86,7 @@ function OceanWater({ timeOfDay, lightX, lightY, lightZ, sunColorHex, moonLightI
       if (!mounted) return; // Ignore if component unmounted
       tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
       setWaterNormals(tex);
+      if (onReady) onReady();
     });
     return () => {
       mounted = false;
@@ -376,7 +377,7 @@ function CameraTilt({ angle }) {
 
 // ─── Main Scene ───
 
-function Scene({ timeOfDay }) {
+function Scene({ timeOfDay, onReady }) {
   const { scene } = useThree();
   const petalDataRef = useRef();
 
@@ -445,13 +446,14 @@ function Scene({ timeOfDay }) {
         moonLightIntensity={solar.moonLightIntensity}
         moonColorHex={solar.moonColorHex}
         skyHorizonHex={solar.skyHorizonHex}
+        onReady={onReady}
       />
       <PostProcessing timeOfDay={timeOfDay} />
     </>
   );
 }
 
-export default function OceanScene({ isModalOpen }) {
+export default function OceanScene({ isModalOpen, onOpenModal }) {
   const [timeOfDay, setTimeOfDay] = useState(17); // Start at 5:00 PM
   const [sliderVisible, setSliderVisible] = useState(true);
   const containerRef = useRef();
@@ -576,8 +578,19 @@ export default function OceanScene({ isModalOpen }) {
     ? { position: [0, 20, 280], fov: 55, near: 1, far: 500000 }
     : { position: [0, 15, 80], fov: 55, near: 1, far: 500000 };
 
+  const [sceneReady, setSceneReady] = useState(false);
+
   return (
     <div ref={containerRef} className="ocean-canvas">
+      {!sceneReady && (
+        <div className="ocean-canvas__loader">
+          <div className="ocean-canvas__loader-dots">
+            <span />
+            <span />
+            <span />
+          </div>
+        </div>
+      )}
       <Canvas
         camera={cameraProps}
         gl={{
@@ -591,9 +604,9 @@ export default function OceanScene({ isModalOpen }) {
         shadows
       >
         {isMobile && <CameraTilt angle={-0.32} />}
-        <Scene timeOfDay={timeOfDay} />
+        <Scene timeOfDay={timeOfDay} onReady={() => setSceneReady(true)} />
       </Canvas>
-      <CanvasButton />
+      <CanvasButton onOpenModal={onOpenModal} />
       <div className={`ocean-canvas__slider${sliderVisible ? '' : ' ocean-canvas__slider--hidden'}`}>
         <Slider min={0} max={24} step={0.05} value={timeOfDay} onChange={setTimeOfDay} />
       </div>

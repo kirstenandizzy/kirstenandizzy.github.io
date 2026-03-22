@@ -2,16 +2,21 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import PixelSprite from '../PixelSprite';
 import useSpriteAnimation from './useSpriteAnimation';
 
-const PHASES = ['opening', 'extending', 'held', 'retracting'];
-const MAX_TONGUE_SEGMENTS = 6;
+const MAX_TONGUE_SEGMENTS = 15;
 const EXTEND_INTERVAL = 40; // ms per segment added
 const HOLD_DURATION = 150;  // ms to hold at full extension
+const SEGMENT_PX = 7;       // px per segment (before scale)
+const BASE_OFFSET_PX = 51;  // approximate px from Yoshi x to tongue start + end piece (at scale 2)
 
-export default function YoshiTongue({ sheet, animations, scale = 2, onComplete }) {
+const TONGUE_Y_TOLERANCE = 30; // max vertical distance (in bottom-coords) for a tongue hit
+
+export default function YoshiTongue({ sheet, animations, scale = 2, onComplete, getNPCPositions, yoshiX, yoshiY, facing, onHit }) {
   const [phase, setPhase] = useState('opening');
   const [segmentCount, setSegmentCount] = useState(0);
+  const [caughtNPC, setCaughtNPC] = useState(null);
   const intervalRef = useRef(null);
   const holdTimeoutRef = useRef(null);
+  const hitRef = useRef(null);
 
   const tongueConfig = animations.tongue;
   if (!tongueConfig || tongueConfig.type !== 'composite') return null;
@@ -23,7 +28,25 @@ export default function YoshiTongue({ sheet, animations, scale = 2, onComplete }
     setPhase('extending');
   }, []);
 
-  // Extending phase: add segments one by one
+  // Calculate tongue tip reach in px from yoshiX for a given segment count
+  const getTongueReach = useCallback((count) => {
+    return BASE_OFFSET_PX + SEGMENT_PX * scale * count;
+  }, [scale]);
+
+  // Check if tongue has reached any NPC
+  const checkHit = useCallback((count) => {
+    if (!getNPCPositions) return null;
+    const positions = getNPCPositions();
+    const reach = getTongueReach(count);
+
+    return positions.find(npc => {
+      const dist = facing === 'right' ? npc.x - yoshiX : yoshiX - npc.x;
+      const vertDist = Math.abs((npc.y ?? 0) - (yoshiY ?? 0));
+      return dist > 0 && dist <= reach && vertDist <= TONGUE_Y_TOLERANCE;
+    }) || null;
+  }, [getNPCPositions, yoshiX, yoshiY, facing, getTongueReach]);
+
+  // Extending phase: add segments one by one, stop on NPC hit
   useEffect(() => {
     if (phase !== 'extending') return;
 
@@ -33,6 +56,17 @@ export default function YoshiTongue({ sheet, animations, scale = 2, onComplete }
     intervalRef.current = setInterval(() => {
       count++;
       setSegmentCount(count);
+
+      const hit = checkHit(count);
+      if (hit) {
+        clearInterval(intervalRef.current);
+        hitRef.current = hit;
+        setCaughtNPC(hit.id);
+        if (onHit) onHit(hit.id);
+        setPhase('retracting');
+        return;
+      }
+
       if (count >= MAX_TONGUE_SEGMENTS) {
         clearInterval(intervalRef.current);
         setPhase('held');
@@ -40,9 +74,9 @@ export default function YoshiTongue({ sheet, animations, scale = 2, onComplete }
     }, EXTEND_INTERVAL);
 
     return () => clearInterval(intervalRef.current);
-  }, [phase]);
+  }, [phase, checkHit, onHit]);
 
-  // Held phase: pause then retract
+  // Held phase: pause then retract (only on miss)
   useEffect(() => {
     if (phase !== 'held') return;
 
@@ -64,6 +98,8 @@ export default function YoshiTongue({ sheet, animations, scale = 2, onComplete }
       if (count <= 0) {
         clearInterval(intervalRef.current);
         setSegmentCount(0);
+        setCaughtNPC(null);
+        hitRef.current = null;
         if (onComplete) onComplete();
         return;
       }

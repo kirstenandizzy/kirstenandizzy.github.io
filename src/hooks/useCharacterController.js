@@ -14,7 +14,7 @@ const JUMP_KEYS = new Set(['ArrowUp', 'w', 'W']);
 const GRAVITY = 800;    // px/s²
 const JUMP_VELOCITY = 300; // px/s
 
-export default function useCharacterController({ enabled = false, bounds = { left: 0, right: 400 }, speed = 120, initialX, initialY = 0, getGroundLevel, onTongueComplete }) {
+export default function useCharacterController({ enabled = false, bounds = { left: 0, right: 400 }, speed = 120, initialX, initialY = 0, getGroundLevel, onTongueComplete, recallTarget, onRecallReached }) {
   const [x, setX] = useState(() => initialX ?? (bounds.left + bounds.right) / 2);
   const [y, setY] = useState(initialY);
   const [facing, setFacing] = useState('right');
@@ -31,6 +31,18 @@ export default function useCharacterController({ enabled = false, bounds = { lef
   const attackingRef = useRef(false);
   const enabledRef = useRef(enabled);
   const getGroundLevelRef = useRef(getGroundLevel);
+
+  // Recall refs
+  const recallTargetRef = useRef(recallTarget);
+  const onRecallReachedRef = useRef(onRecallReached);
+  const recallReachedRef = useRef(false);
+  recallTargetRef.current = recallTarget;
+  onRecallReachedRef.current = onRecallReached;
+
+  // Reset recallReached when recallTarget changes
+  useEffect(() => {
+    recallReachedRef.current = false;
+  }, [recallTarget]);
 
   enabledRef.current = enabled;
   xRef.current = x;
@@ -71,9 +83,11 @@ export default function useCharacterController({ enabled = false, bounds = { lef
 
     const onKeyDown = (e) => {
       if (!enabledRef.current) return;
+      // Suppress all input during recall
+      if (recallTargetRef.current != null) return;
 
       // Tongue attack
-      if (e.key === ' ' || e.key === 'Spacebar') {
+      if (e.key === ' ' || e.key === 'Spacebar' || e.key === 'Enter') {
         e.preventDefault();
         if (!attackingRef.current) {
           attackingRef.current = true;
@@ -152,8 +166,32 @@ export default function useCharacterController({ enabled = false, bounds = { lef
       let curY = yRef.current;
       let vy = vyRef.current;
 
-      // Horizontal movement (allowed while airborne too)
-      if (!attackingRef.current) {
+      // Horizontal movement
+      if (recallTargetRef.current != null && !recallReachedRef.current) {
+        // Auto-walk toward recall target
+        const target = recallTargetRef.current;
+        const dir = target > curX ? 1 : -1;
+        curX += dir * speed * delta;
+
+        if ((dir > 0 && curX >= target) || (dir < 0 && curX <= target)) {
+          curX = target;
+          if (!recallReachedRef.current) {
+            recallReachedRef.current = true;
+            if (onRecallReachedRef.current) onRecallReachedRef.current();
+          }
+        }
+
+        xRef.current = curX;
+        setX(curX);
+        setFacing(dir > 0 ? 'right' : 'left');
+        // Cancel any tongue attack during recall
+        attackingRef.current = false;
+        setAction('walk');
+      } else if (recallReachedRef.current) {
+        // At target — stay idle
+        setAction('idle');
+      } else if (!attackingRef.current) {
+        // Normal keyboard-driven movement
         let dx = 0;
         if (keysDown.current.has('left')) dx -= speed * delta;
         if (keysDown.current.has('right')) dx += speed * delta;
@@ -179,7 +217,6 @@ export default function useCharacterController({ enabled = false, bounds = { lef
         if (!groundedRef.current) {
           groundedRef.current = true;
           setGrounded(true);
-          // Landed — set action based on current keys
           if (!attackingRef.current) {
             const hasMove = keysDown.current.has('left') || keysDown.current.has('right');
             setAction(hasMove ? 'walk' : 'idle');
@@ -206,9 +243,9 @@ export default function useCharacterController({ enabled = false, bounds = { lef
     };
   }, [enabled, speed, bounds.left, bounds.right]);
 
-  // Mobile input methods — called by joystick/tap UI
+  // Mobile input methods
   const setMobileDirection = useCallback((dir) => {
-    // dir: 'left' | 'right' | null
+    if (recallTargetRef.current != null) return; // suppress during recall
     keysDown.current.delete('left');
     keysDown.current.delete('right');
     if (dir) {
@@ -221,6 +258,7 @@ export default function useCharacterController({ enabled = false, bounds = { lef
   }, []);
 
   const triggerJump = useCallback(() => {
+    if (recallTargetRef.current != null) return; // suppress during recall
     if (groundedRef.current) {
       vyRef.current = JUMP_VELOCITY;
       groundedRef.current = false;
@@ -229,6 +267,7 @@ export default function useCharacterController({ enabled = false, bounds = { lef
   }, []);
 
   const triggerTongue = useCallback(() => {
+    if (recallTargetRef.current != null) return; // suppress during recall
     if (!attackingRef.current) {
       attackingRef.current = true;
       setAction('tongue');
