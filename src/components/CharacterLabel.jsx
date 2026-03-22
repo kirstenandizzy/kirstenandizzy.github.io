@@ -11,7 +11,8 @@ export default function CharacterLabel({ name, hoverName, color, bounce, repeat,
     if (hideInitial) return;
     timerRef.current = setTimeout(() => {
       setShowName(false);
-      if (hoverName) setHasShownOnce(true);
+      // Swap to hoverName only after the CSS opacity transition (0.8s) finishes
+      if (hoverName) setTimeout(() => setHasShownOnce(true), 800);
     }, fadeDelay);
     return () => { if (timerRef.current) clearTimeout(timerRef.current); };
   }, [hideInitial, hoverName, fadeDelay]);
