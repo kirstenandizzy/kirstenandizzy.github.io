@@ -77,7 +77,7 @@ function RSVPForm({ dataRef, submitting }) {
           <hr /><hr /><hr />
         </div>
 
-        <h1 className="rsvp-ticket__title">RSVP</h1>
+        <h2 className="rsvp-ticket__title">RSVP</h2>
         <p className="rsvp-ticket__subtitle">For the Ceremony &amp; Reception</p>
 
         <div className="rsvp-ticket__date-row">
