@@ -5,7 +5,7 @@ export default function Balloon({ sheet, animations, scale, startX, startY, colo
   const [animation, setAnimation] = useState(`${color}-idle`);
   const [falling, setFalling] = useState(false);
   const [photoStyle, setPhotoStyle] = useState({ opacity: 1, y: 0 });
-  const [photoExpanded, setPhotoExpanded] = useState(false);
+  const [photoExpanded] = useState(false);
   const [photoShrunk, setPhotoShrunk] = useState(false);
   const photoTapped = useRef(false);
   const shrinkTimerRef = useRef(null);
@@ -142,7 +142,8 @@ export default function Balloon({ sheet, animations, scale, startX, startY, colo
                   photoTapped.current = false;
                 }, 2000);
               } else {
-                setPhotoExpanded(v => !v);
+                // Desktop — pop the balloon
+                handleClick();
               }
             }}
           >

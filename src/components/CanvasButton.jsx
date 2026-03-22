@@ -239,13 +239,14 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
   }, []);
 
   const allNPCsOutRef = useRef(false);
+  const eatenCountRef = useRef(0);
   const checkAllNPCsOut = useCallback(() => {
     // Once all NPCs are out, stay true — eating an NPC shouldn't freeze the rest
     if (allNPCsOutRef.current) return;
     // All NPCs are out only when every NPC from both queues has been launched AND landed
     const allLaunched = npcQueueIndex.current >= GIRLS_NPC_QUEUE.length && guysQueueIndex.current >= GUYS_NPC_QUEUE.length;
     if (!allLaunched) return;
-    const totalExpected = GIRLS_NPC_QUEUE.length + GUYS_NPC_QUEUE.length;
+    const totalExpected = GIRLS_NPC_QUEUE.length + GUYS_NPC_QUEUE.length - eatenCountRef.current;
     const totalLanded = npcPositionsRef.current.length;
     if (totalLanded >= totalExpected) {
       allNPCsOutRef.current = true;
@@ -355,6 +356,8 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
       setActiveNPCs(prev => prev.filter(n => n.id !== npcId));
     }
     npcPositionsRef.current = npcPositionsRef.current.filter(p => p.id !== npcId);
+    eatenCountRef.current += 1;
+    checkAllNPCsOut();
     const dir = facingRef.current;
     const eggX = dir === 'right' ? xRef.current - 5 : xRef.current + 5;
     eggIdRef.current += 1;
@@ -374,7 +377,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
         }, 1000);
       }
     }
-  }, [launchNextNPC, launchNextGuysNPC]);
+  }, [launchNextNPC, launchNextGuysNPC, checkAllNPCsOut]);
 
   // Yoshi reached pipe during recall
   const handleRecallReached = useCallback(() => {
@@ -404,6 +407,8 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
       setPipeState('retracting');
       setRecalling(false);
       setAllNPCsOut(false);
+      allNPCsOutRef.current = false;
+      eatenCountRef.current = 0;
       npcQueueIndex.current = 0;
       guysQueueIndex.current = 0;
       npcPositionsRef.current = [];
