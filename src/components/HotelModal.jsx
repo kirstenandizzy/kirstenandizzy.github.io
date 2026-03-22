@@ -12,6 +12,7 @@ export default function HotelModal({ isOpen, onClose, onCloseStart, closeDelay }
           <div className="hotel-card__content">
             <h3>Sonesta Select</h3>
             <p className="hotel-card__address">600 Hope Rd, Tinton Falls, NJ 07724</p>
+            <p className="hotel-card__drive-time">Room Block Code: <strong style={{ fontFamily: 'courier new', letterSpacing: '0.1em' }}>091926ENGI_1</strong></p>
             <p className="hotel-card__drive-time">🚗 25 min drive</p>
 
             <div className="hotel-card__pills">
