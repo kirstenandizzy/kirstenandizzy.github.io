@@ -576,7 +576,10 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
 
   return (
     <div ref={containerRef} className="ocean-canvas" onClick={(e) => {
-      window.dispatchEvent(new CustomEvent('ocean-click', { detail: { x: e.clientX, y: e.clientY } }));
+      // Only navigate ship if clicking directly on the canvas background, not interactive children
+      if (e.target === e.currentTarget || e.target.closest('canvas')) {
+        window.dispatchEvent(new CustomEvent('ocean-click', { detail: { x: e.clientX, y: e.clientY } }));
+      }
     }}>
       {!loaderRemoved && (
         <div className={`ocean-canvas__loader${sceneReady ? ' ocean-canvas__loader--ready' : ''}`}>

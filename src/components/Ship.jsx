@@ -153,7 +153,7 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
         bottom: y,
         transform: 'translateX(-50%)',
         pointerEvents: 'none',
-        zIndex: 998,
+        zIndex: 10,
         opacity: visible ? 1 : 0,
         transition: 'opacity 0.6s ease-in',
       }}
