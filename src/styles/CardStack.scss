@@ -10,6 +10,34 @@
   }
 }
 
+.rsvp-ticket__title-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+  @media (max-width: $bp-mobile) {
+    gap: 0px;
+  }
+}
+
+.rsvp-ticket__title-group {
+  margin-top: 12px;
+
+  @media (max-width: $bp-mobile) {
+    margin-top: .3rem;
+  }
+}
+
+.rsvp-ticket__lines {
+  width: 100%;
+}
+
+.rsvp-ticket__title {
+  line-height: 2.5rem;
+}
+
 // ── RSVP Content (inside Modal) ─────────────────────────
 
 .rsvp-content {
