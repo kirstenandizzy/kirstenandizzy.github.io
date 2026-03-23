@@ -46,7 +46,7 @@
   > .slider__content > div:has(.slider__events) {
     opacity: 0;
     animation: slider-stagger-in 1s ease forwards;
-    animation-delay: calc(var(--i) * 300ms);
+    animation-delay: calc(var(--i) * 500ms);
   }
 
   &__timeline {
@@ -296,7 +296,7 @@
     span:nth-child(1) {
       font-size: 1.15rem;
       opacity: .75;
-      line-height: 20px
+      line-height: 16px
     }
 
     span:nth-child(2) {
