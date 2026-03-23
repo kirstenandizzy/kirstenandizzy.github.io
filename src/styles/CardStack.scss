@@ -99,6 +99,9 @@
   color: rgba(255, 255, 255, 0.85);
   opacity: 0;
   animation: fadeIn 0.6s ease-out 1.8s forwards;
+  background: black;
+  border-radius: 8px;
+  padding: 0.5rem;
 }
 
 @keyframes fadeIn {

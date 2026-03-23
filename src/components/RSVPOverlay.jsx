@@ -264,7 +264,7 @@ export default function RSVPOverlay({ isOpen, onClose, onCloseStart, closeDelay 
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} onCloseStart={onCloseStart} closeDelay={closeDelay} className={`modal--rsvp${accepted ? ' modal--rsvp-done' : ''}`} innerClassName={animDone ? 'modal__content-inner--done' : ''}>
-        <div className="rsvp-content">
+        <div className="rsvp-content" style={animDone ? { pointerEvents: 'none' } : undefined}>
           <div className="rsvp-content__stage">
             <Envelope closing={accepted && !animDone} done={animDone}>
               {stack?.element}
