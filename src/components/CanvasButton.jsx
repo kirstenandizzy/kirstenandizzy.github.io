@@ -9,8 +9,8 @@ import WaluigiMinion from './WaluigiMinion';
 import CharacterLabel from './CharacterLabel';
 import { pipeSheet, ALLOWED_PIPE_COLORS } from '../sprites/sheets/pipes';
 import { yoshiSheet, YOSHI_ANIMATIONS } from '../sprites/sheets/yoshi';
-import { eggSheet } from '../sprites/sheets/egg';
-import { balloonSheet, BALLOON_ANIMATIONS, BALLOON_SCALE, BALLOON_COLORS } from '../sprites/sheets/balloon';
+import { eggSheet, eggGoldSheet } from '../sprites/sheets/egg';
+import { balloonSheet, BALLOON_ANIMATIONS, BALLOON_SCALE } from '../sprites/sheets/balloon';
 import Balloon from './Balloon';
 import Ship from './Ship';
 import { peachSheet, PEACH_ANIMATIONS, PEACH_SCALE } from '../sprites/sheets/peach';
@@ -361,7 +361,8 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
     // position its top so that bottom edge aligns with the egg.
     const balloonSpriteHeight = 75; // ~30px sprite * 2.5 scale
     const viewportY = clipRect ? clipRect.bottom - (eggBottomY || 0) - balloonSpriteHeight : window.innerHeight - 100;
-    const color = BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)];
+    const glowNPC = [...GIRLS_NPC_QUEUE, ...GUYS_NPC_QUEUE].find(n => n.id === npcId);
+    const color = glowNPC?.glowColor ? 'orange' : 'blue';
     const photo = NPC_PHOTO_MAP[npcId];
     balloonIdRef.current += 1;
     setBalloons(prev => [...prev, { id: balloonIdRef.current, x: viewportX, y: viewportY, color, photo }]);
@@ -382,7 +383,9 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
     const eggX = dir === 'right' ? xRef.current - 5 : xRef.current + 5;
     eggIdRef.current += 1;
     const rollDir = dir === 'right' ? 'left' : 'right';
-    setEggs(prev => [...prev, { id: eggIdRef.current, x: eggX, rollDirection: rollDir, npcId }]);
+    const npcConfig = [...GIRLS_NPC_QUEUE, ...GUYS_NPC_QUEUE].find(n => n.id === npcId);
+    const eggGlow = npcConfig?.glowColor ? '#FFD700' : undefined;
+    setEggs(prev => [...prev, { id: eggIdRef.current, x: eggX, rollDirection: rollDir, npcId, glowColor: eggGlow }]);
     // Queue next NPC spawn from the correct queue since this one was eaten
     if (!recallingRef.current) {
       if (isGuy) {
@@ -689,12 +692,13 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
         {eggs.map((egg, i) => (
           <YoshiEgg
             key={egg.id}
-            sheet={eggSheet}
+            sheet={egg.glowColor ? eggGoldSheet : eggSheet}
             x={egg.x}
             rollDirection={egg.rollDirection || 'left'}
             rolling={recalling}
             bounds={moveBounds}
             showLabel={i === eggs.length - 1}
+            glowColor={egg.glowColor}
             onHatch={(hatchX, hatchBottomY) => { removeEgg(egg.id); spawnBalloon(hatchX ?? egg.x, hatchBottomY, egg.npcId); }}
             onFallOff={() => removeEgg(egg.id)}
           />

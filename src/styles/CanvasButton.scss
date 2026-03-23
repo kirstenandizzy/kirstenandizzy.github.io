@@ -315,6 +315,67 @@
 
   &.egg-medium { animation-duration: 0.8s; }
   &.egg-large  { animation-duration: 0.5s; pointer-events: auto; cursor: url('/cursors/pinkheart_linkselect.cur'), pointer; }
+
+  &.egg-glow {
+    filter: drop-shadow(0 0 6px var(--egg-glow-color))
+            drop-shadow(0 0 14px var(--egg-glow-color));
+    animation: egg-wobble 1.2s ease-in-out infinite, egg-gold-glow 2s ease-in-out infinite;
+    overflow: visible;
+
+    &.egg-medium { animation: egg-wobble 0.8s ease-in-out infinite, egg-gold-glow 2s ease-in-out infinite; }
+    &.egg-large  { animation: egg-wobble 0.5s ease-in-out infinite, egg-gold-glow 2s ease-in-out infinite; }
+
+  }
+}
+
+@keyframes egg-gold-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 6px var(--egg-glow-color))
+            drop-shadow(0 0 14px color-mix(in srgb, var(--egg-glow-color) 60%, transparent));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px var(--egg-glow-color))
+            drop-shadow(0 0 22px color-mix(in srgb, var(--egg-glow-color) 80%, transparent));
+  }
+}
+
+.egg-shine-clip {
+  position: absolute;
+  inset: 5% 10%;
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.egg-shine-stripe {
+  position: absolute;
+  top: -10%;
+  left: -20%;
+  width: 8px;
+  height: 120%;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 10px 4px rgba(255, 215, 0, 0.3);
+  transform: skewX(-20deg);
+  animation: egg-shine 2s linear infinite;
+}
+
+@keyframes egg-shine {
+  0% {
+    left: -20%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  35% {
+    opacity: 0;
+    left: 120%;
+  }
+  100% {
+    opacity: 0;
+    left: 120%;
+  }
 }
 
 .balloon {

@@ -7,6 +7,7 @@ const EGG_SPRITES = {
 };
 
 export const eggSheet = new SpriteSheet('/assets/egg.png', 346, 159, EGG_SPRITES);
+export const eggGoldSheet = new SpriteSheet('/assets/egg-gold.png', 346, 159, EGG_SPRITES);
 
 export const EGG_STAGES = ['egg-small', 'egg-medium', 'egg-large'];
 export const EGG_GROW_INTERVAL = 1500; // ms between stage transitions

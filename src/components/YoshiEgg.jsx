@@ -6,7 +6,28 @@ import { EGG_STAGES, EGG_GROW_INTERVAL, EGG_SCALE } from '../sprites/sheets/egg'
 const EGG_ROLL_SPEED = 40; // px/s
 const FALL_GRAVITY = 600;  // px/s²
 
-export default function YoshiEgg({ sheet, x: initialX, rollDirection = 'left', rolling = false, bounds, showLabel = true, onHatch, onFallOff }) {
+function EggShine() {
+  const [visible, setVisible] = useState(() => Math.random() < 0.5);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const handleIteration = () => {
+      setVisible(Math.random() < 0.5);
+    };
+    el.addEventListener('animationiteration', handleIteration);
+    return () => el.removeEventListener('animationiteration', handleIteration);
+  }, []);
+
+  return (
+    <div className="egg-shine-clip">
+      <div ref={ref} className="egg-shine-stripe" style={{ visibility: visible ? 'visible' : 'hidden' }} />
+    </div>
+  );
+}
+
+export default function YoshiEgg({ sheet, x: initialX, rollDirection = 'left', rolling = false, bounds, showLabel = true, glowColor, onHatch, onFallOff }) {
   const [stage, setStage] = useState(0);
   const [eggX, setEggX] = useState(initialX);
   const [bottomY, setBottomY] = useState(0);
@@ -101,17 +122,19 @@ export default function YoshiEgg({ sheet, x: initialX, rollDirection = 'left', r
   let className = 'yoshi-egg';
   if (stage === 1) className += ' egg-medium';
   if (stage >= 2) className += ' egg-large';
+  if (glowColor) className += ' egg-glow';
 
   return (
     <div
       className={className}
-      style={{ left: eggX, bottom: bottomY }}
+      style={{ left: eggX, bottom: bottomY, ...(glowColor ? { '--egg-glow-color': glowColor } : {}) }}
       onClick={handleClick}
     >
       {stage >= 2 && showLabel && (
         <CharacterLabel name="click me" color="#77dd77" bounce repeat repeatInterval={5000} />
       )}
       <PixelSprite sheet={sheet} name={stageName} scale={EGG_SCALE} />
+      {glowColor && <EggShine />}
     </div>
   );
 }
