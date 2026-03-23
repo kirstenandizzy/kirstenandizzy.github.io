@@ -1,6 +1,6 @@
 .hotel-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
   gap: 1.5rem;
   width: 100%;
   justify-items: center;
@@ -31,7 +31,7 @@
   position: relative;
   text-decoration: none !important;
   color: inherit;
-  overflow: visible;
+  overflow: hidden;
 
   * {
     text-decoration: none !important;
