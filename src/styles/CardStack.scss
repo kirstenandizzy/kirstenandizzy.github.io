@@ -170,7 +170,7 @@
 
   &--closing,
   &--done {
-    transform: translateY(-500px);
+    transform: translateY(400px);
     width: auto;
 
     @media (max-width: $bp-mobile) {
