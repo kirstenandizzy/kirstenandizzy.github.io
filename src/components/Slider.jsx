@@ -64,7 +64,7 @@ const EVENTS = [
   { eventLabel: 'Cocktail Hour', timeLabel: '6:00', value: 18 },
   { eventLabel: 'Dinner', timeLabel: '7:00', value: 19 },
   { eventLabel: 'Reception', timeLabel: '8:00', value: 20 },
-  { eventLabel: 'La Fin', timeLabel: '11:00', value: 23 }
+  { eventLabel: 'Fin', timeLabel: '11:00', value: 23 }
 ];
 
 const formatTimeOfDay = (hours) => {
