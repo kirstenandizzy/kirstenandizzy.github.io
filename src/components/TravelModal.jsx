@@ -32,7 +32,7 @@ const TAXI_OPTIONS = [
 
 export default function TravelModal({ isOpen, onClose, onCloseStart, closeDelay }) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} onCloseStart={onCloseStart} closeDelay={closeDelay}>
+    <Modal isOpen={isOpen} onClose={onClose} onCloseStart={onCloseStart} closeDelay={closeDelay} className="modal--travel">
       <div className="travel-cards">
         {TRAVEL_OPTIONS.map((option, index) => (
           <Card key={index} className="travel-card" style={{ '--i': index }}>
