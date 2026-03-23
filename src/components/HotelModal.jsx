@@ -3,7 +3,7 @@ import '../styles/HotelModal.scss';
 
 export default function HotelModal({ isOpen, onClose, onCloseStart, closeDelay }) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} onCloseStart={onCloseStart} closeDelay={closeDelay}>
+    <Modal isOpen={isOpen} onClose={onClose} onCloseStart={onCloseStart} closeDelay={closeDelay} className="modal--hotels">
       <div className="hotel-cards">
         <a href="https://www.sonesta.com/sonesta-select/nj/tinton-falls/sonesta-select-tinton-falls-eatontown?isGroupCode=true&groupCode=091926ENGI_1&checkin=2026-09-19&checkout=2026-09-21" target="_blank" rel="noopener noreferrer" className="hotel-card hotel-card--featured" style={{ '--i': 0 }}>
           <div className="hotel-card__image">
