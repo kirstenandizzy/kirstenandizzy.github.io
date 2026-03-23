@@ -287,7 +287,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
     return (
       <div className='slider slider--mobile' ref={containerRef}>
         <h3 style={{ '--i': 0 }}>
-          <span>Timeline of Events</span>
+          <span>Schedule of Events</span>
           <span>Sunday, September 20th, 2026</span>
           <span className='alex-brush-regular'>
             <a className='location-link' href='https://www.google.com/maps?daddr=931+Ocean+Ave,+Sea+Bright,+NJ+07760' target='_blank' rel='noopener noreferrer'>
@@ -344,7 +344,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
   return (
     <div className='slider' ref={containerRef}>
       <h3 style={{ '--i': 0 }}>
-        <span>Timeline of Events</span>
+        <span>Schedule of Events</span>
         <span>Sunday, September 20th, 2026</span>
         <span className='alex-brush-regular'>
           <a className='location-link' href='https://www.google.com/maps?daddr=931+Ocean+Ave,+Sea+Bright,+NJ+07760' target='_blank' rel='noopener noreferrer'>
