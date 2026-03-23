@@ -14,7 +14,7 @@ const CARDS = [
 
 const GUEST_ROWS = 8;
 
-function RSVPForm({ dataRef, submitting }) {
+function RSVPForm({ dataRef, submitting, actions }) {
   const [names, setNames] = useState(() => Array.from({ length: GUEST_ROWS }, () => ''));
   const [checks, setChecks] = useState(
     () => Array.from({ length: GUEST_ROWS }, () => ({ yes: false, no: false }))
@@ -167,6 +167,7 @@ function RSVPForm({ dataRef, submitting }) {
             </tr>
           </tbody>
         </table>
+        {actions}
       </div>
     </div>
   );
@@ -267,12 +268,45 @@ export default function RSVPOverlay({ isOpen, onClose, onCloseStart, closeDelay 
     if (card.type !== 'form') return;
   }, []);
 
+  const stackRef = useRef(null);
+
   const renderCard = useCallback((card) => {
     if (card.type === 'form') {
-      return <RSVPForm dataRef={dataRef} submitting={submitting} />;
+      const actions = !accepted ? (
+        <div className="rsvp-content__actions">
+          <button
+            className="rsvp-btn rsvp-btn--accept"
+            onClick={async () => {
+              const ok = await handleSubmit();
+              if (ok) {
+                const el = envelopeRef.current;
+                if (el) {
+                  const rect = el.getBoundingClientRect();
+                  setEnvelopePos({ top: rect.top, left: rect.left, width: rect.width, height: rect.height });
+                }
+                setAccepted(true);
+                stackRef.current?.accept();
+              }
+            }}
+            disabled={stackRef.current?.isAnimating || submitting}
+            aria-label="Accept RSVP"
+          >
+            {submitting ? '…' : (
+              <>
+                Send
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                </svg>
+              </>
+            )}
+          </button>
+          {error && <p className="rsvp-error">{error}</p>}
+        </div>
+      ) : null;
+      return <RSVPForm dataRef={dataRef} submitting={submitting} actions={actions} />;
     }
     return null;
-  }, [submitting]);
+  }, [submitting, accepted, error, handleSubmit]);
 
   const stack = CardStack({
     cards: CARDS,
@@ -280,6 +314,7 @@ export default function RSVPOverlay({ isOpen, onClose, onCloseStart, closeDelay 
     onAccept: handleAccept,
     onReject: handleReject,
   });
+  stackRef.current = stack;
 
   return (
     <>
@@ -292,38 +327,6 @@ export default function RSVPOverlay({ isOpen, onClose, onCloseStart, closeDelay 
               </div>
             </Envelope>
           </div>
-          {!accepted && (
-            <div className="rsvp-content__actions">
-              <button
-                className="rsvp-btn rsvp-btn--accept"
-                onClick={async () => {
-                const ok = await handleSubmit();
-                if (ok) {
-                  // Capture envelope position BEFORE any state changes
-                  const el = envelopeRef.current;
-                  if (el) {
-                    const rect = el.getBoundingClientRect();
-                    setEnvelopePos({ top: rect.top, left: rect.left, width: rect.width, height: rect.height });
-                  }
-                  setAccepted(true);
-                  stack?.accept();
-                }
-              }}
-                disabled={stack?.isAnimating || submitting}
-                aria-label="Accept RSVP"
-              >
-                {submitting ? '…' : (
-                  <>
-                    Send
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                    </svg>
-                  </>
-                )}
-              </button>
-              {error && <p className="rsvp-error">{error}</p>}
-            </div>
-          )}
         </div>
       </Modal>
       <RSVPShip isOpen={isOpen} />

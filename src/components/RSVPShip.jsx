@@ -5,14 +5,14 @@ import { kirbySheet, KIRBY_ANIMATIONS, KIRBY_SCALE } from '../sprites/sheets/kir
 import { foxSheet, FOX_ANIMATIONS, FOX_SCALE } from '../sprites/sheets/fox';
 import ShipPassenger from './ShipPassenger';
 
-const LERP_SPEED = 0.003;
-const ENTRANCE_LERP = 0.012;
+const LERP_SPEED = 0.0012;
+const ENTRANCE_LERP = 0.006;
 const TARGET_THRESHOLD = 15;
-const MIN_PAUSE = 2000;
-const MAX_PAUSE = 5000;
+const MIN_PAUSE = 3000;
+const MAX_PAUSE = 7000;
 const MAX_TILT_FRAMES = 2;
 const FRAME_LERP = 0.12;
-const SHIP_OPACITY = 1;
+const SHIP_OPACITY = 0.45;
 
 // Pick a target biased towards the sides of the viewport, avoiding the centered form
 function pickSideTarget(formCenterX, formHalfWidth, minY, maxY) {
