@@ -187,7 +187,7 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
           label={visible ? "kk" : null}
           hoverLabel="kirsten"
           labelColor="#f4a9a8"
-          labelFadeDelay={2000}
+          labelFadeDelay={2500}
           glowColor="#c89ef2"
           idleEmoteMin={800}
           idleEmoteMax={2000}
@@ -204,7 +204,7 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
           label={visible ? "kiko" : null}
           hoverLabel="israel"
           labelColor="#8fcaca"
-          labelFadeDelay={2000}
+          labelFadeDelay={2500}
           glowColor="#8fcaca"
           freezeAfterEmote
         />
