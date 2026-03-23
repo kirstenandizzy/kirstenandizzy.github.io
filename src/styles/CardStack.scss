@@ -10,6 +10,7 @@
   }
 }
 
+
 .rsvp-ticket__title-row {
   display: flex;
   flex-direction: column;
@@ -396,7 +397,7 @@
       text-transform: uppercase;
       font-family: courier, monospace;
       letter-spacing: 3px;
-      font-size: 12px;
+      font-size: .9rem;
       position: relative;
       top: -2px;
       transform: rotate(-1deg);
