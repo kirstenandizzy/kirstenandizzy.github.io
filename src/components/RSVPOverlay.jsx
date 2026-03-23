@@ -5,6 +5,7 @@ import submitRSVP from '../utils/submitRSVP';
 import Modal from './Modal';
 import CardStack from './CardStack';
 import WaveText from './WaveText';
+import RSVPShip from './RSVPShip';
 import '../styles/CardStack.scss';
 
 const CARDS = [
@@ -261,34 +262,37 @@ export default function RSVPOverlay({ isOpen, onClose, onCloseStart, closeDelay 
   });
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} onCloseStart={onCloseStart} closeDelay={closeDelay} className="modal--rsvp">
-      <div className="rsvp-content">
-        <div className="rsvp-content__stage">
-          <Envelope closing={accepted && !animDone} done={animDone}>
-            {stack?.element}
-          </Envelope>
-        </div>
-        {!accepted && (
-          <div className="rsvp-content__actions">
-            <button
-              className="rsvp-btn rsvp-btn--accept"
-              onClick={async () => { const ok = await handleSubmit(); if (ok) { setAccepted(true); stack?.accept(); } }}
-              disabled={stack?.isAnimating || submitting}
-              aria-label="Accept RSVP"
-            >
-              {submitting ? '…' : (
-                <>
-                  Send
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                  </svg>
-                </>
-              )}
-            </button>
-            {error && <p className="rsvp-error">{error}</p>}
+    <>
+      <Modal isOpen={isOpen} onClose={onClose} onCloseStart={onCloseStart} closeDelay={closeDelay} className={`modal--rsvp${accepted ? ' modal--rsvp-done' : ''}`} innerClassName={animDone ? 'modal__content-inner--done' : ''}>
+        <div className="rsvp-content">
+          <div className="rsvp-content__stage">
+            <Envelope closing={accepted && !animDone} done={animDone}>
+              {stack?.element}
+            </Envelope>
           </div>
-        )}
-      </div>
-    </Modal>
+          {!accepted && (
+            <div className="rsvp-content__actions">
+              <button
+                className="rsvp-btn rsvp-btn--accept"
+                onClick={async () => { const ok = await handleSubmit(); if (ok) { setAccepted(true); stack?.accept(); } }}
+                disabled={stack?.isAnimating || submitting}
+                aria-label="Accept RSVP"
+              >
+                {submitting ? '…' : (
+                  <>
+                    Send
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                    </svg>
+                  </>
+                )}
+              </button>
+              {error && <p className="rsvp-error">{error}</p>}
+            </div>
+          )}
+        </div>
+      </Modal>
+      <RSVPShip isOpen={isOpen} />
+    </>
   );
 }

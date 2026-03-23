@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import '../styles/Modal.scss';
 
-export default function Modal({ isOpen, onClose, onCloseStart, closeDelay = 0, className = '', children }) {
+export default function Modal({ isOpen, onClose, onCloseStart, closeDelay = 0, className = '', innerClassName = '', children }) {
   const [isClosing, setIsClosing] = useState(false);
   const containerRef = useRef(null);
   const closeRef = useRef(null);
@@ -75,7 +75,7 @@ export default function Modal({ isOpen, onClose, onCloseStart, closeDelay = 0, c
         <button ref={closeRef} className={`modal__close${isClosing ? ' modal__close--closing' : ''}`} onClick={handleClose} aria-label='Close modal'>
           ×
         </button>
-        <div className={`modal__content-inner${isClosing ? ' modal__content-inner--closing' : ''}`} onPointerDown={(e) => { if (e.target === e.currentTarget) handleClose(); }}>
+        <div className={`modal__content-inner${isClosing ? ' modal__content-inner--closing' : ''} ${innerClassName}`} onPointerDown={(e) => { if (e.target === e.currentTarget) handleClose(); }}>
           {children}
         </div>
       </div>

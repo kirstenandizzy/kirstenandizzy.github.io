@@ -68,8 +68,16 @@
       animation: scaleOut 0.45s ease-out forwards;
       transform-origin: center center;
     }
-  }
 
+    &--done {
+      width: auto !important;
+      max-width: 400px !important;
+    }
+  }
+}
+
+
+.modal {
   &__close {
     position: fixed;
     top: 2rem;
