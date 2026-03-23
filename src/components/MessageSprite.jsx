@@ -27,8 +27,9 @@ const SHEETS = {
 
 let nextId = 0;
 
-function randomEdgePosition() {
-  const sides = ['top', 'bottom', 'left', 'right'];
+function randomEdgePosition(excludeSides) {
+  let sides = ['top', 'bottom', 'left', 'right'];
+  if (excludeSides) sides = sides.filter(s => !excludeSides.includes(s));
   const side = sides[Math.floor(Math.random() * sides.length)];
   const along = Math.random() * 100;
   return { side, along };
@@ -79,12 +80,12 @@ function SpawnedMessage({ spawn, onDone }) {
   );
 }
 
-export default function MessageSprite({ children, className, onClick }) {
+export default function MessageSprite({ children, className, onClick, excludeSides }) {
   const [spawns, setSpawns] = useState([]);
   const pickRow = () => (Math.random() < 0.5 ? 'row1' : 'row2');
 
   const spawnMessage = useCallback(() => {
-    const { side, along } = randomEdgePosition();
+    const { side, along } = randomEdgePosition(excludeSides);
     const id = nextId++;
     setSpawns(prev => [...prev, { id, side, along, row: pickRow() }]);
   }, []);

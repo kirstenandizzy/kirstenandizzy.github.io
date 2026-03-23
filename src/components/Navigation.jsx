@@ -47,7 +47,7 @@ export default function Navigation({ openModal, setOpenModal, setIsSceneExpanded
         {/* Desktop three-column layout — hidden on mobile */}
         <ul className='navigation__list navigation__list--desktop'>
           <li>
-            <MessageSprite variant="horizontal">
+            <MessageSprite excludeSides={['top']}>
               <div className='navigation__header-multi-line' onClick={() => window.dispatchEvent(new Event('reset-party'))}>
                 <h1 className='the-girl-next-door-regular'>Kirsten and Israel</h1>
                 <p>｡ﾟ♡.(*♡´‿` 人´‿` ♡*)ﾟ♡ °・</p>
