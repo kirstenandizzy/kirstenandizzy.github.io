@@ -67,7 +67,7 @@ export default function CardStack({ cards, renderCard, onAccept, onReject, onCom
     return {
       isAnimating, isDone, accept, reject,
       element: (
-        <div className="card-stack" style={{ visibility: 'hidden', display: 'none'}}>
+        <div className="card-stack" style={{ visibility: 'hidden' }}>
           {renderCard(lastCard)}
         </div>
       ),

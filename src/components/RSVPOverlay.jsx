@@ -172,15 +172,33 @@ function RSVPForm({ dataRef, submitting }) {
   );
 }
 
-function Envelope({ closing, done, children }) {
+function Envelope({ closing, done, capturedPos, envelopeRef, children }) {
   const cls = done ? ' envelope-wrapper--done' : closing ? ' envelope-wrapper--closing' : '';
+
+  // When done, compute center position in px so we transition between two px values
+  // Final envelope height after card collapses is ~150px
+  const doneTop = done
+    ? (window.innerHeight / 2) - 75
+    : null;
+
+  const fixedStyle = capturedPos ? {
+    position: 'fixed',
+    top: done ? doneTop : capturedPos.top,
+    left: capturedPos.left,
+    width: capturedPos.width,
+    height: done ? 150 : capturedPos.height,
+    overflow: 'hidden',
+    transition: done ? 'top 0.8s ease-out, height 0.8s ease-out' : 'none',
+    zIndex: 1000,
+  } : undefined;
+
   return (
-    <div className={`envelope-wrapper${cls}`}>
+    <div ref={envelopeRef} className={`envelope-wrapper${cls}`} style={fixedStyle}>
       <div className="envelope__back" />
       <div className="envelope__card-slot">{children}</div>
       <div className="envelope__front" />
       <div className="envelope__opener" />
-      {(closing || done) && <p className="rsvp-success"><WaveText text="Thank you! Your RSVP has been sent." startAnimationDelay={done ? 500 : 2200} /></p>}
+      {done && <p className="rsvp-success"><WaveText text="Thank you! Your RSVP has been sent." startAnimationDelay={800} /></p>}
     </div>
   );
 }
@@ -191,7 +209,9 @@ export default function RSVPOverlay({ isOpen, onClose, onCloseStart, closeDelay 
   const [animDone, setAnimDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [envelopePos, setEnvelopePos] = useState(null);
   const dataRef = useRef({});
+  const envelopeRef = useRef(null);
 
   // Mark animations done after close sequence completes
   useEffect(() => {
@@ -266,15 +286,29 @@ export default function RSVPOverlay({ isOpen, onClose, onCloseStart, closeDelay 
       <Modal isOpen={isOpen} onClose={onClose} onCloseStart={onCloseStart} closeDelay={closeDelay} className={`modal--rsvp${accepted ? ' modal--rsvp-done' : ''}`} innerClassName={animDone ? 'modal__content-inner--done' : ''}>
         <div className="rsvp-content" style={animDone ? { pointerEvents: 'none' } : undefined}>
           <div className="rsvp-content__stage">
-            <Envelope closing={accepted && !animDone} done={animDone}>
-              {stack?.element}
+            <Envelope closing={accepted && !animDone} done={animDone} capturedPos={envelopePos} envelopeRef={envelopeRef}>
+              <div style={animDone ? { display: 'none' } : undefined}>
+                {stack?.element}
+              </div>
             </Envelope>
           </div>
           {!accepted && (
             <div className="rsvp-content__actions">
               <button
                 className="rsvp-btn rsvp-btn--accept"
-                onClick={async () => { const ok = await handleSubmit(); if (ok) { setAccepted(true); stack?.accept(); } }}
+                onClick={async () => {
+                const ok = await handleSubmit();
+                if (ok) {
+                  // Capture envelope position BEFORE any state changes
+                  const el = envelopeRef.current;
+                  if (el) {
+                    const rect = el.getBoundingClientRect();
+                    setEnvelopePos({ top: rect.top, left: rect.left, width: rect.width, height: rect.height });
+                  }
+                  setAccepted(true);
+                  stack?.accept();
+                }
+              }}
                 disabled={stack?.isAnimating || submitting}
                 aria-label="Accept RSVP"
               >
