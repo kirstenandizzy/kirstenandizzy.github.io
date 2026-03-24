@@ -111,28 +111,59 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
     const photoSpread = Math.min(240, vw * 0.5);
     const bubbleSpread = Math.min(400, vw * 0.8);
 
-    // Spawn the photo bubble
+    // Spawn the photo bubble — above, left, or right of ship (not below)
+    const photoSide = Math.random();
+    let photoX, photoY;
+    if (photoSide < 0.4) {
+      // Above
+      photoX = clampPhoto(cx + (Math.random() - 0.5) * photoSpread);
+      photoY = baseY;
+    } else if (photoSide < 0.7) {
+      // Left
+      photoX = clampPhoto(cx - photoSpread * 0.3 - Math.random() * photoSpread * 0.4);
+      photoY = cy + 50 + Math.random() * 100;
+    } else {
+      // Right
+      photoX = clampPhoto(cx + photoSpread * 0.3 + Math.random() * photoSpread * 0.4);
+      photoY = cy + 50 + Math.random() * 100;
+    }
+
     const newItems = [
       {
         id: newId,
         photo: chosenPhoto,
         bubbleSize: 75 + (Math.random() * 40 - 20),
-        spawnX: clampPhoto(cx + (Math.random() - 0.5) * photoSpread),
-        spawnY: baseY,
+        spawnX: photoX,
+        spawnY: photoY,
       },
     ];
 
-    // Spawn 2-3 small companion bubbles spread widely, can spawn below the ship
+    // Spawn 2-3 small companion bubbles — above, left, or right (not below)
     const bubbleCount = 2 + Math.floor(Math.random() * 2);
     for (let i = 0; i < bubbleCount; i++) {
+      const side = Math.random();
+      let bx, by;
+      if (side < 0.4) {
+        // Above
+        bx = clampBubble(cx + (Math.random() - 0.5) * bubbleSpread);
+        by = cy + 100 + Math.random() * 150;
+      } else if (side < 0.7) {
+        // Left
+        bx = clampBubble(cx - bubbleSpread * 0.2 - Math.random() * bubbleSpread * 0.4);
+        by = cy + Math.random() * 120;
+      } else {
+        // Right
+        bx = clampBubble(cx + bubbleSpread * 0.2 + Math.random() * bubbleSpread * 0.4);
+        by = cy + Math.random() * 120;
+      }
       newItems.push({
         id: photoIdRef.current++,
         photo: null,
         small: true,
         bubbleSize: 10 + Math.random() * 20,
         autoPopDelay: 2000 + Math.random() * 8000,
-        spawnX: clampBubble(cx + (Math.random() - 0.5) * bubbleSpread),
-        spawnY: cy + Math.random() * 250,
+        spawnX: bx,
+        spawnY: by,
       });
     }
 

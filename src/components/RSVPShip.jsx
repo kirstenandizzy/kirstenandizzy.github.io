@@ -14,32 +14,47 @@ const MAX_TILT_FRAMES = 2;
 const FRAME_LERP = 0.12;
 const SHIP_OPACITY = 0.45;
 
-// Pick a target along the edges of the viewport, avoiding the centered form
-function pickSideTarget(formCenterX, formHalfWidth, minY, maxY) {
+// Pick a target outside the modal area
+// x = pixels from left, y = pixels from bottom (matches CSS bottom positioning)
+function pickSideTarget(_formCenterX, _formHalfWidth, minY, maxY) {
   const vw = window.innerWidth;
+  const vh = window.innerHeight;
   const pad = 60;
 
-  // Edge zones the ship can wander through
+  // Modal card rect (centered, ~420px wide, ~85vh tall max)
+  const cardW = Math.min(420, vw * 0.9);
+  const cardH = Math.min(vh * 0.85, vh - 100);
+  const modalLeft = (vw - cardW) / 2;
+  const modalRight = (vw + cardW) / 2;
+  // Convert modal top/bottom from top-origin to bottom-origin
+  const modalTopFromTop = (vh - cardH) / 2;
+  const modalBottomFromBottom = modalTopFromTop;         // bottom edge in bottom-coords
+  const margin = 40; // extra clearance around modal
+
+  // Zones outside the modal (all in left/bottom coordinate space)
   const zones = [];
 
-  // Left strip
-  const leftRight = Math.max(pad, formCenterX - formHalfWidth - 60);
-  if (leftRight > pad + 20) {
-    zones.push({ x: [pad, leftRight], y: [minY, maxY], weight: 3 });
+  // Bottom center — below the modal, spanning full width (strongly preferred)
+  const belowTop = Math.max(minY, modalBottomFromBottom - margin);
+  if (belowTop > minY + 20) {
+    zones.push({ x: [vw * 0.2, vw * 0.8], y: [minY, belowTop], weight: 8 });
   }
 
-  // Right strip
-  const rightLeft = Math.min(vw - pad, formCenterX + formHalfWidth + 60);
-  if (vw - pad > rightLeft + 20) {
-    zones.push({ x: [rightLeft, vw - pad], y: [minY, maxY], weight: 3 });
+  // Left of modal
+  const leftEdge = modalLeft - margin;
+  if (leftEdge > pad + 30) {
+    zones.push({ x: [pad, leftEdge], y: [minY, maxY], weight: 1 });
   }
 
-  // Bottom strip (low on screen, below form)
-  zones.push({ x: [pad, vw - pad], y: [minY, Math.min(minY + 80, maxY)], weight: 2 });
+  // Right of modal
+  const rightEdge = modalRight + margin;
+  if (vw - pad > rightEdge + 30) {
+    zones.push({ x: [rightEdge, vw - pad], y: [minY, maxY], weight: 1 });
+  }
 
-  // Top strip (high on screen, above form)
-  if (maxY > 350) {
-    zones.push({ x: [pad, vw - pad], y: [Math.max(maxY - 100, minY), maxY], weight: 1 });
+  // Fallback: if no zones (very small screen), use bottom corners
+  if (zones.length === 0) {
+    zones.push({ x: [pad, vw - pad], y: [minY, minY + 60], weight: 1 });
   }
 
   // Weighted random pick
@@ -73,9 +88,9 @@ export default function RSVPShip({ isOpen }) {
   const smoothFrameRef = useRef(0);
   const facingRightRef = useRef(true);
 
-  const minY = 120;
+  const minY = 30;
   const maxY = typeof window !== 'undefined'
-    ? Math.min(600, window.innerHeight - 300)
+    ? Math.min(600, window.innerHeight - 200)
     : 600;
 
   const pickTarget = useCallback(() => {

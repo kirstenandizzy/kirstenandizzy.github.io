@@ -611,6 +611,9 @@
   position: relative;
   pointer-events: auto;
   cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
 
   * {
     cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
