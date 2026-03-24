@@ -86,9 +86,9 @@ export default function RSVPOverlay({ isOpen, onClose, onCloseStart }) {
             const allYes = filled.every(g => g.attending === true);
             const allNo = filled.every(g => g.attending === false);
             const subtitle = allYes
-              ? "We're so excited to celebrate with you."
+              ? "We're so excited to celebrate with you!"
               : allNo
-              ? "We'll miss you, let us know if you change your mind!"
+              ? "We're sorry you can't make it, just let us know if there is a change in plans!"
               : "We're so excited to celebrate with you \u2014 we know not everyone in your group can make it, let us know if there are any changes!";
             return (
               <div className="rsvp-overlay__success">
