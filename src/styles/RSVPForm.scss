@@ -1,0 +1,331 @@
+@use 'variables' as *;
+
+.rsvp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(16px);
+  animation: rsvpFadeIn 0.4s ease-out;
+
+  &__card {
+    position: relative;
+    width: 420px;
+    max-width: 90vw;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    color: #fff;
+    font-family: $font-body;
+
+    @media (max-width: $bp-mobile) {
+      padding: 2rem 1.25rem;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+    padding: 0.25rem 0.5rem;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-weight: 700;
+    font-size: 1.75rem;
+    letter-spacing: 0.08em;
+    margin: 0 0 0.25rem;
+    text-align: center;
+    color: #fff;
+  }
+
+  &__subtitle {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    margin: 0 0 0.25rem;
+    line-height: 1.5;
+
+    &:last-of-type {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  &__guests {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__hint {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0 0 0.5rem;
+    text-align: left;
+    font-style: italic;
+  }
+
+  &__add {
+    display: block;
+    margin-top: 0.75rem;
+    background: none;
+    border: 1px dashed rgba(255, 255, 255, 0.25);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: $font-body;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+    width: 100%;
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+    transition: color 0.2s, border-color 0.2s;
+
+    &:hover:not(:disabled) {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+  }
+
+  &__extras {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  &__field {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    font-family: $font-body;
+    font-size: 0.9rem;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    &:focus {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+    }
+
+    &--multiline {
+      resize: vertical;
+      min-height: 4rem;
+    }
+  }
+
+  &__error {
+    color: #e66868;
+    font-size: 0.85rem;
+    text-align: center;
+    margin: 0.75rem 0 0;
+  }
+
+  &__submit {
+    display: block;
+    width: 100%;
+    margin-top: 1.25rem;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 10px;
+    background: #4a90d9;
+    color: #fff;
+    font-family: $font-body;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+    transition: background 0.15s, transform 0.15s, opacity 0.15s;
+
+    &:hover:not(:disabled) {
+      background: #3a7bc8;
+      transform: scale(1.02);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  }
+
+  &__dots {
+    display: inline-flex;
+    gap: 4px;
+    justify-content: center;
+
+    span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fff;
+      animation: rsvpDotBounce 1.4s infinite ease-in-out both;
+
+      &:nth-child(1) { animation-delay: -0.32s; }
+      &:nth-child(2) { animation-delay: -0.16s; }
+    }
+  }
+
+  &__success {
+    text-align: center;
+    padding: 2rem 0;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  &__success-sub {
+    margin: 1rem 0 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.5;
+  }
+}
+
+// ── Guest Row ───────────────────────────────────────────
+
+.rsvp-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  @media (max-width: $bp-mobile) {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  &__name {
+    flex: 1;
+    min-width: 0;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    font-family: $font-body;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    &:focus {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+
+  &__radios {
+    display: flex;
+    gap: 0.25rem;
+    flex-shrink: 0;
+  }
+
+  &__radio {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.65rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+
+    input[type='radio'] {
+      display: none;
+    }
+
+    &:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    &--selected {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.1);
+
+      &.rsvp-row__radio--yes {
+        background: rgba(76, 175, 80, 0.35);
+        border-color: rgba(76, 175, 80, 0.6);
+      }
+
+      &.rsvp-row__radio--no {
+        background: rgba(229, 57, 53, 0.35);
+        border-color: rgba(229, 57, 53, 0.6);
+      }
+    }
+  }
+
+  &__remove {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+    padding: 0.25rem;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #e66868;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+  }
+}
+
+// ── Keyframes ───────────────────────────────────────────
+
+@keyframes rsvpFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes rsvpDotBounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}

@@ -22,7 +22,7 @@ function doPost(e) {
   // Add headers if sheet is empty
   if (sheet.getLastRow() === 0) {
     var headers = ['Timestamp'];
-    for (var h = 1; h <= 8; h++) {
+    for (var h = 1; h <= 20; h++) {
       headers.push('Guest ' + h);
       headers.push('RSVP ' + h);
     }
@@ -33,7 +33,7 @@ function doPost(e) {
 
   // One row per submission — all flat top-level keys
   var row = [timestamp];
-  for (var i = 1; i <= 8; i++) {
+  for (var i = 1; i <= 20; i++) {
     row.push(data['guest_' + i] || '');
     row.push(data['rsvp_' + i] || '');
   }
