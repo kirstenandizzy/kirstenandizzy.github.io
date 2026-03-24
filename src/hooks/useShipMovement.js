@@ -118,8 +118,13 @@ export default function useShipMovement({ enabled = false, dismissing = false, b
     setMovingRight(!fromRight);
     setAngleIndex(initFrame);
     setReady(true);
-    // First target = random waypoint within bounds (ship meanders toward it)
-    pickTarget();
+    // First target = bottom center so the ship enters low and visible
+    const midX = (b.left + b.right) / 2;
+    const spreadX = (b.right - b.left) * 0.15;
+    targetRef.current = {
+      x: midX + (Math.random() - 0.5) * spreadX,
+      y: minYRef.current + Math.random() * 40,
+    };
 
     const tick = () => {
       const pos = posRef.current;
