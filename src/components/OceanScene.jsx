@@ -546,17 +546,7 @@ export default function OceanScene({ isModalOpen, onOpenModal }) {
     }
   }, [isModalOpen]);
 
-  // Handle scroll wheel to adjust time-of-day slider
-  useEffect(() => {
-    const handleWheel = (e) => {
-      if (isModalOpen) return; // let modal content scroll normally
-      e.preventDefault();
-      const step = 0.25; // 15 minutes per scroll tick
-      setTimeOfDay(prev => Math.min(24, Math.max(0, prev + (e.deltaY > 0 ? step : -step))));
-    };
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    return () => window.removeEventListener('wheel', handleWheel);
-  }, [isModalOpen]);
+  // Wheel scrolling is handled by the Slider component directly
 
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
   const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);

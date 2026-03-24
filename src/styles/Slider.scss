@@ -354,156 +354,157 @@
 }
 
 // ──────────────────────────────────────────────
-// Mobile drum-picker layout
+// Drum-picker layout (used on all viewports)
 // ──────────────────────────────────────────────
-@media (max-width: $bp-tablet) {
-  .slider--mobile {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    top: -25px;
-    margin: 0;
-    padding: 0 1rem 1rem;
-    box-sizing: border-box;
-    touch-action: none;
-    overscroll-behavior: none;
+.slider--mobile {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  top: -25px;
+  margin: 0;
+  padding: 0 1rem 1rem;
+  box-sizing: border-box;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
+.slider--mobile h3 {
+  width: 100%;
+  margin: 0;
+  line-height: 1.5rem;
+  padding: 0 0 1rem 0;
+  opacity: 1; // override base .slider h3 opacity — needed for backdrop-filter
+  // Use transform-only animation — opacity on parent kills backdrop-filter
+  transform: translateY(20px);
+  animation: slider-slide-in 1s ease forwards;
+  animation-delay: calc(var(--i) * 300ms);
+  position: relative;
+
+  // Dim text via children instead of parent opacity (preserves backdrop-filter)
+  > span {
+    opacity: 0.75;
   }
 
-  .slider--mobile h3 {
-    width: 100%;
-    margin: 0;
-    line-height: 1.5rem;
-    padding: 0 0 1rem 0;
-    opacity: 1; // override base .slider h3 opacity — needed for backdrop-filter
-    // Use transform-only animation — opacity on parent kills backdrop-filter
-    transform: translateY(20px);
-    animation: slider-slide-in 1s ease forwards;
-    animation-delay: calc(var(--i) * 300ms);
-    position: relative;
-
-    // Dim text via children instead of parent opacity (preserves backdrop-filter)
-    > span {
-      opacity: 0.75;
-    }
-
-    &::before {
-      content: '';
-      position: absolute;
-      inset: -1rem -2rem;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
-      -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
-      z-index: -1;
-      pointer-events: none;
-    }
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -1rem -2rem;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+    z-index: -1;
+    pointer-events: none;
   }
+}
 
-  .slider--mobile .slider__content {
-    // Use transform-only animation — opacity on parent kills backdrop-filter on children
-    transform: translateY(20px);
-    animation: slider-slide-in 1s ease forwards;
-    animation-delay: calc(var(--i) * 300ms);
-    flex: 0 0 auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
+.slider--mobile .slider__content {
+  // Use transform-only animation — opacity on parent kills backdrop-filter on children
+  transform: translateY(20px);
+  animation: slider-slide-in 1s ease forwards;
+  animation-delay: calc(var(--i) * 300ms);
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+// ── Drum window (horizontal) ──
+.slider__window--horizontal {
+  position: relative;
+  width: 280px;
+  max-width: 90vw;
+  flex-shrink: 0;
+  height: 2.5rem;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 20%,
+    black 80%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 20%,
+    black 80%,
+    transparent 100%
+  );
+}
+
+.slider__indicator {
+  display: none;
+}
+
+.slider__strip--horizontal {
+  will-change: transform;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.slider__strip--horizontal .slider__strip-item {
+  width: 55px;
+  height: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.85rem;
+  cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+  user-select: none;
+  transition: opacity 0.05s, transform 0.05s;
+}
+
+// ── Event list ──
+.slider__mobile-events {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 280px;
+}
+
+.slider__mobile-event {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  color: white;
+  cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
+  text-align: left;
+  font-family: inherit;
+  font-size: 0.85rem;
+  transition: border-color 0.2s;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slider-mobile-event-in 0.8s ease forwards;
+  animation-delay: calc(var(--i) * 300ms);
+
+  &:hover, &:active {
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3), 0 0 25px rgba(255, 255, 255, 0.15), 0 0 45px rgba(255, 255, 255, 0.08);
   }
+}
 
-  // ── Drum window ──
-  .slider__window {
-    position: relative;
-    width: 5rem;
-    flex-shrink: 0;
-    height: 150px;
-    overflow: hidden;
-    mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 25%,
-      black 75%,
-      transparent 100%
-    );
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 25%,
-      black 75%,
-      transparent 100%
-    );
-  }
+.slider__mobile-event-time {
+  flex-shrink: 0;
+  font-weight: 500;
+  opacity: 0.8;
+  min-width: 3rem;
+}
 
-  .slider__indicator {
-    display: none;
-  }
-
-  .slider__strip {
-    will-change: transform;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .slider__strip-item {
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1rem;
-    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
-    user-select: none;
-    transition: opacity 0.05s, transform 0.05s;
-  }
-
-  // ── Event list ──
-  .slider__mobile-events {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 100%;
-    max-width: 280px;
-  }
-
-  .slider__mobile-event {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 8px;
-    padding: 0.5rem 0.75rem;
-    color: white;
-    cursor: url('/cursors/pinkheart_linkselect.cur'), pointer;
-    text-align: left;
-    font-family: inherit;
-    font-size: 0.85rem;
-    transition: border-color 0.2s;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: slider-mobile-event-in 0.8s ease forwards;
-    animation-delay: calc(var(--i) * 300ms);
-
-    &:hover, &:active {
-      border-color: rgba(255, 255, 255, 0.4);
-    }
-  }
-
-  .slider__mobile-event-time {
-    flex-shrink: 0;
-    font-weight: 500;
-    opacity: 0.8;
-    min-width: 3rem;
-  }
-
-  .slider__mobile-event-label {
-    opacity: 0.6;
-  }
+.slider__mobile-event-label {
+  opacity: 0.6;
 }

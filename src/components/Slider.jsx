@@ -32,29 +32,29 @@ const thumbPosition = (value, max, adjustment = 0) => {
 
 const HOURS = [
   { label: '12am', value: 0 },
-  { label: 1, value: 1 },
-  { label: 2, value: 2 },
-  { label: 3, value: 3 },
-  { label: 4, value: 4 },
-  { label: 5, value: 5 },
-  { label: 6, value: 6 },
-  { label: 7, value: 7 },
-  { label: 8, value: 8 },
-  { label: 9, value: 9 },
-  { label: 10, value: 10 },
-  { label: 11, value: 11 },
+  { label: '1am', value: 1 },
+  { label: '2am', value: 2 },
+  { label: '3am', value: 3 },
+  { label: '4am', value: 4 },
+  { label: '5am', value: 5 },
+  { label: '6am', value: 6 },
+  { label: '7am', value: 7 },
+  { label: '8am', value: 8 },
+  { label: '9am', value: 9 },
+  { label: '10am', value: 10 },
+  { label: '11am', value: 11 },
   { label: '12pm', value: 12 },
-  { label: 1, value: 13 },
-  { label: 2, value: 14 },
-  { label: 3, value: 15 },
-  { label: 4, value: 16 },
-  { label: 5, value: 17 },
-  { label: 6, value: 18 },
-  { label: 7, value: 19 },
-  { label: 8, value: 20 },
-  { label: 9, value: 21 },
-  { label: 10, value: 22 },
-  { label: 11, value: 23 },
+  { label: '1pm', value: 13 },
+  { label: '2pm', value: 14 },
+  { label: '3pm', value: 15 },
+  { label: '4pm', value: 16 },
+  { label: '5pm', value: 17 },
+  { label: '6pm', value: 18 },
+  { label: '7pm', value: 19 },
+  { label: '8pm', value: 20 },
+  { label: '9pm', value: 21 },
+  { label: '10pm', value: 22 },
+  { label: '11pm', value: 23 },
   { label: '12am', value: 24 }
 ];
 
@@ -75,19 +75,17 @@ const formatTimeOfDay = (hours) => {
   return `${displayHour}:${m.toString().padStart(2, '0')} ${meridiem}`;
 };
 
-// Height of each label in the drum strip (px)
-const STRIP_ITEM_HEIGHT = 40;
-// Height of the visible drum window (px)
-const WINDOW_HEIGHT = 150;
+// Width of each label in the horizontal drum strip (px)
+const STRIP_ITEM_WIDTH = 55;
+// Width of the visible horizontal drum window (px)
+const WINDOW_WIDTH = 280;
 
 export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }) {
   const timelineRef = useRef(null);
   const containerRef = useRef(null);
   const windowRef = useRef(null);
   const touchStartRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(() =>
-    window.matchMedia('(max-width: 768px)').matches
-  );
+  const [isMobile] = useState(true);
 
   // Refs to avoid re-registering touch listeners on every value change
   const valueRef = useRef(value);
@@ -95,6 +93,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
   const minRef = useRef(min);
   const maxRef = useRef(max);
   const targetValueRef = useRef(value);
+  const lastOnChangeRef = useRef(0);
   const animFrameRef = useRef(null);
   const velocityRef = useRef(0);
   const lastTouchTimeRef = useRef(0);
@@ -106,12 +105,6 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
   useEffect(() => { minRef.current = min; }, [min]);
   useEffect(() => { maxRef.current = max; }, [max]);
 
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)');
-    const handler = (e) => setIsMobile(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
 
   // Lerp animation loop
   const startAnimation = (force) => {
@@ -126,12 +119,21 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
       if (Math.abs(diff) < 0.01) {
         if (onChangeRef.current) onChangeRef.current(target);
         animFrameRef.current = null;
+        lastOnChangeRef.current = 0;
         return;
       }
 
-      const lerpFactor = isMobile ? 0.04 : 0.08;
+      const lerpFactor = 0.08;
       const next = current + diff * lerpFactor;
-      if (onChangeRef.current) onChangeRef.current(next);
+      // Throttle onChange to ~30fps to avoid hammering the 3D scene
+      const now = performance.now();
+      if (now - lastOnChangeRef.current > 30) {
+        lastOnChangeRef.current = now;
+        if (onChangeRef.current) onChangeRef.current(next);
+      } else {
+        // Update local ref so drum strip stays smooth, but skip scene re-render
+        valueRef.current = next;
+      }
       animFrameRef.current = requestAnimationFrame(animate);
     };
 
@@ -151,8 +153,8 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
         cancelAnimationFrame(animFrameRef.current);
         animFrameRef.current = null;
       }
-      touchStartRef.current = e.touches[0].clientY;
-      lastTouchYRef.current = e.touches[0].clientY;
+      touchStartRef.current = e.touches[0].clientX;
+      lastTouchYRef.current = e.touches[0].clientX;
       lastTouchTimeRef.current = Date.now();
       velocityRef.current = 0;
       targetValueRef.current = valueRef.current;
@@ -165,24 +167,24 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
       if (touchStartRef.current === null) return;
       e.preventDefault(); // prevent iOS Safari from scrolling/rubber-banding
 
-      const currentY = e.touches[0].clientY;
+      const currentX = e.touches[0].clientX;
       const now = Date.now();
-      const deltaY = currentY - lastTouchYRef.current;
+      const deltaX = currentX - lastTouchYRef.current;
 
       const dt = now - lastTouchTimeRef.current;
       if (dt > 0) {
-        velocityRef.current = deltaY / dt;
+        velocityRef.current = deltaX / dt;
       }
-      lastTouchYRef.current = currentY;
+      lastTouchYRef.current = currentX;
       lastTouchTimeRef.current = now;
 
       if (!deadZonePassed) {
-        accumulatedDelta += Math.abs(deltaY);
+        accumulatedDelta += Math.abs(deltaX);
         if (accumulatedDelta < DEAD_ZONE) return;
         deadZonePassed = true;
       }
 
-      const hoursDelta = -deltaY / PIXELS_PER_HOUR;
+      const hoursDelta = -deltaX / PIXELS_PER_HOUR;
       const newTarget = Math.max(
         minRef.current,
         Math.min(maxRef.current, targetValueRef.current + hoursDelta)
@@ -231,10 +233,102 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
     target.addEventListener('touchmove', handleTouchMove, { passive: false });
     target.addEventListener('touchend', handleTouchEnd, { passive: true });
 
+    // Mouse drag support for desktop
+    let mouseDeadZonePassed = false;
+    let mouseAccumulatedDelta = 0;
+
+    const handleMouseDown = (e) => {
+      e.preventDefault(); // prevent text selection
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current);
+        animFrameRef.current = null;
+      }
+      touchStartRef.current = e.clientX;
+      lastTouchYRef.current = e.clientX;
+      lastTouchTimeRef.current = Date.now();
+      velocityRef.current = 0;
+      targetValueRef.current = valueRef.current;
+      mouseDeadZonePassed = false;
+      mouseAccumulatedDelta = 0;
+
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+    };
+
+    const handleMouseMove = (e) => {
+      if (touchStartRef.current === null) return;
+
+      const currentX = e.clientX;
+      const now = Date.now();
+      const deltaX = currentX - lastTouchYRef.current;
+
+      const dt = now - lastTouchTimeRef.current;
+      if (dt > 0) {
+        velocityRef.current = deltaX / dt;
+      }
+      lastTouchYRef.current = currentX;
+      lastTouchTimeRef.current = now;
+
+      if (!mouseDeadZonePassed) {
+        mouseAccumulatedDelta += Math.abs(deltaX);
+        if (mouseAccumulatedDelta < DEAD_ZONE) return;
+        mouseDeadZonePassed = true;
+      }
+
+      const hoursDelta = -deltaX / PIXELS_PER_HOUR;
+      const newTarget = Math.max(
+        minRef.current,
+        Math.min(maxRef.current, targetValueRef.current + hoursDelta)
+      );
+      targetValueRef.current = newTarget;
+      startAnimation();
+    };
+
+    const handleMouseUp = () => {
+      touchStartRef.current = null;
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+
+      const velocity = velocityRef.current;
+      if (Math.abs(velocity) > 0.05) {
+        let v = velocity;
+        const FRICTION = 0.94;
+
+        const momentumAnimate = () => {
+          v *= FRICTION;
+          if (Math.abs(v) < 0.001) {
+            animFrameRef.current = null;
+            return;
+          }
+          const hoursDelta = -(v * 16) / PIXELS_PER_HOUR;
+          const newTarget = Math.max(
+            minRef.current,
+            Math.min(maxRef.current, targetValueRef.current + hoursDelta)
+          );
+          targetValueRef.current = newTarget;
+
+          const current = valueRef.current;
+          const diff = targetValueRef.current - current;
+          const next = current + diff * 0.18;
+          if (onChangeRef.current) onChangeRef.current(next);
+
+          animFrameRef.current = requestAnimationFrame(momentumAnimate);
+        };
+
+        if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+        animFrameRef.current = requestAnimationFrame(momentumAnimate);
+      }
+    };
+
+    target.addEventListener('mousedown', handleMouseDown);
+
     return () => {
       target.removeEventListener('touchstart', handleTouchStart);
       target.removeEventListener('touchmove', handleTouchMove);
       target.removeEventListener('touchend', handleTouchEnd);
+      target.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
       if (animFrameRef.current) {
         cancelAnimationFrame(animFrameRef.current);
         animFrameRef.current = null;
@@ -245,7 +339,7 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
   // Smooth wheel scrolling on desktop
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || isMobile) return;
+    if (!container) return;
 
     const PIXELS_PER_HOUR = 200;
 
@@ -280,9 +374,9 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
 
   // --- Mobile drum picker rendering ---
   if (isMobile) {
-    const totalStripHeight = HOURS.length * STRIP_ITEM_HEIGHT;
-    // value=0 → strip at top (first label centered), value=max → strip scrolled up
-    const stripOffset = -(value / max) * totalStripHeight + WINDOW_HEIGHT / 2;
+    const totalStripWidth = HOURS.length * STRIP_ITEM_WIDTH;
+    // value=0 → strip at left (first label centered), value=max → strip scrolled left
+    const stripOffset = -(value / max) * totalStripWidth + WINDOW_WIDTH / 2;
 
     return (
       <div className='slider slider--mobile' ref={containerRef}>
@@ -299,11 +393,11 @@ export default function Slider({ min = 0, max = 100, value, onChange, step = 1 }
           </span>
         </h3>
         <div className='slider__content' style={{ '--i': 1 }}>
-          <div className='slider__window' ref={windowRef}>
+          <div className='slider__window slider__window--horizontal' ref={windowRef}>
             <div className='slider__indicator' />
             <div
-              className='slider__strip'
-              style={{ transform: `translateY(${stripOffset}px)` }}
+              className='slider__strip slider__strip--horizontal'
+              style={{ transform: `translateX(${stripOffset}px)` }}
             >
               {HOURS.map((hour) => {
                 const distance = Math.abs(hour.value - value);
