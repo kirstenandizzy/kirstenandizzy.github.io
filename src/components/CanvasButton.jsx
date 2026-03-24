@@ -27,7 +27,51 @@ import MobileJoystick from './MobileJoystick';
 
 
 const PIPE_SCALE = 2;
+const PIPE_SHAFT_INSET = 3;   // px inset on each side (source res)
+const PIPE_SHAFT_SLICE_Y = 24; // row to sample from within each 32px sprite
+const PIPE_SHAFT_HEIGHT = 200; // tall enough to extend below viewport
 const CHARACTER_SCALE = 2;
+
+// Extract a 1px-tall row from the pipe sprite sheet per color so it tiles correctly.
+// CSS background-size can't isolate a single row from a multi-row sheet for repeat-y,
+// so we use a canvas to create a tiny data URL per pipe color.
+const shaftURLCache = {};
+function loadShaftURLs(onReady) {
+  if (Object.keys(shaftURLCache).length === ALLOWED_PIPE_COLORS.length) {
+    onReady();
+    return;
+  }
+  const img = new Image();
+  img.onload = () => {
+    ALLOWED_PIPE_COLORS.forEach(color => {
+      const rect = pipeSheet.getRect(`${color}-pipe`);
+      if (!rect) return;
+      const w = rect.w - PIPE_SHAFT_INSET * 2;
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = 1;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, rect.x + PIPE_SHAFT_INSET, rect.y + PIPE_SHAFT_SLICE_Y, w, 1, 0, 0, w, 1);
+      shaftURLCache[color] = canvas.toDataURL();
+    });
+    onReady();
+  };
+  img.src = pipeSheet.src;
+}
+
+function getPipeShaftStyle(color) {
+  const rect = pipeSheet.getRect(`${color}-pipe`);
+  if (!rect) return {};
+  const dataURL = shaftURLCache[color];
+  if (!dataURL) return {};
+  const w = (rect.w - PIPE_SHAFT_INSET * 2) * PIPE_SCALE;
+  return {
+    backgroundImage: `url('${dataURL}')`,
+    backgroundSize: `${w}px ${PIPE_SCALE}px`,
+    width: w,
+    height: PIPE_SHAFT_HEIGHT,
+  };
+}
 
 const GIRLS_NPC_QUEUE = [
   { id: 'peach', sheet: peachSheet, animations: PEACH_ANIMATIONS, scale: PEACH_SCALE, facesRight: false },
@@ -99,6 +143,9 @@ function pickRandomColor(exclude) {
 }
 
 export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOverlay, onActiveChange }) {
+  const [shaftReady, setShaftReady] = useState(() => Object.keys(shaftURLCache).length === ALLOWED_PIPE_COLORS.length);
+  useEffect(() => { if (!shaftReady) loadShaftURLs(() => setShaftReady(true)); }, [shaftReady]);
+
   const [pipeState, setPipeState] = useState('hidden');
   const [pipeColor, setPipeColor] = useState('green');
   const [pipeLeft, setPipeLeft] = useState(0);
@@ -678,6 +725,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
           onTransitionEnd={handlePipeTransitionEnd}
         >
           <PixelSprite sheet={pipeSheet} name={`${pipeColor}-pipe`} scale={PIPE_SCALE} />
+          <div className="pipe-shaft" style={getPipeShaftStyle(pipeColor)} />
         </div>
 
         {/* Guys Pipe (Bride & Groom button) */}
@@ -686,6 +734,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
           style={{ left: guysPipeLeft }}
         >
           <PixelSprite sheet={pipeSheet} name={`${guysPipeColor}-pipe`} scale={PIPE_SCALE} />
+          <div className="pipe-shaft" style={getPipeShaftStyle(guysPipeColor)} />
         </div>
 
         {/* Eggs (rendered after pipes so they appear in front) */}

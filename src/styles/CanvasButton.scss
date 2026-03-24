@@ -106,9 +106,7 @@
   overflow: visible;
   pointer-events: none;
   z-index: 1;
-  // Clip bottom only: hide pipe/NPCs below, extend 50px into button area for sink-behind.
-  // Top/left/right use large negative values = no clipping on those sides.
-  clip-path: inset(-100vh -100px -50px -100px);
+  clip-path: none;
 }
 
 .pipe-slide {
@@ -135,6 +133,17 @@
     transition-duration: 0.4s;
     transition-timing-function: ease-in;
   }
+}
+
+.pipe-shaft {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  image-rendering: pixelated;
+  image-rendering: -webkit-crisp-edges;
+  background-repeat: repeat-y;
+  pointer-events: none;
 }
 
 .character-label {
