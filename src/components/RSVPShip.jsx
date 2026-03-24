@@ -14,60 +14,12 @@ const MAX_TILT_FRAMES = 2;
 const FRAME_LERP = 0.12;
 const SHIP_OPACITY = 0.45;
 
-// Pick a target outside the modal area
-// x = pixels from left, y = pixels from bottom (matches CSS bottom positioning)
-function pickSideTarget(_formCenterX, _formHalfWidth, minY, maxY) {
+// Pick a target in the bottom strip of the screen, away from the centered modal
+function pickSideTarget(_formCenterX, _formHalfWidth, minY) {
   const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const pad = 60;
-
-  // Modal card rect (centered, ~420px wide, ~85vh tall max)
-  const cardW = Math.min(420, vw * 0.9);
-  const cardH = Math.min(vh * 0.85, vh - 100);
-  const modalLeft = (vw - cardW) / 2;
-  const modalRight = (vw + cardW) / 2;
-  // Convert modal top/bottom from top-origin to bottom-origin
-  const modalTopFromTop = (vh - cardH) / 2;
-  const modalBottomFromBottom = modalTopFromTop;         // bottom edge in bottom-coords
-  const margin = 40; // extra clearance around modal
-
-  // Zones outside the modal (all in left/bottom coordinate space)
-  const zones = [];
-
-  // Bottom center — below the modal, spanning full width (strongly preferred)
-  const belowTop = Math.max(minY, modalBottomFromBottom - margin);
-  if (belowTop > minY + 20) {
-    zones.push({ x: [vw * 0.2, vw * 0.8], y: [minY, belowTop], weight: 8 });
-  }
-
-  // Left of modal
-  const leftEdge = modalLeft - margin;
-  if (leftEdge > pad + 30) {
-    zones.push({ x: [pad, leftEdge], y: [minY, maxY], weight: 1 });
-  }
-
-  // Right of modal
-  const rightEdge = modalRight + margin;
-  if (vw - pad > rightEdge + 30) {
-    zones.push({ x: [rightEdge, vw - pad], y: [minY, maxY], weight: 1 });
-  }
-
-  // Fallback: if no zones (very small screen), use bottom corners
-  if (zones.length === 0) {
-    zones.push({ x: [pad, vw - pad], y: [minY, minY + 60], weight: 1 });
-  }
-
-  // Weighted random pick
-  const totalWeight = zones.reduce((s, z) => s + z.weight, 0);
-  let r = Math.random() * totalWeight;
-  let zone = zones[0];
-  for (const z of zones) {
-    r -= z.weight;
-    if (r <= 0) { zone = z; break; }
-  }
-
-  const tx = zone.x[0] + Math.random() * (zone.x[1] - zone.x[0]);
-  const ty = zone.y[0] + Math.random() * (zone.y[1] - zone.y[0]);
+  // Stay in the bottom ~100px of the screen (low bottom values = near screen edge)
+  const tx = vw * 0.15 + Math.random() * vw * 0.7;
+  const ty = minY + Math.random() * 70;
   return { x: tx, y: ty };
 }
 
