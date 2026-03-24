@@ -40,7 +40,7 @@ const FAQ_ITEMS = [
   },
   {
     question: 'What is the parking situation?',
-    answer: 'There is free parking available at the venue, though it may be limited.'
+    answer: 'There is free parking available at the venue.'
   },
 ];
 
