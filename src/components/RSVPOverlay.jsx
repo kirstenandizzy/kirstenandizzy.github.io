@@ -75,6 +75,7 @@ export default function RSVPOverlay({ isOpen, onClose, onCloseStart }) {
 
   return (
     <>
+      <RSVPShip isOpen={isOpen} />
       <div className="rsvp-overlay" onClick={handleClose}>
         <div className="rsvp-overlay__card" onClick={e => e.stopPropagation()}>
           <button className="rsvp-overlay__close" onClick={handleClose} aria-label="Close">
@@ -192,7 +193,6 @@ export default function RSVPOverlay({ isOpen, onClose, onCloseStart }) {
           )}
         </div>
       </div>
-      <RSVPShip isOpen={isOpen} />
     </>
   );
 }

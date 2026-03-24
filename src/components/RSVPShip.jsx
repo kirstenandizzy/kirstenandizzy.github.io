@@ -14,22 +14,45 @@ const MAX_TILT_FRAMES = 2;
 const FRAME_LERP = 0.12;
 const SHIP_OPACITY = 0.45;
 
-// Pick a target biased towards the sides of the viewport, avoiding the centered form
+// Pick a target along the edges of the viewport, avoiding the centered form
 function pickSideTarget(formCenterX, formHalfWidth, minY, maxY) {
   const vw = window.innerWidth;
-  const pad = 80;
-  const leftZone = { left: pad, right: Math.max(pad, formCenterX - formHalfWidth - 40) };
-  const rightZone = { left: Math.min(vw - pad, formCenterX + formHalfWidth + 40), right: vw - pad };
+  const pad = 60;
 
-  // Pick a side randomly
-  const leftWidth = leftZone.right - leftZone.left;
-  const rightWidth = rightZone.right - rightZone.left;
-  const total = leftWidth + rightWidth;
-  const pickLeft = Math.random() < (total > 0 ? leftWidth / total : 0.5);
-  const zone = pickLeft ? leftZone : rightZone;
+  // Edge zones the ship can wander through
+  const zones = [];
 
-  const tx = zone.left + Math.random() * (zone.right - zone.left);
-  const ty = minY + Math.random() * (maxY - minY);
+  // Left strip
+  const leftRight = Math.max(pad, formCenterX - formHalfWidth - 60);
+  if (leftRight > pad + 20) {
+    zones.push({ x: [pad, leftRight], y: [minY, maxY], weight: 3 });
+  }
+
+  // Right strip
+  const rightLeft = Math.min(vw - pad, formCenterX + formHalfWidth + 60);
+  if (vw - pad > rightLeft + 20) {
+    zones.push({ x: [rightLeft, vw - pad], y: [minY, maxY], weight: 3 });
+  }
+
+  // Bottom strip (low on screen, below form)
+  zones.push({ x: [pad, vw - pad], y: [minY, Math.min(minY + 80, maxY)], weight: 2 });
+
+  // Top strip (high on screen, above form)
+  if (maxY > 350) {
+    zones.push({ x: [pad, vw - pad], y: [Math.max(maxY - 100, minY), maxY], weight: 1 });
+  }
+
+  // Weighted random pick
+  const totalWeight = zones.reduce((s, z) => s + z.weight, 0);
+  let r = Math.random() * totalWeight;
+  let zone = zones[0];
+  for (const z of zones) {
+    r -= z.weight;
+    if (r <= 0) { zone = z; break; }
+  }
+
+  const tx = zone.x[0] + Math.random() * (zone.x[1] - zone.x[0]);
+  const ty = zone.y[0] + Math.random() * (zone.y[1] - zone.y[0]);
   return { x: tx, y: ty };
 }
 
@@ -173,7 +196,7 @@ export default function RSVPShip({ isOpen }) {
         bottom: y,
         transform: 'translateX(-50%)',
         pointerEvents: 'none',
-        zIndex: 999,
+        zIndex: 1000,
         opacity: visible ? SHIP_OPACITY : 0,
         transition: 'opacity 1.5s ease-in',
       }}
