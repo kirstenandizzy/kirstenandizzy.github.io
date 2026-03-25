@@ -375,6 +375,9 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
         autoSpawnPhase.current = 'done';
         allNPCsOutRef.current = true;
         setAllNPCsOut(true);
+        // Reset queue indices so Wedding Party starts from the beginning
+        npcQueueIndex.current = 0;
+        guysQueueIndex.current = 0;
         setTimeout(() => setPipeState('retracting'), 400);
       }
       return;
@@ -665,6 +668,10 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
       }
     } else if (pipeState === 'retracting') {
       setPipeState('hidden');
+      // Clear auto-spawn phase once pipes fully retract, so normal flow isn't affected
+      if (autoSpawnPhase.current === 'done') {
+        autoSpawnPhase.current = 'complete';
+      }
     }
   }, [pipeState, launchNextNPC, launchNextGuysNPC]);
 
