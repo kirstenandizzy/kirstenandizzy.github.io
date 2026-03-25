@@ -45,7 +45,7 @@
   > .slider__content > div:has(.slider__events) {
     opacity: 0;
     animation: slider-stagger-in 1s ease forwards;
-    animation-delay: calc(var(--i) * 500ms);
+    animation-delay: calc(var(--i) * 250ms);
   }
 
   &__timeline {
@@ -138,7 +138,7 @@
     transform: translate(-50%, 0);
     opacity: 0;
     animation: slider-event-in 1s ease forwards;
-    animation-delay: calc(var(--i) * 300ms);
+    animation-delay: calc(var(--i) * 200ms);
     display: flex;
     gap: 0.25rem;
     pointer-events: auto;
@@ -378,8 +378,8 @@
   opacity: 1; // override base .slider h3 opacity — needed for backdrop-filter
   // Use transform-only animation — opacity on parent kills backdrop-filter
   transform: translateY(20px);
-  animation: slider-slide-in 1s ease forwards;
-  animation-delay: calc(var(--i) * 300ms);
+  animation: slider-slide-in 0.7s ease forwards;
+  animation-delay: calc(var(--i) * 200ms);
   position: relative;
 
   // Dim text via children instead of parent opacity (preserves backdrop-filter)
@@ -403,8 +403,8 @@
 .slider--mobile .slider__content {
   // Use transform-only animation — opacity on parent kills backdrop-filter on children
   transform: translateY(20px);
-  animation: slider-slide-in 1s ease forwards;
-  animation-delay: calc(var(--i) * 300ms);
+  animation: slider-slide-in 0.7s ease forwards;
+  animation-delay: calc(var(--i) * 200ms);
   flex: 0 0 auto;
   display: flex;
   flex-direction: column;
@@ -488,8 +488,8 @@
   transition: border-color 0.2s;
   opacity: 0;
   transform: translateY(20px);
-  animation: slider-mobile-event-in 0.8s ease forwards;
-  animation-delay: calc(var(--i) * 300ms);
+  animation: slider-mobile-event-in 0.6s ease forwards;
+  animation-delay: calc(var(--i) * 200ms);
 
   &:hover, &:active {
     border-color: rgba(255, 255, 255, 0.4);

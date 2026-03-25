@@ -161,6 +161,11 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
   // Ship state: 'hidden' | 'visible' | 'exiting'
   const [shipState, setShipState] = useState('hidden');
 
+  // Auto-spawn: launch 2 NPCs on page load without Yoshi
+  const autoSpawnPhase = useRef('pending'); // 'pending' | 'rising' | 'launched' | 'done'
+  const autoLandedCount = useRef(0);
+  const [dismissingAuto, setDismissingAuto] = useState(false);
+
   // Random glow colors for active button text
   const [partyGlow, setPartyGlow] = useState(null);
   const [groomGlow, setGroomGlow] = useState(null);
@@ -170,8 +175,9 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
   const [guysPipeLeft, setGuysPipeLeft] = useState(0);
   const guysButtonRef = useRef(null);
 
-  // Notify parent when either button group is active
-  const buttonsActive = pipeState !== 'hidden' || shipState !== 'hidden';
+  // Notify parent when either button group is active (skip blur during auto-spawn)
+  const isAutoSpawning = autoSpawnPhase.current === 'rising' || autoSpawnPhase.current === 'launched' || autoSpawnPhase.current === 'done';
+  const buttonsActive = (pipeState !== 'hidden' && !isAutoSpawning) || shipState !== 'hidden';
   useEffect(() => {
     if (onActiveChange) onActiveChange(buttonsActive);
   }, [buttonsActive, onActiveChange]);
@@ -213,6 +219,40 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
     window.addEventListener('resize', updateBounds);
     return () => window.removeEventListener('resize', updateBounds);
   }, []);
+
+  // Auto-spawn: raise pipes and launch one NPC from each after a delay
+  const pipeStateRef = useRef(pipeState);
+  pipeStateRef.current = pipeState;
+  useEffect(() => {
+    if (autoSpawnPhase.current === 'launched' || autoSpawnPhase.current === 'done') return;
+    autoSpawnPhase.current = 'waiting';
+    const timer = setTimeout(() => {
+      if (pipeStateRef.current !== 'hidden') return; // user already clicked
+      autoSpawnPhase.current = 'rising';
+      // Pick random starting indices so different NPCs appear each visit
+      npcQueueIndex.current = Math.floor(Math.random() * GIRLS_NPC_QUEUE.length);
+      guysQueueIndex.current = Math.floor(Math.random() * GUYS_NPC_QUEUE.length);
+      const color1 = pickRandomColor('');
+      setPipeColor(color1);
+      setGuysPipeColor(pickRandomColor(color1));
+      setPipeState('rising');
+      // Fallback: if onTransitionEnd doesn't fire, launch after pipe animation duration
+      setTimeout(() => {
+        if (autoSpawnPhase.current === 'rising') {
+          autoSpawnPhase.current = 'launched';
+          launchNextNPC();
+          setTimeout(() => launchNextGuysNPC(), 300);
+        }
+      }, 500);
+    }, 3000);
+    return () => {
+      clearTimeout(timer);
+      // Allow re-setup on StrictMode remount
+      if (autoSpawnPhase.current === 'waiting') {
+        autoSpawnPhase.current = 'pending';
+      }
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Pipe dimensions for platform collision
   const pipeWidth = 32 * PIPE_SCALE;
@@ -277,7 +317,8 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
     if (npcQueueIndex.current >= GIRLS_NPC_QUEUE.length) return;
     const config = GIRLS_NPC_QUEUE[npcQueueIndex.current];
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const npc = { ...config, launchDirection: 'left' };
+    const isAuto = autoSpawnPhase.current === 'launched';
+    const npc = { ...config, launchDirection: 'left', autoSpawned: isAuto };
     if (isMobile && npc.launchSpeed) npc.launchSpeed = npc.launchSpeed * 0.75;
     setActiveNPCs(prev => [...prev, npc]);
     npcQueueIndex.current += 1;
@@ -299,7 +340,8 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
     if (guysQueueIndex.current >= GUYS_NPC_QUEUE.length) return;
     const config = GUYS_NPC_QUEUE[guysQueueIndex.current];
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const npc = { ...config, launchDirection: 'right' };
+    const isAuto = autoSpawnPhase.current === 'launched';
+    const npc = { ...config, launchDirection: 'right', autoSpawned: isAuto };
     if (isMobile && npc.launchSpeed) npc.launchSpeed = npc.launchSpeed * 0.75;
     setActiveGuysNPCs(prev => [...prev, npc]);
     guysQueueIndex.current += 1;
@@ -326,6 +368,17 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
       .filter(p => p.id !== npcId)
       .concat({ id: npcId, x: landedX });
     checkAllNPCsOut();
+    // During auto-spawn, count landings and retract pipes when both are down
+    if (autoSpawnPhase.current === 'launched') {
+      autoLandedCount.current += 1;
+      if (autoLandedCount.current >= 2) {
+        autoSpawnPhase.current = 'done';
+        allNPCsOutRef.current = true;
+        setAllNPCsOut(true);
+        setTimeout(() => setPipeState('retracting'), 400);
+      }
+      return;
+    }
     // Don't launch next NPC if recalling
     if (!recallingRef.current) {
       npcSpawnTimer.current = setTimeout(() => {
@@ -339,6 +392,18 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
       .filter(p => p.id !== npcId)
       .concat({ id: npcId, x: landedX });
     checkAllNPCsOut();
+    // During auto-spawn, count landings and retract pipes when both are down
+    if (autoSpawnPhase.current === 'launched') {
+      autoLandedCount.current += 1;
+      if (autoLandedCount.current >= 2) {
+        autoSpawnPhase.current = 'done';
+        allNPCsOutRef.current = true;
+        setAllNPCsOut(true);
+        setTimeout(() => setPipeState('retracting'), 400);
+      }
+      return;
+    }
+    if (autoSpawnPhase.current === 'done') return;
     if (!recallingRef.current) {
       guysSpawnTimer.current = setTimeout(() => {
         launchNextGuysNPC();
@@ -356,6 +421,26 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
     setActiveGuysNPCs(prev => prev.filter(n => n.id !== npcId));
     npcPositionsRef.current = npcPositionsRef.current.filter(p => p.id !== npcId);
   }, []);
+
+  // When dismissing auto NPCs completes, start normal pipe sequence
+  useEffect(() => {
+    if (!dismissingAuto) return;
+    const hasAutoNPCs = activeNPCs.some(n => n.autoSpawned) || activeGuysNPCs.some(n => n.autoSpawned);
+    if (!hasAutoNPCs) {
+      setDismissingAuto(false);
+      // Reset queue indices and allNPCsOut for fresh spawn sequence
+      npcQueueIndex.current = 0;
+      guysQueueIndex.current = 0;
+      allNPCsOutRef.current = false;
+      setAllNPCsOut(false);
+      npcPositionsRef.current = [];
+      const color1 = pickRandomColor(pipeColor);
+      setPipeColor(color1);
+      setGuysPipeColor(pickRandomColor(color1));
+      setPipeState('rising');
+      setPartyGlow(GHIBLI_PALETTE[Math.floor(Math.random() * GHIBLI_PALETTE.length)]);
+    }
+  }, [dismissingAuto, activeNPCs, activeGuysNPCs, pipeColor]);
 
   // Start NPC spawn sequence when Yoshi becomes active
   const spawnStarted = useRef(false);
@@ -530,38 +615,58 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
     if (recalling) return; // already recalling
 
     if (pipeState === 'hidden') {
+      // If auto-spawned NPCs are still walking around, dismiss them first
+      const hasAutoNPCs = activeNPCs.some(n => n.autoSpawned) || activeGuysNPCs.some(n => n.autoSpawned);
+      if (hasAutoNPCs && !dismissingAuto) {
+        setDismissingAuto(true);
+        return;
+      }
       const color1 = pickRandomColor(pipeColor);
       setPipeColor(color1);
       setGuysPipeColor(pickRandomColor(color1));
       setPipeState('rising');
       setPartyGlow(GHIBLI_PALETTE[Math.floor(Math.random() * GHIBLI_PALETTE.length)]);
     } else if (pipeState === 'visible' && (characterState === 'active' || characterState === 'hidden')) {
-      setPartyGlow(null);
       if (characterState === 'active') {
         // Start recall sequence — everyone walks back to pipe
+        setPartyGlow(null);
         setRecalling(true);
         if (npcSpawnTimer.current) clearTimeout(npcSpawnTimer.current);
         if (guysSpawnTimer.current) clearTimeout(guysSpawnTimer.current);
         setMinions([]); // minions just vanish
         setBalloons([]); // clear balloons
         // Eggs will roll off on their own
+      } else if (autoSpawnPhase.current === 'done' || autoSpawnPhase.current === 'launched') {
+        // Pipes are up from auto-spawn, Yoshi not active — spawn Yoshi now
+        autoSpawnPhase.current = 'done';
+        leftPipe.current = false;
+        setCharacterState('mounting');
+        setPartyGlow(GHIBLI_PALETTE[Math.floor(Math.random() * GHIBLI_PALETTE.length)]);
       } else {
         // No character active, just retract pipe
+        setPartyGlow(null);
         setPipeState('retracting');
       }
     }
-  }, [pipeState, characterState, onClick, pipeColor, recalling]);
+  }, [pipeState, characterState, onClick, pipeColor, recalling, activeNPCs, activeGuysNPCs, dismissingAuto]);
 
   const handlePipeTransitionEnd = useCallback((e) => {
     if (e.target !== e.currentTarget) return;
     if (pipeState === 'rising') {
       setPipeState('visible');
       leftPipe.current = false;
-      setCharacterState('mounting');
+      if (autoSpawnPhase.current === 'rising') {
+        // Auto-spawn: skip Yoshi, launch one NPC from each pipe
+        autoSpawnPhase.current = 'launched';
+        setTimeout(() => launchNextNPC(), 300);
+        setTimeout(() => launchNextGuysNPC(), 600);
+      } else {
+        setCharacterState('mounting');
+      }
     } else if (pipeState === 'retracting') {
       setPipeState('hidden');
     }
-  }, [pipeState]);
+  }, [pipeState, launchNextNPC, launchNextGuysNPC]);
 
   const handleCharacterTransitionEnd = useCallback((e) => {
     if (e.target !== e.currentTarget) return;
@@ -663,12 +768,13 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
             maxIdleTime={npc.maxIdleTime}
             minWalkDist={npc.minWalkDist}
             maxWalkDist={npc.maxWalkDist}
-            label={NPC_NAME_MAP[npc.id]}
+            label={npc.autoSpawned ? null : NPC_NAME_MAP[npc.id]}
             labelColor={npcColorsRef.current[npc.id]}
-            glowColor={npc.glowColor}
+            glowColor={npc.autoSpawned ? undefined : npc.glowColor}
             zIndex={npc.zIndex}
-            recalling={recalling}
-            recallTarget={pipeLeft}
+            recalling={recalling || (dismissingAuto && npc.autoSpawned)}
+            recallTarget={dismissingAuto && npc.autoSpawned ? moveBounds.left : pipeLeft}
+            dismissSpeed={dismissingAuto && npc.autoSpawned ? 400 : undefined}
             onReturned={() => handleNPCReturned(npc.id)}
             canWander={allNPCsOut}
           />
@@ -696,12 +802,13 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
             maxIdleTime={npc.maxIdleTime}
             minWalkDist={npc.minWalkDist}
             maxWalkDist={npc.maxWalkDist}
-            label={NPC_NAME_MAP[npc.id]}
+            label={npc.autoSpawned ? null : NPC_NAME_MAP[npc.id]}
             labelColor={npcColorsRef.current[npc.id]}
-            glowColor={npc.glowColor}
+            glowColor={npc.autoSpawned ? undefined : npc.glowColor}
             zIndex={npc.zIndex}
-            recalling={recalling}
-            recallTarget={guysPipeLeft}
+            recalling={recalling || (dismissingAuto && npc.autoSpawned)}
+            recallTarget={dismissingAuto && npc.autoSpawned ? moveBounds.right : guysPipeLeft}
+            dismissSpeed={dismissingAuto && npc.autoSpawned ? 400 : undefined}
             onReturned={() => handleGuysNPCReturned(npc.id)}
             canWander={allNPCsOut}
           />

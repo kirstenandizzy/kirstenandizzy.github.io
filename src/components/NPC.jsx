@@ -5,6 +5,7 @@ import useNPCPhysics from '../hooks/useNPCPhysics';
 import useNPCBehavior from '../hooks/useNPCBehavior';
 
 const RETURN_SPEED = 120; // px/s — faster than wander
+const DISMISS_GRAVITY = 600; // px/s² — fall speed when dismissed past edge
 
 export default function NPC({
   sheet,
@@ -33,6 +34,7 @@ export default function NPC({
   glowColor,
   zIndex,
   canWander = true,
+  dismissSpeed,
 }) {
   const [currentAnim, setCurrentAnim] = useState('launch');
   const [behaviorEnabled, setBehaviorEnabled] = useState(false);
@@ -40,13 +42,19 @@ export default function NPC({
   const currentAnimRef = useRef('launch');
   const onLandedRef = useRef(onLanded);
   onLandedRef.current = onLanded;
+  const dismissSpeedRef = useRef(dismissSpeed);
+  dismissSpeedRef.current = dismissSpeed;
 
   // Return state
   const [returning, setReturning] = useState(false);
   const [returnX, setReturnX] = useState(0);
+  const [returnY, setReturnY] = useState(0);
   const [sinking, setSinking] = useState(false);
   const [onPipe, setOnPipe] = useState(false);
   const returnXRef = useRef(0);
+  const returnYRef = useRef(0);
+  const returnVyRef = useRef(0);
+  const dismissFallingRef = useRef(false);
   const returnRafRef = useRef(null);
   const lastReturnTimeRef = useRef(0);
   const returnStartedRef = useRef(false);
@@ -113,12 +121,31 @@ export default function NPC({
       // Walking toward the pipe
       const target = recallTargetRef.current;
       const moveDir = target > returnXRef.current ? 1 : -1;
-      returnXRef.current += moveDir * RETURN_SPEED * dt;
+      returnXRef.current += moveDir * (dismissSpeedRef.current || RETURN_SPEED) * dt;
+
+      // Dismiss falling: just drop straight down
+      if (dismissFallingRef.current) {
+        returnVyRef.current -= DISMISS_GRAVITY * dt;
+        returnYRef.current += returnVyRef.current * dt;
+        setReturnY(returnYRef.current);
+        if (returnYRef.current < -200) {
+          onReturnedRef.current?.();
+          return;
+        }
+        returnRafRef.current = requestAnimationFrame(tick);
+        return;
+      }
 
       if ((moveDir > 0 && returnXRef.current >= target) ||
           (moveDir < 0 && returnXRef.current <= target)) {
         returnXRef.current = target;
         setReturnX(target);
+        if (dismissSpeedRef.current) {
+          // Auto-dismiss: start falling off the edge
+          dismissFallingRef.current = true;
+          returnRafRef.current = requestAnimationFrame(tick);
+          return;
+        }
         // At pipe — hop on top, then despawn
         currentAnimRef.current = 'idle';
         setCurrentAnim('idle');
@@ -235,8 +262,8 @@ export default function NPC({
 
   // Not visible during waiting phase
   if (phase === 'waiting') return null;
-  // When on pipe or sinking, position at pipe top
-  const displayY = (sinking || onPipe) ? startY : (phase === 'landed' ? 0 : physicsY);
+  // When on pipe or sinking, position at pipe top; when dismiss-falling, use returnY
+  const displayY = dismissFallingRef.current ? returnY : (sinking || onPipe) ? startY : (phase === 'landed' ? 0 : physicsY);
 
   // Determine facing direction
   let displayFacing;
