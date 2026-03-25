@@ -8,15 +8,15 @@ export const FIREWORKS_CONFIG = {
   TIME_END:        24,     // midnight — La Fin
   FADE_IN:         0.1,    // quick fade at window start (fade in from 18:54 to 19:00)
   FADE_OUT:        0.05,   // quick fade at window end
-  BASE_INTERVAL:   4.5,    // seconds between spawns at normal rate
-  FINALE_INTERVAL: 2.0,    // seconds between spawns at finale rate (22–23h)
-  MAX_FIREWORKS:   8,      // pool cap
+  BASE_INTERVAL:   2.25,   // seconds between spawns at normal rate
+  FINALE_INTERVAL: 1.0,    // seconds between spawns at finale rate (22–23h)
+  MAX_FIREWORKS:   16,     // pool cap
   EXPAND_SCALE:    12.0,   // world-unit expansion radius of a burst
   // Scene positioning (camera [0,15,80], ocean y=0, moon at y=30 z=-80)
   LAUNCH_Y_MIN:    1,
   LAUNCH_Y_MAX:    4,
-  BURST_Y_MIN:     38,
-  BURST_Y_MAX:     50,
+  BURST_Y_MIN:     30,
+  BURST_Y_MAX:     40,
   SPREAD_X:        55,     // ±55 x
   Z_NEAR:         -30,
   Z_FAR:          -85,

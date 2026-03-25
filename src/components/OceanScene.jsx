@@ -134,7 +134,7 @@ function OceanWater({ timeOfDay, lightX, lightY, lightZ, sunColorHex, moonLightI
 
   // Scale reflection visibility based on time of day
   const reflectionScale = useMemo(() => {
-    return 0.1 + nightFactor * 0.8; // 0.1 at night → 0.9 at day
+    return 0.03 + nightFactor * 0.87; // 0.03 at night → 0.9 at day
   }, [nightFactor]);
 
   const water = useMemo(() => {
