@@ -200,7 +200,7 @@ function spawnFlashLight(state, scene, pos, color) {
   if (flashLights.length >= 3) return;
 
   const lightColor = color ? new THREE.Color().copy(color).multiplyScalar(1.2) : new THREE.Color('#fff8e7');
-  const light = new THREE.PointLight(lightColor, 25.0, 160, 2);
+  const light = new THREE.PointLight(lightColor, 8.0, 160, 2);
   light.position.copy(pos);
   scene.add(light);
 

@@ -339,14 +339,14 @@
   to   { transform: translateY(0); }
 }
 
-// Slide-in for event buttons — uses visibility instead of opacity to preserve backdrop-filter
+// Slide-in for mobile event buttons
 @keyframes slider-event-in {
   from {
-    visibility: hidden;
+    opacity: 0;
     transform: translateY(20px);
   }
   to {
-    visibility: visible;
+    opacity: 1;
     transform: translateY(0);
   }
 }
@@ -485,7 +485,7 @@
   font-family: inherit;
   font-size: 0.85rem;
   transition: border-color 0.2s;
-  visibility: hidden;
+  opacity: 0;
   transform: translateY(20px);
   animation: slider-event-in 0.6s ease forwards;
   animation-delay: calc(var(--i) * 200ms);

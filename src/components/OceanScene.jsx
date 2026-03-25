@@ -154,6 +154,19 @@ function OceanWater({ timeOfDay, lightX, lightY, lightZ, sunColorHex, moonLightI
       alpha: 1.0,
     });
     w.rotation.x = -Math.PI / 2;
+
+    // Patch Water shader to support reflection intensity scaling
+    w.material.uniforms.reflectionIntensity = { value: 0.1 };
+    w.material.fragmentShader = w.material.fragmentShader.replace(
+      'uniform sampler2D mirrorSampler;',
+      'uniform sampler2D mirrorSampler;\nuniform float reflectionIntensity;'
+    );
+    w.material.fragmentShader = w.material.fragmentShader.replace(
+      'vec3 reflectionSample = vec3( texture2D( mirrorSampler, mirrorCoord.xy / mirrorCoord.w + distortion ) );',
+      'vec3 reflectionSample = vec3( texture2D( mirrorSampler, mirrorCoord.xy / mirrorCoord.w + distortion ) ) * reflectionIntensity;'
+    );
+    w.material.needsUpdate = true;
+
     return w;
   }, [waterNormals]);
 
@@ -166,7 +179,10 @@ function OceanWater({ timeOfDay, lightX, lightY, lightZ, sunColorHex, moonLightI
     if (water.material.uniforms.size) {
       water.material.uniforms.size.value = waterDistortion;
     }
-  }, [water, waterSunColor, waterSunDirection, waterColorHex, waterDistortion]);
+    if (water.material.uniforms.reflectionIntensity) {
+      water.material.uniforms.reflectionIntensity.value = reflectionScale;
+    }
+  }, [water, waterSunColor, waterSunDirection, waterColorHex, waterDistortion, reflectionScale]);
 
   useFrame((_, delta) => {
     if (water?.material?.uniforms?.time) {
