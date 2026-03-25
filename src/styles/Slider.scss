@@ -370,8 +370,8 @@
 }
 
 .slider--mobile h3 {
-  width: 100%;
-  margin: 0;
+  width: fit-content;
+  margin: 0 auto;
   line-height: 1.5rem;
   padding: 0 0 1rem 0;
   opacity: 1; // override base .slider h3 opacity — needed for backdrop-filter

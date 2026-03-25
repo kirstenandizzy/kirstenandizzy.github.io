@@ -163,7 +163,7 @@ function OceanWater({ timeOfDay, lightX, lightY, lightZ, sunColorHex, moonLightI
     );
     w.material.fragmentShader = w.material.fragmentShader.replace(
       'vec3 reflectionSample = vec3( texture2D( mirrorSampler, mirrorCoord.xy / mirrorCoord.w + distortion ) );',
-      'vec3 reflectionSample = vec3( texture2D( mirrorSampler, mirrorCoord.xy / mirrorCoord.w + distortion ) ) * reflectionIntensity;'
+      'vec3 reflectionSample = min(vec3(1.0), vec3( texture2D( mirrorSampler, mirrorCoord.xy / mirrorCoord.w + distortion ) )) * reflectionIntensity;'
     );
     w.material.needsUpdate = true;
 
