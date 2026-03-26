@@ -173,6 +173,15 @@ export default function Ship({ moveBounds, dismissing, onExited }) {
     ]);
   }, [photos]);
 
+  // Auto-spawn photos randomly every ~3 seconds
+  useEffect(() => {
+    if (!visible) return;
+    const id = setInterval(() => {
+      handleClick();
+    }, 3000);
+    return () => clearInterval(id);
+  }, [visible, handleClick]);
+
   const frameName = `angle-${angleIndex}`;
 
   return (
