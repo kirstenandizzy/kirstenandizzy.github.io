@@ -784,6 +784,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
             dismissSpeed={dismissingAuto && npc.autoSpawned ? 400 : undefined}
             onReturned={() => handleNPCReturned(npc.id)}
             canWander={allNPCsOut}
+            showMessages={!!npc.autoSpawned}
           />
         ))}
 
@@ -818,6 +819,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
             dismissSpeed={dismissingAuto && npc.autoSpawned ? 400 : undefined}
             onReturned={() => handleGuysNPCReturned(npc.id)}
             canWander={allNPCsOut}
+            showMessages={!!npc.autoSpawned}
           />
         ))}
 

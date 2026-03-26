@@ -1,8 +1,18 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import AnimatedSprite from '../sprites/animations/AnimatedSprite';
 import CharacterLabel from './CharacterLabel';
+import {
+  messageTopSheet,
+  MESSAGE_ANIMATIONS,
+  MESSAGE_SCALE,
+} from '../sprites/sheets/message';
 import useNPCPhysics from '../hooks/useNPCPhysics';
 import useNPCBehavior from '../hooks/useNPCBehavior';
+
+const LOOPING_MSG = {
+  row1: { ...MESSAGE_ANIMATIONS.row1, loop: true },
+  row2: { ...MESSAGE_ANIMATIONS.row2, loop: true },
+};
 
 const RETURN_SPEED = 120; // px/s — faster than wander
 const DISMISS_GRAVITY = 600; // px/s² — fall speed when dismissed past edge
@@ -35,9 +45,11 @@ export default function NPC({
   zIndex,
   canWander = true,
   dismissSpeed,
+  showMessages = false,
 }) {
   const [currentAnim, setCurrentAnim] = useState('launch');
   const [behaviorEnabled, setBehaviorEnabled] = useState(false);
+  const [msgRow, setMsgRow] = useState('row1');
   const landedCalledRef = useRef(false);
   const currentAnimRef = useRef('launch');
   const onLandedRef = useRef(onLanded);
@@ -288,14 +300,31 @@ export default function NPC({
       {(phase === 'landed' || behaviorEnabled) && !returning && label && (
         <CharacterLabel name={label} color={labelColor} />
       )}
-      <div className={glowColor ? 'passenger-glow' : undefined} style={{
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        width: stableWidth,
-        '--glow-color': glowColor,
-        ...((displayFacing === 'right') !== facesRight ? { transform: 'scaleX(-1)' } : {}),
-      }}>
+      <div
+        className={glowColor ? 'passenger-glow' : undefined}
+        style={{
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'center',
+          width: stableWidth,
+          '--glow-color': glowColor,
+          ...((displayFacing === 'right') !== facesRight ? { transform: 'scaleX(-1)' } : {}),
+        }}
+        onClick={showMessages ? () => setMsgRow(r => r === 'row1' ? 'row2' : 'row1') : undefined}
+        onMouseEnter={showMessages ? () => setMsgRow(r => r === 'row1' ? 'row2' : 'row1') : undefined}
+        onTouchStart={showMessages ? (e) => { e.preventDefault(); setMsgRow(r => r === 'row1' ? 'row2' : 'row1'); } : undefined}
+      >
+        {showMessages && (phase === 'landed' || behaviorEnabled) && (
+          <div style={{ position: 'absolute', top: 0, left: '50%', transform: `translate(-50%, calc(-100% - 4px))${(displayFacing === 'right') !== facesRight ? ' scaleX(-1)' : ''}`, pointerEvents: 'none' }}>
+            <AnimatedSprite
+              sheet={messageTopSheet}
+              animations={LOOPING_MSG}
+              animation={msgRow}
+              scale={MESSAGE_SCALE / 2}
+            />
+          </div>
+        )}
         <AnimatedSprite
           sheet={sheet}
           animations={displayAnimations}
