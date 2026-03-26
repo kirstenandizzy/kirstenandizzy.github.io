@@ -239,7 +239,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
       // Fallback: if onTransitionEnd doesn't fire, launch after pipe animation duration
       setTimeout(() => {
         if (autoSpawnPhase.current === 'rising') {
-          autoSpawnPhase.current = 'launched';
+          autoSpawnPhase.current = 'launching';
           launchNextNPC();
           setTimeout(() => launchNextGuysNPC(), 300);
         }
@@ -317,8 +317,9 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
     if (npcQueueIndex.current >= GIRLS_NPC_QUEUE.length) return;
     const config = GIRLS_NPC_QUEUE[npcQueueIndex.current];
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const isAuto = autoSpawnPhase.current === 'launched';
+    const isAuto = autoSpawnPhase.current === 'launching';
     const npc = { ...config, launchDirection: 'left', autoSpawned: isAuto };
+    if (isAuto) autoSpawnPhase.current = 'launched';
     if (isMobile && npc.launchSpeed) npc.launchSpeed = npc.launchSpeed * 0.75;
     setActiveNPCs(prev => [...prev, npc]);
     npcQueueIndex.current += 1;
@@ -660,7 +661,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
       leftPipe.current = false;
       if (autoSpawnPhase.current === 'rising') {
         // Auto-spawn: skip Yoshi, launch one NPC from each pipe
-        autoSpawnPhase.current = 'launched';
+        autoSpawnPhase.current = 'launching';
         setTimeout(() => launchNextNPC(), 300);
         setTimeout(() => launchNextGuysNPC(), 600);
       } else {

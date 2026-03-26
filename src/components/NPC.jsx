@@ -50,6 +50,18 @@ export default function NPC({
   const [currentAnim, setCurrentAnim] = useState('launch');
   const [behaviorEnabled, setBehaviorEnabled] = useState(false);
   const [msgRow, setMsgRow] = useState('row1');
+  const [msgVisible, setMsgVisible] = useState(true);
+  const msgTimerRef = useRef(null);
+
+  // Hide message after 2 seconds, re-show on interaction
+  const showMsg = useCallback(() => {
+    setMsgVisible(true);
+    clearTimeout(msgTimerRef.current);
+    msgTimerRef.current = setTimeout(() => setMsgVisible(false), 2000);
+  }, []);
+
+  useEffect(() => () => clearTimeout(msgTimerRef.current), []);
+
   const landedCalledRef = useRef(false);
   const currentAnimRef = useRef('launch');
   const onLandedRef = useRef(onLanded);
@@ -85,6 +97,13 @@ export default function NPC({
     direction: launchDirection,
     ...(launchSpeed != null ? { launchSpeed } : {}),
   });
+
+  // Start the initial 2s timer once landed
+  useEffect(() => {
+    if (showMessages && (phase === 'landed' || behaviorEnabled)) {
+      showMsg();
+    }
+  }, [showMessages, phase, behaviorEnabled, showMsg]);
 
   const physicsXRef = useRef(physicsX);
   physicsXRef.current = physicsX;
@@ -311,11 +330,11 @@ export default function NPC({
           '--glow-color': glowColor,
           ...((displayFacing === 'right') !== facesRight ? { transform: 'scaleX(-1)' } : {}),
         }}
-        onClick={showMessages ? () => setMsgRow(r => r === 'row1' ? 'row2' : 'row1') : undefined}
-        onMouseEnter={showMessages ? () => setMsgRow(r => r === 'row1' ? 'row2' : 'row1') : undefined}
-        onTouchStart={showMessages ? (e) => { e.preventDefault(); setMsgRow(r => r === 'row1' ? 'row2' : 'row1'); } : undefined}
+        onClick={showMessages ? () => { setMsgRow(r => r === 'row1' ? 'row2' : 'row1'); showMsg(); } : undefined}
+        onMouseEnter={showMessages ? () => { setMsgRow(r => r === 'row1' ? 'row2' : 'row1'); showMsg(); } : undefined}
+        onTouchStart={showMessages ? (e) => { e.preventDefault(); setMsgRow(r => r === 'row1' ? 'row2' : 'row1'); showMsg(); } : undefined}
       >
-        {showMessages && (phase === 'landed' || behaviorEnabled) && (
+        {showMessages && msgVisible && (phase === 'landed' || behaviorEnabled) && (
           <div style={{ position: 'absolute', top: 0, left: '50%', transform: `translate(-50%, calc(-100% - 4px))${(displayFacing === 'right') !== facesRight ? ' scaleX(-1)' : ''}`, pointerEvents: 'none' }}>
             <AnimatedSprite
               sheet={messageTopSheet}
