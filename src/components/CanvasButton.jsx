@@ -176,8 +176,8 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
   const guysButtonRef = useRef(null);
 
   // Notify parent when either button group is active (skip blur during auto-spawn)
-  const isAutoSpawning = autoSpawnPhase.current === 'rising' || autoSpawnPhase.current === 'launched' || autoSpawnPhase.current === 'done';
-  const buttonsActive = (pipeState !== 'hidden' && !isAutoSpawning) || shipState !== 'hidden';
+  const [autoSpawnComplete, setAutoSpawnComplete] = useState(false);
+  const buttonsActive = (pipeState !== 'hidden' && pipeState !== 'retracting' && autoSpawnComplete) || shipState !== 'hidden';
   useEffect(() => {
     if (onActiveChange) onActiveChange(buttonsActive);
   }, [buttonsActive, onActiveChange]);
@@ -672,6 +672,7 @@ export default function CanvasButton({ onClick, onOpenModal, isModalOpen, hideOv
       // Clear auto-spawn phase once pipes fully retract, so normal flow isn't affected
       if (autoSpawnPhase.current === 'done') {
         autoSpawnPhase.current = 'complete';
+        setAutoSpawnComplete(true);
       }
     }
   }, [pipeState, launchNextNPC, launchNextGuysNPC]);

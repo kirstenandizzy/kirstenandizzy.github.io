@@ -283,6 +283,10 @@
     z-index: 3; // In front of pipe after landing
   }
 
+  &.npc-jump {
+    animation: npc-jump 0.5s ease;
+  }
+
   &.npc-sinking {
     transition: transform 0.3s ease-in;
     transform: translateX(-50%) translateY(100%);
@@ -629,6 +633,12 @@
 @keyframes arrow-bounce {
   0%, 100% { transform: translateY(0); }
   50%      { transform: translateY(-6px); }
+}
+
+@keyframes npc-jump {
+  0%   { transform: translateX(-50%) translateY(0); }
+  40%  { transform: translateX(-50%) translateY(-30px); }
+  100% { transform: translateX(-50%) translateY(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {

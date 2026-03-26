@@ -29,6 +29,10 @@ export default function useSpriteAnimation({ frames, fps = 10, loop = true, play
   useEffect(() => {
     if (!playing || interval === 0 || frames.length <= 1) {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (playing && frames.length <= 1 && !loop && onComplete) {
+        const t = setTimeout(onComplete, 500);
+        return () => clearTimeout(t);
+      }
       return;
     }
 

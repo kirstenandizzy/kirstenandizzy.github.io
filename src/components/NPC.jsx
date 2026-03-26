@@ -98,12 +98,14 @@ export default function NPC({
     ...(launchSpeed != null ? { launchSpeed } : {}),
   });
 
-  // Start the initial 2s timer once landed
+  // Start the initial 2s timer once behavior is enabled (after landing completes)
+  const msgInitRef = useRef(false);
   useEffect(() => {
-    if (showMessages && (phase === 'landed' || behaviorEnabled)) {
+    if (showMessages && behaviorEnabled && !msgInitRef.current) {
+      msgInitRef.current = true;
       showMsg();
     }
-  }, [showMessages, phase, behaviorEnabled, showMsg]);
+  }, [showMessages, behaviorEnabled, showMsg]);
 
   const physicsXRef = useRef(physicsX);
   physicsXRef.current = physicsX;
@@ -174,6 +176,8 @@ export default function NPC({
         if (dismissSpeedRef.current) {
           // Auto-dismiss: start falling off the edge
           dismissFallingRef.current = true;
+          currentAnimRef.current = 'fall';
+          setCurrentAnim('fall');
           returnRafRef.current = requestAnimationFrame(tick);
           return;
         }
@@ -235,30 +239,45 @@ export default function NPC({
     setCurrentAnim(isWalking ? 'walk' : 'idle');
   }, [isWalking, behaviorEnabled]);
 
-  // Use animations directly — emote plays the full sequence as defined
-  const displayAnimations = animations;
+  // Add a non-looping version of launch for fun animation use
+  const displayAnimations = useMemo(() => {
+    if (!animations.launch) return animations;
+    return { ...animations, launchFun: { ...animations.launch, loop: false } };
+  }, [animations]);
+
+  const getFunAnims = useCallback(() => {
+    if (npcId === 'toadette') return ['launchFun'];
+    const noLaunch = npcId === 'peach' || npcId === 'waluigi' || npcId === 'falcon';
+    const base = [...Object.keys(animations).filter(k => k.startsWith('emote')), 'landed'];
+    return noLaunch ? base : [...base, 'launchFun'];
+  }, [npcId, animations]);
+
+  const playFunAnim = useCallback(() => {
+    const funAnims = getFunAnims();
+    const pick = funAnims[Math.floor(Math.random() * funAnims.length)];
+    currentAnimRef.current = pick;
+    setCurrentAnim(pick);
+  }, [getFunAnims]);
 
   // When landed/idle/emote animation completes, transition to next state
   const handleAnimComplete = useCallback(() => {
-    if (currentAnimRef.current === 'landed') {
+    if (currentAnimRef.current === 'landed' && !behaviorEnabled) {
+      // Initial landing — transition to idle and enable wander
       if (recallingRef.current) {
-        // Skip wander, start returning immediately
         startReturn(physicsXRef.current);
       } else {
         currentAnimRef.current = 'idle';
         setCurrentAnim('idle');
         setBehaviorEnabled(true);
       }
-    } else if (currentAnimRef.current === 'idle' && animations.emote) {
-      if (Math.random() < 0.4) {
-        currentAnimRef.current = 'emote';
-        setCurrentAnim('emote');
-      }
-    } else if (currentAnimRef.current === 'emote') {
+    } else if (currentAnimRef.current === 'idle') {
+      playFunAnim();
+    } else if (currentAnimRef.current.startsWith('emote') || currentAnimRef.current === 'landed' || currentAnimRef.current === 'launchFun') {
+      // Fun animation finished — return to idle
       currentAnimRef.current = 'idle';
       setCurrentAnim('idle');
     }
-  }, [animations, startReturn]);
+  }, [animations, startReturn, behaviorEnabled]);
 
   // Report current position to parent for hit detection
   const displayX = returning ? returnX : (behaviorEnabled ? wanderX : physicsX);
@@ -308,7 +327,7 @@ export default function NPC({
 
   return (
     <div
-      className={`npc-sprite${phase === 'landed' || behaviorEnabled ? ' npc-landed' : ''}${sinking ? ' npc-sinking' : ''}`}
+      className={`npc-sprite${phase === 'landed' || behaviorEnabled ? ' npc-landed' : ''}${sinking ? ' npc-sinking' : ''}${npcId === 'toadette' && currentAnim === 'launchFun' ? ' npc-jump' : ''}`}
       style={{
         left: displayX,
         bottom: displayY,
@@ -330,11 +349,17 @@ export default function NPC({
           '--glow-color': glowColor,
           ...((displayFacing === 'right') !== facesRight ? { transform: 'scaleX(-1)' } : {}),
         }}
-        onClick={showMessages ? () => { setMsgRow(r => r === 'row1' ? 'row2' : 'row1'); showMsg(); } : undefined}
+        onClick={showMessages ? () => {
+          setMsgRow(r => r === 'row1' ? 'row2' : 'row1'); showMsg();
+          if (currentAnimRef.current === 'idle' || currentAnimRef.current === 'walk') playFunAnim();
+        } : undefined}
         onMouseEnter={showMessages ? () => { setMsgRow(r => r === 'row1' ? 'row2' : 'row1'); showMsg(); } : undefined}
-        onTouchStart={showMessages ? (e) => { e.preventDefault(); setMsgRow(r => r === 'row1' ? 'row2' : 'row1'); showMsg(); } : undefined}
+        onTouchStart={showMessages ? (e) => {
+          e.preventDefault(); setMsgRow(r => r === 'row1' ? 'row2' : 'row1'); showMsg();
+          if (currentAnimRef.current === 'idle' || currentAnimRef.current === 'walk') playFunAnim();
+        } : undefined}
       >
-        {showMessages && msgVisible && (phase === 'landed' || behaviorEnabled) && (
+        {showMessages && msgVisible && behaviorEnabled && (
           <div style={{ position: 'absolute', top: 0, left: '50%', transform: `translate(-50%, calc(-100% - 4px))${(displayFacing === 'right') !== facesRight ? ' scaleX(-1)' : ''}`, pointerEvents: 'none' }}>
             <AnimatedSprite
               sheet={messageTopSheet}
