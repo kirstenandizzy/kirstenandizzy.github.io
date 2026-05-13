@@ -151,11 +151,14 @@ export default function RSVPOverlay({ isOpen, onClose, onCloseStart }) {
                 ))}
               </div>
 
+
               {guests.length < MAX_GUESTS && (
                 <button className="rsvp-overlay__add" onClick={addGuest} disabled={submitting}>
                   + Add Guest
                 </button>
               )}
+
+              <p className="rsvp-overlay__hint">If your children will be joining, please add their names too</p>
 
               <div className="rsvp-overlay__extras">
                 <input
