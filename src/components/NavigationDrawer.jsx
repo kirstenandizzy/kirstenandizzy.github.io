@@ -17,11 +17,8 @@ export default function NavigationDrawer({ isMenuOpen, setIsMenuOpen, onLinkClic
 
       {/* Mobile drawer */}
       <nav className={`navigation__drawer${isMenuOpen ? ' navigation__drawer--open' : ''}`} role="navigation">
-        <MessageSprite className="navigation__drawer-title" onClick={() => { window.dispatchEvent(new Event('reset-party')); setIsMenuOpen(false); }}>
-          <h1 className='the-girl-next-door-regular'>Kirsten and Israel</h1>
-          <p>‧♡₊˚ଘ(੭*˘ ³ ˘)੭ <span style={{color: '#cc382f'}}>♥︎</span> ٩(˘ ᗜ ˘*)و ♡‧₊˚</p>
-        </MessageSprite>
         <ul className='navigation__drawer-links'>
+          <li><a onClick={() => { window.dispatchEvent(new Event('reset-party')); setIsMenuOpen(false); }}>Home</a></li>
           <li><a onClick={(e) => handleLinkClick(e, 'rsvp')}>RSVP</a></li>
           <li><a onClick={(e) => handleLinkClick(e, 'travel')}>Travel</a></li>
           <li><a onClick={(e) => handleLinkClick(e, 'hotel')}>Hotel</a></li>
