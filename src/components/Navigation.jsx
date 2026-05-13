@@ -50,7 +50,7 @@ export default function Navigation({ openModal, setOpenModal, setIsSceneExpanded
             <MessageSprite excludeSides={['top']}>
               <div className='navigation__header-multi-line' onClick={() => window.dispatchEvent(new Event('reset-party'))}>
                 <h1 className='the-girl-next-door-regular'>Kirsten and Israel</h1>
-                <p>｡ﾟ♡.(*♡´‿` 人´‿` ♡*)ﾟ♡ °・</p>
+                <p>‧♡₊˚ଘ(੭*˘ ³ ˘)੭ <span style={{color: '#cc382f'}}>♥︎</span> ٩(˘ ᗜ ˘*)و ♡‧₊˚</p>
               </div>
             </MessageSprite>
           </li>
