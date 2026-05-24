@@ -11,8 +11,8 @@ const FAQ_ITEMS = [
     answer: (<><strong>Windows on the Water</strong><br />931 Ocean Ave<br />Sea Bright, NJ 07760<br /><br />The ceremony will be outdoors weather permitting, and the rest of the evening will be outdoors/indoors at your leisure.</>)
   },
   {
-    question: `Children... what's the deal?`,
-    answer: 'Kids are welcome, though we are not guaranteeing that the wedding is "child-friendly" in regards to things like music selection. There will be a menu specific for children under 12.'
+    question: `Children allowed?`,
+    answer: 'Kids are welcome, though we are not guaranteeing that the wedding is "child-friendly" in regards to things like music selection! There will be a menu for children under 12.'
   },
   {
     question: 'Dress code?',
