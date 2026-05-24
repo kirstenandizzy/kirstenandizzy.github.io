@@ -11,6 +11,10 @@ const FAQ_ITEMS = [
     answer: (<><strong>Windows on the Water</strong><br />931 Ocean Ave<br />Sea Bright, NJ 07760<br /><br />The ceremony will be outdoors weather permitting, and the rest of the evening will be outdoors/indoors at your leisure.</>)
   },
   {
+    question: `Problems finding a hotel?`,
+    answer: 'Let us know! We reserved some backup rooms for our hotel block as we are aware that the Sea.Hear.Now Festival is happening the same weekend as our wedding, and we want to make sure everyone has a place to stay. If you are having trouble finding a hotel, please reach out to us and we will do our best to assist you.'
+  },
+  {
     question: `Children allowed?`,
     answer: 'Kids are welcome, though we are not guaranteeing that the wedding is "child-friendly" in regards to things like music selection! There will be a menu for children under 12.'
   },
@@ -20,7 +24,7 @@ const FAQ_ITEMS = [
   },
   {
     question: 'Do you have a gift registry?',
-    answer: 'We do not have a registry. We mean it when we say that your presence at our wedding is the greatest gift we could ask for, and we can’t wait to celebrate with you! If you did want to gift us something, we are asking for cash gifts to go towards our honeymoon and future adventures!'
+    answer: 'We do not have a registry! Your presence at our wedding is the greatest gift we could ask for, and we can’t wait to celebrate with you. If you did want to gift us something, we are asking for cash gifts to go towards our wishing well. We are also always happy to recieve your favorite books or handy dandy things if physical gifts are more your style.'
   },
   {
     question: 'What time should I arrive?',
