@@ -1,8 +1,41 @@
+import { useState, useEffect } from 'react';
 import Modal from './Modal';
 import '../styles/HotelModal.scss';
 
 export default function HotelModal({ isOpen, onClose, onCloseStart, closeDelay }) {
+  const [showPSA, setShowPSA] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShowPSA(true);
+    }
+  }, [isOpen]);
+
+  const closePSA = () => {
+    setShowPSA(false);
+  };
+
   return (
+    <>
+      {showPSA && (
+        <div className="psa-modal-overlay">
+          <div className="psa-modal">
+            <button className="psa-modal__close" onClick={closePSA} aria-label="Close">
+              ✕
+            </button>
+            <div className="psa-modal__content">
+              <h2 className="psa-modal__title">Hotel PSA</h2>
+              <p className="psa-modal__body">
+                Hello friends and family! Our hotel's room block got a bit screwy, long story, so if you want to book a room at the hotel with a block (Sonesta Select, Tinton Falls) just reach out to myself, or any member of my immediate family like my mom or pops. We reserved a block of rooms to make sure there would be availability because there is a festival (Sea.Hear.Now) causing some mayhem with hotels! So we can transfer a King ($159/night) or Double Queen ($189/night) for you, just let us know.
+              </p>
+              <button className="psa-modal__okay-btn" onClick={closePSA}>
+                Okay
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
     <Modal isOpen={isOpen} onClose={onClose} onCloseStart={onCloseStart} closeDelay={closeDelay} className="modal--hotels">
       <div className="hotel-cards">
         <a href="https://www.sonesta.com/sonesta-select/nj/tinton-falls/sonesta-select-tinton-falls-eatontown?isGroupCode=true&groupCode=091926ENGI_1&checkin=2026-09-19&checkout=2026-09-21" target="_blank" rel="noopener noreferrer" className="hotel-card hotel-card--featured" style={{ '--i': 0 }}>
@@ -72,5 +105,6 @@ export default function HotelModal({ isOpen, onClose, onCloseStart, closeDelay }
         </a>
       </div>
     </Modal>
+    </>
   );
 }
