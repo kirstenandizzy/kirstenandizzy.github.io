@@ -26,7 +26,7 @@ export default function HotelModal({ isOpen, onClose, onCloseStart, closeDelay }
             <div className="psa-modal__content">
               <h2 className="psa-modal__title">Hotel PSA</h2>
               <p className="psa-modal__body">
-                Hello friends and family! Our hotel's room block got a bit screwy, long story, so if you want to book a room at the hotel with the block (Sonesta Select, Tinton Falls) just reach out to myself, or any member of my immediate family like my mom or pops. We reserved a bunch of rooms in our name to make sure there would be availability because there is a festival (Sea.Hear.Now) causing some mayhem with hotels! So we can transfer a King ($159/night) or Double Queen ($189/night) for you, just let us know.
+                Hello friends and family! Our hotel's room block got a bit screwy, long story, so if you want to book a room at the hotel with the block (Sonesta Select, Tinton Falls) just reach out to Kirsten or Izzy, or any member of Kirsten's immediate family and we can help. We reserved a bunch of rooms in our name to make sure there would be availability because there is a festival (Sea.Hear.Now) causing some mayhem with hotels, combined with the hotel having room block problems! So we can transfer a King ($159/night) or Double Queen ($189/night) room to you, just let us know.
               </p>
               <button className="psa-modal__okay-btn" onClick={closePSA}>
                 Okay
