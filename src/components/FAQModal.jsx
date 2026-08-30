@@ -24,7 +24,7 @@ const FAQ_ITEMS = [
   },
   {
     question: 'Do you have a gift registry?',
-    answer: 'We do not have a registry! Your presence at our wedding is the greatest gift we could ask for, and we can’t wait to celebrate with you. If you did want to gift us something, we are asking for cash gifts to go towards our wishing well. We are also always happy to recieve your favorite books or handy dandy things if physical gifts are more your style.'
+    answer: (<>We do not have a registry! Your presence at our wedding is the greatest gift we could ask for, and we can't wait to celebrate with you. If you did want to gift us something, we are asking for cash gifts to go towards our wishing well. You can send us money via <a href="https://account.venmo.com/u/kirsten-rauffer-1" target="_blank" rel="noopener noreferrer">Venmo</a>. We are also always happy to recieve your favorite books or handy dandy things if physical gifts are more your style.</>)
   },
   {
     question: 'What time should I arrive?',
